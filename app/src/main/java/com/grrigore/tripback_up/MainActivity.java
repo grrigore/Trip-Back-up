@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     TextView tvCreateAccount;
 
     private FirebaseAuth firebaseAuth;
-    private Context context = getApplicationContext();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
         //get firebase auth instance
         firebaseAuth = FirebaseAuth.getInstance();
 
-        onCreateAccountClick();
 
         //bind views with butterknife
         ButterKnife.bind(this);
+        
+        onCreateAccountClick();
     }
 
     private void onCreateAccountClick() {
@@ -60,18 +60,18 @@ public class MainActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(username)) {
-            Toast.makeText(context, getString(R.string.no_username), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_username), Toast.LENGTH_LONG).show();
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(context, getString(R.string.no_password), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
         }
 
         firebaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    Toast.makeText(context, getString(R.string.wrong_credentials), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(MainActivity.this, TripListActivity.class);
                     startActivity(intent);
