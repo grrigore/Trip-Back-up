@@ -9,4 +9,6 @@
     <string name="password">Password</string>
     <string name="login_button">login</string>
     <string name="create_account">Create account</string>
+    <string name="signup_button">signup</string>
+    <string name="existing_account">Already have an account? Log-in</string>
 </resources>
