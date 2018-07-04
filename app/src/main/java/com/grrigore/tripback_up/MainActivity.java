@@ -21,8 +21,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.etUsername)
-    EditText etUsername;
+    @BindView(R.id.etEmail)
+    EditText etEmail;
     @BindView(R.id.etPassword)
     EditText etPassword;
     @BindView(R.id.tvCreateAccount)
@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        String username = etUsername.getText().toString();
+        String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
-        if (TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), getString(R.string.no_username), Toast.LENGTH_LONG).show();
         }
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
         }
 
-        firebaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {

@@ -21,8 +21,8 @@ import butterknife.ButterKnife;
 public class SingUpActivity extends AppCompatActivity {
 
 
-    @BindView(R.id.etUsername)
-    EditText etUsername;
+    @BindView(R.id.etEmail)
+    EditText etEmail;
     @BindView(R.id.etPassword)
     EditText etPassword;
     @BindView(R.id.tvLogin)
@@ -50,10 +50,10 @@ public class SingUpActivity extends AppCompatActivity {
     }
 
     public void signup(View view) {
-        String username = etUsername.getText().toString();
+        String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
-        if (TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), getString(R.string.no_username), Toast.LENGTH_LONG).show();
         }
 
@@ -61,7 +61,7 @@ public class SingUpActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
         }
 
-        firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(SingUpActivity.this, new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SingUpActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
