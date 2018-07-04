@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SingUpActivity extends AppCompatActivity {
 
@@ -22,6 +23,9 @@ public class SingUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sing_up);
+
+        //bind views with butterknife
+        ButterKnife.bind(this);
     }
 
     public void signup(View view) {

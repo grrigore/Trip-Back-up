@@ -11,4 +11,7 @@
     <string name="create_account">Create account</string>
     <string name="signup_button">signup</string>
     <string name="existing_account">Already have an account? Log-in</string>
+    <string name="no_username">Enter username!</string>
+    <string name="no_password">Enter password!</string>
+    <string name="wrong_credentials">Wrong credentials!</string>
 </resources>
