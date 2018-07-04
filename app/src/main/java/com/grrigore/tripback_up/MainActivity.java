@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         //bind views with butterknife
         ButterKnife.bind(this);
-        
+
         onCreateAccountClick();
     }
 

@@ -1,6 +1,5 @@
 package com.grrigore.tripback_up;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,7 +28,6 @@ public class SingUpActivity extends AppCompatActivity {
     @BindView(R.id.tvLogin)
     TextView tvLogin;
 
-    private Context context = getApplicationContext();
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -40,6 +38,13 @@ public class SingUpActivity extends AppCompatActivity {
         //bind views with butterknife
         ButterKnife.bind(this);
 
+        tvLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SingUpActivity.this, MainActivity.class));
+            }
+        });
+
         //get firebase auth instance
         firebaseAuth = FirebaseAuth.getInstance();
     }
@@ -49,18 +54,18 @@ public class SingUpActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(username)) {
-            Toast.makeText(context, getString(R.string.no_username), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_username), Toast.LENGTH_LONG).show();
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(context, getString(R.string.no_password), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
         }
 
         firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(SingUpActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    Toast.makeText(context, getString(R.string.create_account_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.create_account_error), Toast.LENGTH_LONG).show();
                 } else {
                     startActivity(new Intent(SingUpActivity.this, MainActivity.class));
                     finish();
