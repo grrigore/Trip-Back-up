@@ -41,6 +41,9 @@ public class SingUpActivity extends AppCompatActivity {
         //bind views with butterknife
         ButterKnife.bind(this);
 
+        //hide toolbar
+        getSupportActionBar().hide();
+
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

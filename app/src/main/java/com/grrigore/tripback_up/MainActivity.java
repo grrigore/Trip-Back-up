@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         //bind views with butterknife
         ButterKnife.bind(this);
 
+        //hide toolbar
+        getSupportActionBar().hide();
+
         onCreateAccountClick();
     }
 
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
         }
 
-        if (password.length() < 6){
+        if (password.length() < 6) {
             Toast.makeText(getApplicationContext(), getString(R.string.password_shot), Toast.LENGTH_LONG).show();
         }
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
