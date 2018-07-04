@@ -51,10 +51,10 @@ public class SingUpActivity extends AppCompatActivity {
 
     public void signup(View view) {
         String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
+        final String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_username), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_email), Toast.LENGTH_LONG).show();
         }
 
         if (TextUtils.isEmpty(password)) {
@@ -65,7 +65,11 @@ public class SingUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.create_account_error), Toast.LENGTH_LONG).show();
+                    if (password.length() < 6) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.password_shot), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.create_account_error), Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     startActivity(new Intent(SingUpActivity.this, MainActivity.class));
                     finish();

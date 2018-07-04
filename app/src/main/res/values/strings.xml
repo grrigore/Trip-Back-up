@@ -15,4 +15,5 @@
     <string name="no_password">Enter password!</string>
     <string name="wrong_credentials">Wrong credentials!</string>
     <string name="create_account_error">Error while creating account!</string>
+    <string name="password_shot">Password too short! Please use at least 6 characters!</string>
 </resources>
