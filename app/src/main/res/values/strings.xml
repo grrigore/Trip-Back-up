@@ -16,4 +16,8 @@
     <string name="wrong_credentials">Wrong credentials!</string>
     <string name="create_account_error">Error while creating account!</string>
     <string name="password_shot">Password too short! Please use at least 6 characters!</string>
+    <string name="recent_trips">Recent trips</string>
+    <string name="add_trip">Add trip</string>
+    <string name="fav_trips">Favourite trips</string>
+    <string name="past_trips">Past trips</string>
 </resources>
