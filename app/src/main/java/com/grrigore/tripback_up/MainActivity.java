@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//todo on screen rotate
+//todo layout polish
 
 public class MainActivity extends AppCompatActivity {
 
