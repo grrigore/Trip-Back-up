@@ -17,4 +17,7 @@ public class TripAdderActivity extends AppCompatActivity {
 
     public void addMedia(View view) {
     }
+
+    public void saveTrip(View view) {
+    }
 }

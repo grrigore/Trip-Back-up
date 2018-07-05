@@ -26,4 +26,5 @@
     <string name="trip_add_media">Add media</string>
     <string name="trip_places">Places</string>
     <string name="trip_add_places">Add places</string>
+    <string name="trip_save">Save trip</string>
 </resources>
