@@ -1,60 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SingUpActivity">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_account" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/email" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account" />
 
-    <EditText
-        android:id="@+id/etEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:nextFocusDown="@id/etPassword"
-        android:nextFocusUp="@id/tvLogin" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/email" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/password" />
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:nextFocusDown="@id/etPassword"
+            android:nextFocusUp="@id/tvLogin" />
 
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:nextFocusDown="@id/btSignup"
-        android:nextFocusUp="@id/etEmail" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password" />
 
-    <Button
-        android:id="@+id/btSignup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:nextFocusDown="@id/tvLogin"
-        android:nextFocusUp="@id/etPassword"
-        android:onClick="signup"
-        android:text="@string/signup_button" />
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:nextFocusDown="@id/btSignup"
+            android:nextFocusUp="@id/etEmail" />
 
-    <TextView
-        android:id="@+id/tvLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nextFocusDown="@id/etEmail"
-        android:nextFocusUp="@id/btSignup"
-        android:text="@string/existing_account" />
-</LinearLayout>
+        <Button
+            android:id="@+id/btSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:nextFocusDown="@id/tvLogin"
+            android:nextFocusUp="@id/etPassword"
+            android:onClick="signup"
+            android:text="@string/signup_button" />
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@id/etEmail"
+            android:nextFocusUp="@id/btSignup"
+            android:text="@string/existing_account" />
+    </LinearLayout>
+</ScrollView>
