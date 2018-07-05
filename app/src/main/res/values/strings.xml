@@ -20,4 +20,10 @@
     <string name="add_trip">Add trip</string>
     <string name="fav_trips">Favourite trips</string>
     <string name="past_trips">Past trips</string>
+    <string name="trip_title">Title</string>
+    <string name="trip_description">Description</string>
+    <string name="trip_gallery">Gallery</string>
+    <string name="trip_add_media">Add media</string>
+    <string name="trip_places">Places</string>
+    <string name="trip_add_places">Add places</string>
 </resources>

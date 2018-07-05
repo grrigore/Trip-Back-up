@@ -12,19 +12,25 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/trip_title" />
 
         <EditText
+            android:id="@+id/etTitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/trip_title"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/trip_description" />
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/trip_description" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -33,17 +39,20 @@
             <TextView
                 android:id="@+id/tvGallery"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/trip_gallery" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tvGallery" />
+                android:layout_toRightOf="@id/tvGallery"
+                android:text="@string/trip_add_media" />
         </RelativeLayout>
 
-        <ListView
+        <GridView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:numColumns="3" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,12 +61,14 @@
             <TextView
                 android:id="@+id/tvPlaces"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/trip_places" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tvPlaces" />
+                android:layout_toRightOf="@id/tvPlaces"
+                android:text="@string/trip_add_places" />
         </RelativeLayout>
 
     </LinearLayout>
