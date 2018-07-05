@@ -19,8 +19,11 @@
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
             android:hint="@string/trip_title"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:nextFocusDown="@id/etDescription"
+            android:nextFocusUp="@id/btPlaces" />
 
         <TextView
             android:layout_width="match_parent"
@@ -28,9 +31,12 @@
             android:text="@string/trip_description" />
 
         <EditText
+            android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/trip_description" />
+            android:hint="@string/trip_description"
+            android:nextFocusDown="@id/btMedia"
+            android:nextFocusUp="@id/etTitle" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,15 +49,22 @@
                 android:text="@string/trip_gallery" />
 
             <Button
+                android:id="@+id/btMedia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tvGallery"
+                android:nextFocusDown="@id/gvMedia"
+                android:nextFocusUp="@id/etDescription"
+                android:onClick="addMedia"
                 android:text="@string/trip_add_media" />
         </RelativeLayout>
 
         <GridView
+            android:id="@+id/gvMedia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusDown="@id/btPlaces"
+            android:nextFocusUp="@id/btMedia"
             android:numColumns="3" />
 
         <RelativeLayout
@@ -65,9 +78,13 @@
                 android:text="@string/trip_places" />
 
             <Button
+                android:id="@+id/btPlaces"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tvPlaces"
+                android:nextFocusDown="@id/etTitle"
+                android:nextFocusUp="@id/gvMedia"
+                android:onClick="addPlace"
                 android:text="@string/trip_add_places" />
         </RelativeLayout>
 
