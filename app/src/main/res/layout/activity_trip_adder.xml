@@ -21,9 +21,10 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:hint="@string/trip_title"
-            android:maxLines="1"
+            android:inputType="text"
             android:nextFocusDown="@id/etDescription"
-            android:nextFocusUp="@id/btPlaces" />
+            android:nextFocusUp="@id/btPlaces"
+            android:singleLine="true" />
 
         <TextView
             android:layout_width="match_parent"
@@ -35,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/trip_description"
+            android:inputType="text"
             android:nextFocusDown="@id/btMedia"
             android:nextFocusUp="@id/etTitle" />
 
