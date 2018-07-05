@@ -1,6 +1,8 @@
 package com.grrigore.tripback_up;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -28,11 +30,15 @@ public class TripAdderActivity extends AppCompatActivity {
     }
 
     public void addPlace(View view) {
+        startActivity(new Intent(this, MapsAdderActivity.class));
     }
 
     public void addMedia(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 0);
     }
 
     public void saveTrip(View view) {
+
     }
 }
