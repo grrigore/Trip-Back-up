@@ -13,6 +13,7 @@ import android.widget.GridView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.grrigore.tripback_up.utils.AddImagesTask;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class TripAdderActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
     private List<URI> imageURIs;
+
 
     public static final int PICK_IMAGE_REQUEST = 1;
 
@@ -59,6 +61,18 @@ public class TripAdderActivity extends AppCompatActivity {
     }
 
     public void addMedia(View view) {
+        (new AddImagesTask() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+            }
+        }).execute();
 
         //create storage reference from our app
         //points to the root reference
@@ -85,9 +99,11 @@ public class TripAdderActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri selectedImageUri = data.getData();
+            if (data.getData() != null) {
+                Uri selectedImageUri = data.getData();
+                Log.d("IMAGEURI", selectedImageUri.toString());
+            }
 
-            Log.d("IMAGE URI", selectedImageUri.toString());
         }
     }
 
