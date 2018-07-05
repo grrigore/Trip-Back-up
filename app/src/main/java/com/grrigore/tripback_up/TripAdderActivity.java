@@ -65,7 +65,7 @@ public class TripAdderActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                
+
             }
 
             @Override
