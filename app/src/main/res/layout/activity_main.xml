@@ -32,9 +32,10 @@
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
         android:hint="@string/email"
-        android:inputType="textEmailAddress" />
-
+        android:inputType="textEmailAddress"
+        android:nextFocusForward="@id/etPassword" />
 
     <TextView
         android:layout_width="match_parent"
@@ -46,12 +47,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:nextFocusForward="@id/btLogin" />
 
     <Button
+        android:id="@+id/btLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:nextFocusForward="@id/tvCreateAccount"
         android:onClick="login"
         android:text="@string/login_button" />
 
