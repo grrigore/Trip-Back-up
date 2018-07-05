@@ -23,7 +23,7 @@
         android:focusable="true"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:nextFocusForward="@id/etPassword" />
+        android:nextFocusDown="@id/etPassword" />
 
     <TextView
         android:layout_width="match_parent"
@@ -36,14 +36,14 @@
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:nextFocusForward="@id/btSignup" />
+        android:nextFocusDown="@id/btSignup" />
 
     <Button
         android:id="@+id/btSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:nextFocusForward="@id/tvLogin"
+        android:nextFocusDown="@id/tvLogin"
         android:onClick="signup"
         android:text="@string/signup_button" />
 
@@ -51,5 +51,6 @@
         android:id="@+id/tvLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:nextFocusDown="@id/etEmail"
         android:text="@string/existing_account" />
 </LinearLayout>
