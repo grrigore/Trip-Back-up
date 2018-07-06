@@ -56,10 +56,17 @@ public class TripAdderActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param view This method sends the user to a MapActivity.
+     */
     public void addPlace(View view) {
         startActivity(new Intent(this, MapsAdderActivity.class));
     }
 
+    /**
+     * @param view This method uses an intent to allow the user to pick images that he wants to add to the Trip object
+     *             and stores the images in firebase storage.
+     */
     public void addMedia(View view) {
         (new AddImagesTask() {
             @Override
@@ -107,7 +114,14 @@ public class TripAdderActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param view This method saves the Trip object to firebase database.
+     */
     public void saveTrip(View view) {
+
+        String title = etTitle.getText().toString();
+        String description = etDescription.getText().toString();
+
 
     }
 }
