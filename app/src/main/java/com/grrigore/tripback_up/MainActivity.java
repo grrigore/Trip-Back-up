@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param view
+     * This method allows the user to login using his credentials.
+     */
     public void login(View view) {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();

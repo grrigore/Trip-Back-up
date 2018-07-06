@@ -55,6 +55,10 @@ public class SingUpActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * @param view
+     * This method allows the user to create a new account.
+     */
     public void signup(View view) {
         String email = etEmail.getText().toString();
         final String password = etPassword.getText().toString();
