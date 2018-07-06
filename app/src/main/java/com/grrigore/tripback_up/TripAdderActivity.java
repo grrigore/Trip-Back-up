@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
@@ -28,8 +28,8 @@ public class TripAdderActivity extends AppCompatActivity {
     EditText etTitle;
     @BindView(R.id.etDescription)
     EditText etDescription;
-    @BindView(R.id.gvMedia)
-    GridView gvMedia;
+    @BindView(R.id.lvMedia)
+    ListView lvMedia;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;

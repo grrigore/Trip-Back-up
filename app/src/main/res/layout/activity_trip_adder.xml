@@ -55,19 +55,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tvGallery"
-                android:nextFocusDown="@id/gvMedia"
+                android:nextFocusDown="@id/lvMedia"
                 android:nextFocusUp="@id/etDescription"
                 android:onClick="addMedia"
                 android:text="@string/trip_add_media" />
         </RelativeLayout>
 
-        <GridView
-            android:id="@+id/gvMedia"
+        <ListView
+            android:id="@+id/lvMedia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nextFocusDown="@id/btPlaces"
-            android:nextFocusUp="@id/btMedia"
-            android:numColumns="3" />
+            android:nextFocusUp="@id/btMedia" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -85,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tvPlaces"
                 android:nextFocusDown="@id/btSave"
-                android:nextFocusUp="@id/gvMedia"
+                android:nextFocusUp="@id/lvMedia"
                 android:onClick="addPlace"
                 android:text="@string/trip_add_places" />
         </RelativeLayout>
