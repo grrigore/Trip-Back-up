@@ -91,19 +91,6 @@ public class TripAdderActivity extends AppCompatActivity {
             }
         }).execute();
 
-        //create storage reference from our app
-        //points to the root reference
-        StorageReference storageReference = firebaseStorage.getReference();
-
-        //create a child reference for images
-        //points to "images"
-        //StorageReference imagesReference = storageReference.child("images");
-
-
-        //create a child reference for videos
-        //points to "videos"
-        //StorageReference videosReference = storageReference.child("videos");
-
 
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -158,34 +145,10 @@ public class TripAdderActivity extends AppCompatActivity {
 
                         }
                         Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
+
                         imageURIs = mArrayUri;
 
-                        StorageReference storageReference = firebaseStorage.getReference();
-                        StorageReference imageReference;
-                        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid());
-                        UploadTask uploadTask;
-
-                        for (Uri imageURI : imageURIs) {
-                            imageReference = userReference.child("images/" + imageURI.getLastPathSegment());
-                            uploadTask = imageReference.putFile(imageURI);
-
-                            // Register observers to listen for when the download is done or if it fails
-                            uploadTask.addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle unsuccessful uploads
-                                    ToastUtil.showToast("Upload fail!", getApplicationContext());
-                                }
-                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                                    // ...
-                                    ToastUtil.showToast("Upload success!", getApplicationContext());
-                                }
-                            });
-
-                        }
+                        uploadImagesToFirebase();
                     }
                 }
             } else {
@@ -199,10 +162,43 @@ public class TripAdderActivity extends AppCompatActivity {
     }
 
     /**
+     * This method is used to upload images to Firebase Storage.
+     */
+    private void uploadImagesToFirebase() {
+        //create storage reference from our app
+        //points to the root reference
+        StorageReference storageReference = firebaseStorage.getReference();
+        //create storage reference for user folder
+        //points to the user folder
+        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid());
+        StorageReference imageReference;
+        UploadTask uploadTask;
+
+        for (Uri imageURI : imageURIs) {
+            //create storage reference for user's image folder
+            //points to the images folder
+            imageReference = userReference.child("images/" + imageURI.getLastPathSegment());
+            uploadTask = imageReference.putFile(imageURI);
+
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    ToastUtil.showToast("Upload fail!", getApplicationContext());
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ToastUtil.showToast("Upload success!", getApplicationContext());
+                }
+            });
+        }
+    }
+
+    /**
      * @param view This method saves the Trip object to firebase database.
      */
     public void saveTrip(View view) {
-
         String title = etTitle.getText().toString();
         String description = etDescription.getText().toString();
         trip.setTitle(title);
