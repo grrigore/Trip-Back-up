@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -174,12 +175,15 @@ public class TripAdderActivity extends AppCompatActivity {
         StorageReference imageReference;
         UploadTask uploadTask;
 
+        //array list used to store images paths
+        final ArrayList<String> strings = new ArrayList<>();
+
         for (Uri imageURI : imageURIs) {
             //create storage reference for user's image folder
             //points to the images folder
             imageReference = userReference.child("images/" + imageURI.getLastPathSegment());
             uploadTask = imageReference.putFile(imageURI);
-
+            strings.add(imageURI.getPath());
             // Register observers to listen for when the download is done or if it fails
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -190,6 +194,9 @@ public class TripAdderActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     ToastUtil.showToast("Upload success!", getApplicationContext());
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, strings);
+                    lvMedia.setAdapter(adapter);
                 }
             });
         }
