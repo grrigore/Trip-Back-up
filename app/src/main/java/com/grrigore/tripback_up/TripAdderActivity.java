@@ -1,21 +1,28 @@
 package com.grrigore.tripback_up;
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.utils.AddImagesTask;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +40,12 @@ public class TripAdderActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
-    private List<URI> imageURIs;
-
+    private ArrayList<Uri> imageURIs;
+    private Trip trip;
 
     public static final int PICK_IMAGE_REQUEST = 1;
+    String imageEncoded;
+    List<String> imagesEncodedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,7 @@ public class TripAdderActivity extends AppCompatActivity {
         //bind views
         ButterKnife.bind(this);
 
+        trip = null;
         imageURIs = new ArrayList<>();
 
         //create instance of firebase auth
@@ -87,31 +97,105 @@ public class TripAdderActivity extends AppCompatActivity {
 
         //create a child reference for images
         //points to "images"
-        StorageReference imagesReference = storageReference.child("images");
+        //StorageReference imagesReference = storageReference.child("images");
 
 
         //create a child reference for videos
         //points to "videos"
-        StorageReference videosReference = storageReference.child("videos");
+        //StorageReference videosReference = storageReference.child("videos");
 
 
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-
-
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            if (data.getData() != null) {
-                Uri selectedImageUri = data.getData();
-                Log.d("IMAGEURI", selectedImageUri.toString());
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                imagesEncodedList = new ArrayList<String>();
+                if (data.getData() != null) {
+
+                    Uri mImageUri = data.getData();
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(mImageUri,
+                            filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imageEncoded = cursor.getString(columnIndex);
+                    cursor.close();
+
+                } else {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            mArrayUri.add(uri);
+                            // Get the cursor
+                            Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
+                            // Move to first row
+                            cursor.moveToFirst();
+
+                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                            imageEncoded = cursor.getString(columnIndex);
+                            imagesEncodedList.add(imageEncoded);
+                            cursor.close();
+
+                        }
+                        Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
+                        imageURIs = mArrayUri;
+
+                        StorageReference storageReference = firebaseStorage.getReference();
+                        StorageReference imageReference;
+                        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid());
+                        UploadTask uploadTask;
+
+                        for (Uri imageURI : imageURIs) {
+                            imageReference = userReference.child("images/" + imageURI.getLastPathSegment());
+                            uploadTask = imageReference.putFile(imageURI);
+
+                            // Register observers to listen for when the download is done or if it fails
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle unsuccessful uploads
+                                    ToastUtil.showToast("Upload fail!", getApplicationContext());
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                                    // ...
+                                    ToastUtil.showToast("Upload success!", getApplicationContext());
+                                }
+                            });
+
+                        }
+                    }
+                }
+            } else {
+                ToastUtil.showToast("You haven't picked Image", this);
             }
-
+        } catch (Exception e) {
+            ToastUtil.showToast("Something went wrong", this);
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -121,7 +205,9 @@ public class TripAdderActivity extends AppCompatActivity {
 
         String title = etTitle.getText().toString();
         String description = etDescription.getText().toString();
-
+        trip.setTitle(title);
+        trip.setDescription(description);
 
     }
+
 }
