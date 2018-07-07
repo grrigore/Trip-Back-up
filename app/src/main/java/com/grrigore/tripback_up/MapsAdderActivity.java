@@ -20,6 +20,7 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     private GoogleMap mMap;
     private List<Place> places;
+    private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,13 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        //move the camera to the center of the map
+        mMap = googleMap;
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0, 0)));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -53,22 +61,13 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
                 // Placing a marker on the touched position
                 mMap.addMarker(markerOptions);
-
-                places.add(new Place(Double.toString(latLng.latitude), Double.toString(latLng.longitude)));
+                place = new Place(Double.toString(latLng.latitude), Double.toString(latLng.longitude));
             }
         });
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        //move the camera to the center of the map
-        mMap = googleMap;
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,0)));
     }
 
     public void addMarkerToMap(View view) {
-
+        places.add(place);
     }
 
     public void saveMarkers(View view) {
