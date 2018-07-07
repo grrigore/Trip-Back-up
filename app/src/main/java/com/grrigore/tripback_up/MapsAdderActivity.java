@@ -11,6 +11,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.grrigore.tripback_up.model.Place;
 
 import java.util.ArrayList;
@@ -22,12 +25,22 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     private List<Place> places;
     private Place place;
 
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_adder);
 
+        //array list used to store the places added
         places = new ArrayList<>();
+
+        //get database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        //create instance of firebase auth
+        firebaseAuth = FirebaseAuth.getInstance();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -74,6 +87,13 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
         //todo save markers to firebase database
         for (Place place : places) {
             Log.d("PLACES", place.getLat() + " " + place.getLng());
+            writeNewPlace(place.getLat(), place.getLng());
         }
+    }
+
+    private void writeNewPlace(String lat, String lng) {
+        Place place = new Place(lat, lng);
+
+        databaseReference.child("users").child(firebaseAuth.getUid()).setValue(place);
     }
 }
