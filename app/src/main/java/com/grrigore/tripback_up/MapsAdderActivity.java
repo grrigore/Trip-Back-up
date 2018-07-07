@@ -92,8 +92,9 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     }
 
     private void writeNewPlace(String lat, String lng) {
+        //only saves one place (the last one)
+        //hit add foreach here
         Place place = new Place(lat, lng);
-
-        databaseReference.child("users").child(firebaseAuth.getUid()).setValue(place);
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("places").setValue(place);
     }
 }
