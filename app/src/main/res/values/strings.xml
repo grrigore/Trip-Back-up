@@ -29,4 +29,5 @@
     <string name="trip_save">Save trip</string>
     <string name="add_marker">add marker</string>
     <string name="save_markers">save markers</string>
+    <string name="clean_markers">clean markers</string>
 </resources>

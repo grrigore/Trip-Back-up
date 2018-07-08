@@ -22,6 +22,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="cleanMarkers"
+        android:text="@string/clean_markers" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="saveMarkers"
         android:text="@string/save_markers" />
 </LinearLayout>

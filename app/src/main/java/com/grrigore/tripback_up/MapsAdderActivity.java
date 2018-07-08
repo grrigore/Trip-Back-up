@@ -86,16 +86,29 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     }
 
     public void saveMarkers(View view) {
-        //todo save markers to firebase database
-        for (Place place : places) {
-            Log.d("PLACES", place.getLat() + " " + place.getLng());
-            writeNewPlace(place.getLat(), place.getLng());
+        if (id != 0) {
+            for (int i = id; i < places.size(); i++) {
+                Log.d("PLACES", place.getLat() + " " + place.getLng());
+                writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
+            }
+        } else {
+            for (int i = 0; i < places.size(); i++) {
+                Log.d("PLACES", place.getLat() + " " + place.getLng());
+                writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
+            }
         }
+
     }
 
     private void writeNewPlace(String lat, String lng) {
         Place place = new Place(lat, lng);
         databaseReference.child("users").child(firebaseAuth.getUid()).child("places").child(String.valueOf(id)).setValue(place);
         id++;
+    }
+
+    public void cleanMarkers(View view) {
+        places.clear();
+        id = 0;
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("places").removeValue();
     }
 }
