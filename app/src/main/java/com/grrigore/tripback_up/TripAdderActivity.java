@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 
 public class TripAdderActivity extends AppCompatActivity {
 
+
     @BindView(R.id.etTitle)
     EditText etTitle;
     @BindView(R.id.etDescription)
@@ -47,6 +48,7 @@ public class TripAdderActivity extends AppCompatActivity {
 
     private ArrayList<Uri> imageURIs;
     private Trip trip;
+    private int tripId;
 
     public static final int PICK_IMAGE_REQUEST = 1;
     String imageEncoded;
@@ -60,6 +62,8 @@ public class TripAdderActivity extends AppCompatActivity {
         //bind views
         ButterKnife.bind(this);
 
+        Bundle bundle = getIntent().getExtras();
+        tripId = bundle.getInt("tripId");
         trip = new Trip();
         imageURIs = new ArrayList<>();
 
@@ -78,7 +82,9 @@ public class TripAdderActivity extends AppCompatActivity {
      * @param view This method sends the user to a MapActivity.
      */
     public void addPlace(View view) {
-        startActivity(new Intent(this, MapsAdderActivity.class));
+        Intent intent = new Intent(this, MapsAdderActivity.class);
+        intent.putExtra("tripId", tripId);
+        startActivity(intent);
     }
 
     /**
@@ -177,8 +183,8 @@ public class TripAdderActivity extends AppCompatActivity {
         //points to the root reference
         StorageReference storageReference = firebaseStorage.getReference();
         //create storage reference for user folder
-        //points to the user folder
-        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid());
+        //points to the trip folder
+        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid()).child("trip" + tripId);
         StorageReference imageReference;
         UploadTask uploadTask;
 
@@ -217,8 +223,8 @@ public class TripAdderActivity extends AppCompatActivity {
         String description = etDescription.getText().toString();
         trip.setTitle(title);
         trip.setDescription(description);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip").child("title").setValue(trip.getTitle());
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip").child("description").setValue(trip.getDescription());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("title").setValue(trip.getTitle());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("description").setValue(trip.getDescription());
         ToastUtil.showToast("Trip saved!", getApplicationContext());
     }
 }

@@ -3,15 +3,19 @@ package com.grrigore.tripback_up;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class TripListActivity extends AppCompatActivity {
+    private int tripId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_list);
+
+        tripId = 0;
     }
 
 
@@ -36,7 +40,11 @@ public class TripListActivity extends AppCompatActivity {
                 //todo fav trip selection
                 return true;
             case R.id.addTrip:
-                startActivity(new Intent(this, TripAdderActivity.class));
+                Intent intent = new Intent(this, TripAdderActivity.class);
+                intent.putExtra("tripId", tripId);
+                tripId++;
+                Log.d("TRIP ID", String.valueOf(tripId));
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
