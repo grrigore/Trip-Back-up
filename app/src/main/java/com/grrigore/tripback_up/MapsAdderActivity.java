@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.grrigore.tripback_up.model.Place;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,18 +98,18 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
                 writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
             }
         }
-
+        ToastUtil.showToast("Places added!", getApplicationContext());
     }
 
     private void writeNewPlace(String lat, String lng) {
         Place place = new Place(lat, lng);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("places").child(String.valueOf(id)).setValue(place);
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip").child("places").child(String.valueOf(id)).setValue(place);
         id++;
     }
 
     public void cleanMarkers(View view) {
         places.clear();
         id = 0;
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("places").removeValue();
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip").child("places").removeValue();
     }
 }

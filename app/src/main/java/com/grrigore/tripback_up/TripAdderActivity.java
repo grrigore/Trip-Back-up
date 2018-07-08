@@ -17,6 +17,8 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -41,6 +43,8 @@ public class TripAdderActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
+    private DatabaseReference databaseReference;
+
     private ArrayList<Uri> imageURIs;
     private Trip trip;
 
@@ -56,7 +60,7 @@ public class TripAdderActivity extends AppCompatActivity {
         //bind views
         ButterKnife.bind(this);
 
-        trip = null;
+        trip = new Trip();
         imageURIs = new ArrayList<>();
 
         //create instance of firebase auth
@@ -64,6 +68,9 @@ public class TripAdderActivity extends AppCompatActivity {
 
         //create instance of firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
+
+        //get database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
     }
 
@@ -210,7 +217,8 @@ public class TripAdderActivity extends AppCompatActivity {
         String description = etDescription.getText().toString();
         trip.setTitle(title);
         trip.setDescription(description);
-
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip").child("title").setValue(trip.getTitle());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip").child("description").setValue(trip.getDescription());
+        ToastUtil.showToast("Trip saved!", getApplicationContext());
     }
-
 }
