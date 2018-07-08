@@ -24,9 +24,11 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     private GoogleMap mMap;
     private List<Place> places;
     private Place place;
+    int id = 0;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +94,8 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     }
 
     private void writeNewPlace(String lat, String lng) {
-        //only saves one place (the last one)
-        //hit add foreach here
         Place place = new Place(lat, lng);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("places").setValue(place);
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("places").child(String.valueOf(id)).setValue(place);
+        id++;
     }
 }
