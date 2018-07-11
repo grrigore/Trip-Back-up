@@ -196,11 +196,13 @@ public class TripAdderActivity extends AppCompatActivity {
 
         //array list used to store images paths
         final ArrayList<String> strings = new ArrayList<>();
-
+        int i = 0;
         for (Uri imageURI : imageURIs) {
+
             //create storage reference for user's image folder
             //points to the images folder
-            imageReference = userReference.child("images/" + imageURI.getLastPathSegment());
+            imageReference = userReference.child("images/" + "img" + i);
+            i++;
             uploadTask = imageReference.putFile(imageURI);
             strings.add(imageURI.getPath());
             // Register observers to listen for when the download is done or if it fails
@@ -218,6 +220,8 @@ public class TripAdderActivity extends AppCompatActivity {
                     lvMedia.setAdapter(adapter);
                 }
             });
+
+            databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("images").child("img" + i).setValue(imageReference.toString());
         }
     }
 
