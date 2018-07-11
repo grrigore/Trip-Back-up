@@ -66,6 +66,7 @@ public class TripListActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Trip trip = dataSnapshot.getValue(Trip.class);
                 tripList.add(trip);
+                Log.d("Trip List", String.valueOf(tripList.size()));
             }
 
             @Override
