@@ -3,11 +3,18 @@ package com.grrigore.tripback_up;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import butterknife.BindView;
+
 public class TripListActivity extends AppCompatActivity {
+
+    @BindView(R.id.rlvTrips)
+    RecyclerView rlvTrips;
+
     private int tripId;
 
     @Override
