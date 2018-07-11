@@ -27,6 +27,8 @@ import com.grrigore.tripback_up.utils.AddImagesTask;
 import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,6 +50,7 @@ public class TripAdderActivity extends AppCompatActivity {
 
     private ArrayList<Uri> imageURIs;
     private Trip trip;
+    private Date date;
     private int tripId;
 
     public static final int PICK_IMAGE_REQUEST = 1;
@@ -66,6 +69,9 @@ public class TripAdderActivity extends AppCompatActivity {
         tripId = bundle.getInt("tripId");
         trip = new Trip();
         imageURIs = new ArrayList<>();
+
+        //get current time
+        date = Calendar.getInstance().getTime();
 
         //create instance of firebase auth
         firebaseAuth = FirebaseAuth.getInstance();
@@ -221,10 +227,14 @@ public class TripAdderActivity extends AppCompatActivity {
     public void saveTrip(View view) {
         String title = etTitle.getText().toString();
         String description = etDescription.getText().toString();
+
         trip.setTitle(title);
         trip.setDescription(description);
+        trip.setDate(date);
         databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("title").setValue(trip.getTitle());
         databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("description").setValue(trip.getDescription());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("date").setValue(trip.getDate());
+
         ToastUtil.showToast("Trip saved!", getApplicationContext());
     }
 }

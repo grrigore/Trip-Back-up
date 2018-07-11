@@ -1,10 +1,12 @@
 package com.grrigore.tripback_up.model;
 
+import java.util.Date;
 import java.util.List;
 
 public class Trip {
     private String title;
     private String description;
+    private Date date;
     private List<String> photos;
     private List<String> videos;
     private List<Place> places;
@@ -12,12 +14,21 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(String title, String description, List<String> photos, List<String> videos, List<Place> places) {
+    public Trip(String title, String description, Date date, List<String> photos, List<String> videos, List<Place> places) {
         this.title = title;
         this.description = description;
+        this.date = date;
         this.photos = photos;
         this.videos = videos;
         this.places = places;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getTitle() {
