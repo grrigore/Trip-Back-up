@@ -29,7 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TripListActivity extends AppCompatActivity implements TripAdapter.ItemClickListener {
+public class TripListActivity extends AppCompatActivity{
 
     @BindView(R.id.rlvTrips)
     RecyclerView rlvTrips;
@@ -95,6 +95,13 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                 }
                 tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
                 RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intentTripDetail = new Intent(TripListActivity.this, TripDetailActivity.class);
+                        startActivity(intentTripDetail);
+                    }
+                });
                 rlvTrips.setLayoutManager(layoutManager);
                 rlvTrips.setItemAnimator(new DefaultItemAnimator());
                 rlvTrips.setAdapter(tripAdapter);
@@ -138,11 +145,5 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Intent intentTripDetail = new Intent(this, TripDetailActivity.class);
-        startActivity(intentTripDetail);
     }
 }
