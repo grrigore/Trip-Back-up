@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +34,7 @@ public class SingUpActivity extends AppCompatActivity {
     TextView tvLogin;
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +56,13 @@ public class SingUpActivity extends AppCompatActivity {
 
         //get firebase auth instance
         firebaseAuth = FirebaseAuth.getInstance();
+
+        //get database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     /**
-     * @param view
-     * This method allows the user to create a new account.
+     * @param view This method allows the user to create a new account.
      */
     public void signup(View view) {
         String email = etEmail.getText().toString();
@@ -81,10 +86,16 @@ public class SingUpActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), getString(R.string.create_account_error), Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    initialiseTripNumber();
                     startActivity(new Intent(SingUpActivity.this, MainActivity.class));
                     finish();
                 }
             }
         });
     }
+
+    private void initialiseTripNumber() {
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(0);
+    }
+
 }

@@ -9,8 +9,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -53,7 +51,7 @@ public class TripAdderActivity extends AppCompatActivity {
     private ArrayList<Uri> imageURIs;
     private Trip trip;
     private Date date;
-    private int tripId;
+    private Long tripId;
 
     public static final int PICK_IMAGE_REQUEST = 1;
     String imageEncoded;
@@ -68,7 +66,8 @@ public class TripAdderActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
-        tripId = bundle.getInt("tripId");
+        tripId = bundle.getLong("tripId");
+        Log.d(TripAdderActivity.class.getSimpleName(), "Trip id sent from trip list = " + tripId);
         trip = new Trip();
         imageURIs = new ArrayList<>();
 
@@ -192,7 +191,7 @@ public class TripAdderActivity extends AppCompatActivity {
         StorageReference storageReference = firebaseStorage.getReference();
         //create storage reference for user folder
         //points to the trip folder
-        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid()).child("trip" + tripId);
+        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid()).child("trips").child("trip" + tripId);
         StorageReference imageReference;
         UploadTask uploadTask;
 
@@ -223,7 +222,7 @@ public class TripAdderActivity extends AppCompatActivity {
                 }
             });
 
-            databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("images").child("img" + i).setValue(imageReference.toString());
+            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("images").child("img" + i).setValue(imageReference.toString());
         }
     }
 
@@ -237,44 +236,16 @@ public class TripAdderActivity extends AppCompatActivity {
         trip.setTitle(title);
         trip.setDescription(description);
         trip.setDate(date);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("title").setValue(trip.getTitle());
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("description").setValue(trip.getDescription());
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("date").setValue(trip.getDate());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("title").setValue(trip.getTitle());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("description").setValue(trip.getDescription());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("date").setValue(trip.getDate());
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
 
         ToastUtil.showToast("Trip saved!", getApplicationContext());
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.recentTrips:
-                //todo recent trip selection
-                Intent intentRecentTrips = new Intent(this, TripListActivity.class);
-                startActivity(intentRecentTrips);
-                return true;
-            case R.id.pastTrips:
-                //todo past trip selection
-                return true;
-            case R.id.favTrips:
-                //todo fav trip selection
-                return true;
-            case R.id.addTrip:
-                Intent intentAddTrip = new Intent(this, TripAdderActivity.class);
-                intentAddTrip.putExtra("tripId", tripId);
-                tripId++;
-                Log.d("TRIP ID", String.valueOf(tripId));
-                startActivity(intentAddTrip);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
+        Intent intentRecentTrips = new Intent(this, TripListActivity.class);
+        intentRecentTrips.putExtra("tripId", tripId);
+        startActivity(intentRecentTrips);
     }
 }

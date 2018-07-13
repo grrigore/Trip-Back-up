@@ -38,7 +38,7 @@ public class TripListActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
-    private int tripId;
+    private long tripId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class TripListActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        tripId = 0;
 
         //create instance of firebase auth
         firebaseAuth = FirebaseAuth.getInstance();
@@ -58,20 +57,38 @@ public class TripListActivity extends AppCompatActivity {
         //create instance of firebase database
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        //points to the root reference
-        StorageReference storageReference = firebaseStorage.getReference();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            tripId = bundle.getLong("tripId");
+            Log.d(TripListActivity.class.getSimpleName(), "Trip id sent from trip adder = " + tripId);
+        } else {
+            // Read from the database
+            databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    tripId = (long) dataSnapshot.child("tripNumber").getValue();
+                }
 
-        final StorageReference imageRef = firebaseStorage.getReferenceFromUrl("gs://trip-back-up-1530375802363.appspot.com/user/" + firebaseAuth.getCurrentUser().getUid() + "/trip" + tripId + "/images/img0");
-
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
+                }
+            });
+        }
 
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Trip> tripList = new ArrayList<>();
-                for (DataSnapshot tripDataSnapshot : dataSnapshot.getChildren()) {
+                DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
+                for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
                     Trip trip = tripDataSnapshot.getValue(Trip.class);
                     tripList.add(trip);
                 }
+                StorageReference imageRef = firebaseStorage.getReferenceFromUrl("gs://trip-back-up-1530375802363.appspot.com/user/" + firebaseAuth.getCurrentUser().getUid() + "/trips/trip" + tripId + "/images/img0");
                 tripAdapter = new TripAdapter(tripList, imageRef, getApplicationContext());
                 RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
                 rlvTrips.setLayoutManager(layoutManager);
@@ -108,10 +125,10 @@ public class TripListActivity extends AppCompatActivity {
                 //todo fav trip selection
                 return true;
             case R.id.addTrip:
+                tripId++;
+                Log.d(TripListActivity.class.getSimpleName(), "Current trip id = " + tripId);
                 Intent intent = new Intent(this, TripAdderActivity.class);
                 intent.putExtra("tripId", tripId);
-                tripId++;
-                Log.d("TRIP ID", String.valueOf(tripId));
                 startActivity(intent);
                 return true;
             default:
