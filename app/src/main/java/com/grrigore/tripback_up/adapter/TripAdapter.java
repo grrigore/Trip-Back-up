@@ -24,6 +24,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     private List<Trip> trips;
     private List<StorageReference> storageReferences;
     private Context context;
+    private ItemClickListener itemClickListener;
 
     public TripAdapter(List<Trip> trips, List<StorageReference> storageReferences, Context context) {
         this.trips = trips;
@@ -57,7 +58,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tvTitle)
         TextView tvTitle;
@@ -68,5 +69,20 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(v, getAdapterPosition());
+            }
+        }
+    }
+
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }
