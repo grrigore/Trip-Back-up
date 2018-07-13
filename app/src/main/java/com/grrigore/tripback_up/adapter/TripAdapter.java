@@ -22,12 +22,12 @@ import butterknife.ButterKnife;
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     private List<Trip> trips;
-    private StorageReference storageReference;
+    private List<StorageReference> storageReferences;
     private Context context;
 
-    public TripAdapter(List<Trip> trips, StorageReference storageReference, Context context) {
+    public TripAdapter(List<Trip> trips, List<StorageReference> storageReferences, Context context) {
         this.trips = trips;
-        this.storageReference = storageReference;
+        this.storageReferences = storageReferences;
         this.context = context;
     }
 
@@ -44,7 +44,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         // Load the image using Glide
         Glide.with(context)
                 .using(new FirebaseImageLoader())
-                .load(storageReference)
+                .load(storageReferences.get(position))
                 .into(holder.ivImage);
     }
 

@@ -83,13 +83,16 @@ public class TripListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Trip> tripList = new ArrayList<>();
+                List<StorageReference> imageRefs = new ArrayList<>();
+
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
                     Trip trip = tripDataSnapshot.getValue(Trip.class);
                     tripList.add(trip);
+                    String imageRefString = (String) tripDataSnapshot.child("images").child("img1").getValue();
+                    imageRefs.add(firebaseStorage.getReferenceFromUrl(imageRefString));
                 }
-                StorageReference imageRef = firebaseStorage.getReferenceFromUrl("gs://trip-back-up-1530375802363.appspot.com/user/" + firebaseAuth.getCurrentUser().getUid() + "/trips/trip" + tripId + "/images/img0");
-                tripAdapter = new TripAdapter(tripList, imageRef, getApplicationContext());
+                tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
                 RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
                 rlvTrips.setLayoutManager(layoutManager);
                 rlvTrips.setItemAnimator(new DefaultItemAnimator());
