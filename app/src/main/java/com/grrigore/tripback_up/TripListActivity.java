@@ -77,7 +77,6 @@ public class TripListActivity extends AppCompatActivity {
                 rlvTrips.setLayoutManager(layoutManager);
                 rlvTrips.setItemAnimator(new DefaultItemAnimator());
                 rlvTrips.setAdapter(tripAdapter);
-                Log.d("-----Trip List------", String.valueOf(tripList.size()));
             }
 
             @Override
