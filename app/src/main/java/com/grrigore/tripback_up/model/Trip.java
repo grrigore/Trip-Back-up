@@ -1,15 +1,16 @@
 package com.grrigore.tripback_up.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Trip {
-    private String title;
-    private String description;
-    private Date date;
-    private List<String> photos;
-    private List<String> videos;
-    private List<Place> places;
+    private String title = null;
+    private String description = null;
+    private Date date = null;
+    private List<String> photos = new ArrayList<>();
+    private List<String> videos = new ArrayList<>();
+    private List<Place> places = new ArrayList<>();
 
     public Trip() {
     }

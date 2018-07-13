@@ -1,8 +1,8 @@
 package com.grrigore.tripback_up.model;
 
 public class Place {
-    private String lat;
-    private String lng;
+    private String lat = null;
+    private String lng = null;
 
     public Place() {
     }

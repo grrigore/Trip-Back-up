@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.TripAdapter;
 import com.grrigore.tripback_up.model.Trip;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,7 +34,6 @@ public class TripListActivity extends AppCompatActivity {
     RecyclerView rlvTrips;
 
     private TripAdapter tripAdapter;
-    private List<Trip> tripList;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -59,24 +61,30 @@ public class TripListActivity extends AppCompatActivity {
         //points to the root reference
         StorageReference storageReference = firebaseStorage.getReference();
 
-        StorageReference imageRef = firebaseStorage.getReferenceFromUrl("gs://trip-back-up-1530375802363.appspot.com/user/" + firebaseAuth.getCurrentUser().getUid() + "/trip" + tripId + "/images/img0");
+        final StorageReference imageRef = firebaseStorage.getReferenceFromUrl("gs://trip-back-up-1530375802363.appspot.com/user/" + firebaseAuth.getCurrentUser().getUid() + "/trip" + tripId + "/images/img0");
+
 
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Trip trip = dataSnapshot.getValue(Trip.class);
-                tripList.add(trip);
-                Log.d("Trip List", String.valueOf(tripList.size()));
+                List<Trip> tripList = new ArrayList<>();
+                for (DataSnapshot tripDataSnapshot : dataSnapshot.getChildren()) {
+                    Trip trip = tripDataSnapshot.getValue(Trip.class);
+                    tripList.add(trip);
+                }
+                tripAdapter = new TripAdapter(tripList, imageRef, getApplicationContext());
+                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                rlvTrips.setLayoutManager(layoutManager);
+                rlvTrips.setItemAnimator(new DefaultItemAnimator());
+                rlvTrips.setAdapter(tripAdapter);
+                Log.d("-----Trip List------", String.valueOf(tripList.size()));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("-----Error-----", databaseError.getMessage());
             }
         });
-
-        tripAdapter = new TripAdapter(tripList, imageRef, this);
-        rlvTrips.setAdapter(tripAdapter);
     }
 
 

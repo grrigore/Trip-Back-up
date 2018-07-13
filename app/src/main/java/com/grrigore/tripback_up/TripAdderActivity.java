@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -240,5 +242,39 @@ public class TripAdderActivity extends AppCompatActivity {
         databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("date").setValue(trip.getDate());
 
         ToastUtil.showToast("Trip saved!", getApplicationContext());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.recentTrips:
+                //todo recent trip selection
+                Intent intentRecentTrips = new Intent(this, TripListActivity.class);
+                startActivity(intentRecentTrips);
+                return true;
+            case R.id.pastTrips:
+                //todo past trip selection
+                return true;
+            case R.id.favTrips:
+                //todo fav trip selection
+                return true;
+            case R.id.addTrip:
+                Intent intentAddTrip = new Intent(this, TripAdderActivity.class);
+                intentAddTrip.putExtra("tripId", tripId);
+                tripId++;
+                Log.d("TRIP ID", String.valueOf(tripId));
+                startActivity(intentAddTrip);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

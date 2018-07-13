@@ -42,15 +42,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         Trip trip = trips.get(position);
         holder.tvTitle.setText(trip.getTitle());
         // Load the image using Glide
-        /*Glide.with(context)
+        Glide.with(context)
                 .using(new FirebaseImageLoader())
                 .load(storageReference)
-                .into(holder.ivImage);*/
+                .into(holder.ivImage);
     }
 
     @Override
     public int getItemCount() {
-        return trips.size();
+        if (trips == null) {
+            return 0;
+        } else {
+            return trips.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
