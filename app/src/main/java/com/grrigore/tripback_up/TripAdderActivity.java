@@ -54,8 +54,8 @@ public class TripAdderActivity extends AppCompatActivity {
     private Long tripId;
 
     public static final int PICK_IMAGE_REQUEST = 1;
-    String imageEncoded;
-    List<String> imagesEncodedList;
+    private String imageEncoded;
+    private List<String> imagesEncodedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

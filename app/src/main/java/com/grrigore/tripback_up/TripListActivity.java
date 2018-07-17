@@ -29,7 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TripListActivity extends AppCompatActivity{
+public class TripListActivity extends AppCompatActivity {
 
     @BindView(R.id.rlvTrips)
     RecyclerView rlvTrips;
