@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.TripAdapter;
+import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 
 import java.util.ArrayList;
@@ -94,19 +95,36 @@ public class TripListActivity extends AppCompatActivity {
 
                     trip.setTitle((String) tripDataSnapshot.child("title").getValue());
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
-                    trip.setDate((Date) tripDataSnapshot.child("date").getValue());
-                    trip.setImages();
-                    trip.setPlaces();
 
-                    Log.d(TripListActivity.class.getSimpleName(), trip.toString());
-                    Log.d(TripListActivity.class.getSimpleName(), trip.getImages().get(0));
-                    Log.d(TripListActivity.class.getSimpleName(), String.valueOf(trip.getPlaces().get(0)));
+
+                    DataSnapshot dateDataSnapshot = tripDataSnapshot.child("date");
+                    Date date = new Date();
+                    if (dateDataSnapshot.child("time").getValue() != null) {
+                        date.setTime((Long) dateDataSnapshot.child("time").getValue());
+                    }
+                    trip.setDate(date);
+
+                    DataSnapshot imagesDataSnapshot = tripDataSnapshot.child("images");
+                    List<String> imageList = new ArrayList<>();
+                    for (int i = 1; i <= imagesDataSnapshot.getChildrenCount(); i++) {
+                        imageList.add(String.valueOf(imagesDataSnapshot.child("img" + i).getValue()));
+                    }
+                    trip.setImages(imageList);
+
+                    DataSnapshot placesDataSnapshot = tripDataSnapshot.child("places");
+                    List<Place> placeList = new ArrayList<>();
+                    for (int i = 0; i < placesDataSnapshot.getChildrenCount(); i++) {
+                        Place place = new Place();
+                        place.setLat((String) placesDataSnapshot.child(String.valueOf(i)).child("lat").getValue());
+                        place.setLng((String) placesDataSnapshot.child(String.valueOf(i)).child("lng").getValue());
+                        placeList.add(place);
+                    }
+                    trip.setPlaces(placeList);
 
                     tripList.add(trip);
 
                     //get first image form each trip
-                    String imageRefString = (String) tripDataSnapshot.child("images").child("img1").getValue();
-                    imageRefs.add(firebaseStorage.getReferenceFromUrl(imageRefString));
+                    imageRefs.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
                 }
 
                 tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
