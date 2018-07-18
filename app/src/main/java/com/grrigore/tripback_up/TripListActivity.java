@@ -86,7 +86,7 @@ public class TripListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final List<Trip> tripList = new ArrayList<>();
-                List<StorageReference> imageRefs = new ArrayList<>();
+                final List<StorageReference> imageRefs = new ArrayList<>();
 
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
@@ -134,9 +134,11 @@ public class TripListActivity extends AppCompatActivity {
                 tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intentTripDetail = new Intent(TripListActivity.this, TripDetailActivity.class);
-                        intentTripDetail.putExtra("tripClicked", tripList.get(position));
-                        startActivity(intentTripDetail);
+                        Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
+                        tripDetailIntent.putExtra("tripClicked", tripList.get(position));
+                        tripDetailIntent.putExtra("tripId", position + 1);
+                        tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
+                        startActivity(tripDetailIntent);
                     }
                 });
                 rlvTrips.setLayoutManager(layoutManager);
