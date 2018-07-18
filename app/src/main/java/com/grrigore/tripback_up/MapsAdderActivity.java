@@ -26,7 +26,7 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     private List<Place> places;
     private Place place;
     private int placeId = 0;
-    private int tripId;
+    private long tripId;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -47,7 +47,7 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
         firebaseAuth = FirebaseAuth.getInstance();
 
         Bundle bundle = getIntent().getExtras();
-        tripId = bundle.getInt("tripId");
+        tripId = bundle.getLong("tripId");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -93,12 +93,10 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     public void saveMarkers(View view) {
         if (placeId != 0) {
             for (int i = placeId; i < places.size(); i++) {
-                Log.d("PLACES", place.getLat() + " " + place.getLng());
                 writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
             }
         } else {
             for (int i = 0; i < places.size(); i++) {
-                Log.d("PLACES", place.getLat() + " " + place.getLng());
                 writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
             }
         }
@@ -107,13 +105,13 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     private void writeNewPlace(String lat, String lng) {
         Place place = new Place(lat, lng);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
         placeId++;
     }
 
     public void cleanMarkers(View view) {
         places.clear();
         placeId = 0;
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trip" + tripId).child("places").removeValue();
+        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").removeValue();
     }
 }
