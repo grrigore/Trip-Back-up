@@ -3,6 +3,8 @@ package com.grrigore.tripback_up;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+//TODO implement this activity
+
 public class MediaActivity extends AppCompatActivity {
 
     @Override

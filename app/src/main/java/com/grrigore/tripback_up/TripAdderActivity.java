@@ -34,6 +34,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//TODO on screen rotate
+
 public class TripAdderActivity extends AppCompatActivity {
 
 

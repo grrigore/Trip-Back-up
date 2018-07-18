@@ -29,6 +29,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//TODO on screen rotate
+
 public class TripListActivity extends AppCompatActivity {
 
     @BindView(R.id.rlvTrips)
@@ -67,8 +69,6 @@ public class TripListActivity extends AppCompatActivity {
             databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
                     tripId = (long) dataSnapshot.child("tripNumber").getValue();
                 }
 
@@ -95,6 +95,7 @@ public class TripListActivity extends AppCompatActivity {
                 }
                 tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
                 RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                //set on item click listener
                 tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
