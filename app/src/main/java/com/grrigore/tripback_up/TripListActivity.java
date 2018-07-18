@@ -85,7 +85,7 @@ public class TripListActivity extends AppCompatActivity {
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Trip> tripList = new ArrayList<>();
+                final List<Trip> tripList = new ArrayList<>();
                 List<StorageReference> imageRefs = new ArrayList<>();
 
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
@@ -135,6 +135,7 @@ public class TripListActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intentTripDetail = new Intent(TripListActivity.this, TripDetailActivity.class);
+                        intentTripDetail.putExtra("tripClicked", tripList.get(position));
                         startActivity(intentTripDetail);
                     }
                 });
