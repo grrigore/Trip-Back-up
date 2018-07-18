@@ -31,4 +31,5 @@
     <string name="clean_markers">clean markers</string>
     <string name="trip_gallery">Gallery</string>
     <string name="no_recent_trips">You\'ve got no recent trips... \n consider travelling more often!</string>
+    <string name="mark_as_favourite">mark as favourite</string>
 </resources>
