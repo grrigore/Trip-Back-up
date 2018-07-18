@@ -1,10 +1,13 @@
 package com.grrigore.tripback_up.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Trip {
+public class Trip implements Parcelable {
     private String title = null;
     private String description = null;
     private Date date = null;
@@ -83,4 +86,72 @@ public class Trip {
                 ", places=" + places +
                 '}';
     }
+
+    protected Trip(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        long tmpDate = in.readLong();
+        date = tmpDate != -1 ? new Date(tmpDate) : null;
+        if (in.readByte() == 0x01) {
+            images = new ArrayList<String>();
+            in.readList(images, String.class.getClassLoader());
+        } else {
+            images = null;
+        }
+        if (in.readByte() == 0x01) {
+            videos = new ArrayList<String>();
+            in.readList(videos, String.class.getClassLoader());
+        } else {
+            videos = null;
+        }
+        if (in.readByte() == 0x01) {
+            places = new ArrayList<Place>();
+            in.readList(places, Place.class.getClassLoader());
+        } else {
+            places = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeLong(date != null ? date.getTime() : -1L);
+        if (images == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(images);
+        }
+        if (videos == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(videos);
+        }
+        if (places == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(places);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 }
