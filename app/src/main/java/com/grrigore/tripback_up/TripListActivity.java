@@ -24,6 +24,7 @@ import com.grrigore.tripback_up.adapter.TripAdapter;
 import com.grrigore.tripback_up.model.Trip;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -88,12 +89,28 @@ public class TripListActivity extends AppCompatActivity {
 
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
-                    Trip trip = tripDataSnapshot.getValue(Trip.class);
+                    Trip trip = new Trip();
+                    //Trip trip = tripDataSnapshot.getValue(Trip.class);
+
+                    trip.setTitle((String) tripDataSnapshot.child("title").getValue());
+                    trip.setDescription((String) tripDataSnapshot.child("description").getValue());
+                    trip.setDate((Date) tripDataSnapshot.child("date").getValue());
+                    trip.setImages();
+                    trip.setPlaces();
+
+                    Log.d(TripListActivity.class.getSimpleName(), trip.toString());
+                    Log.d(TripListActivity.class.getSimpleName(), trip.getImages().get(0));
+                    Log.d(TripListActivity.class.getSimpleName(), String.valueOf(trip.getPlaces().get(0)));
+
                     tripList.add(trip);
+
+                    //get first image form each trip
                     String imageRefString = (String) tripDataSnapshot.child("images").child("img1").getValue();
                     imageRefs.add(firebaseStorage.getReferenceFromUrl(imageRefString));
                 }
+
                 tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
+
                 RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
                 //set on item click listener
                 tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {

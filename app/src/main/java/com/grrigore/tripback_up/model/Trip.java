@@ -8,18 +8,18 @@ public class Trip {
     private String title = null;
     private String description = null;
     private Date date = null;
-    private List<String> photos = new ArrayList<>();
+    private List<String> images = new ArrayList<>();
     private List<String> videos = new ArrayList<>();
     private List<Place> places = new ArrayList<>();
 
     public Trip() {
     }
 
-    public Trip(String title, String description, Date date, List<String> photos, List<String> videos, List<Place> places) {
+    public Trip(String title, String description, Date date, List<String> images, List<String> videos, List<Place> places) {
         this.title = title;
         this.description = description;
         this.date = date;
-        this.photos = photos;
+        this.images = images;
         this.videos = videos;
         this.places = places;
     }
@@ -48,12 +48,12 @@ public class Trip {
         this.description = description;
     }
 
-    public List<String> getPhotos() {
-        return photos;
+    public List<String> getImages() {
+        return images;
     }
 
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public List<String> getVideos() {
@@ -70,5 +70,17 @@ public class Trip {
 
     public void setPlaces(List<Place> places) {
         this.places = places;
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", images=" + images +
+                ", videos=" + videos +
+                ", places=" + places +
+                '}';
     }
 }
