@@ -14,7 +14,6 @@
         android:gravity="center">
 
         <LinearLayout
-            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -78,7 +77,7 @@
                 android:id="@+id/btLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_marginTop="8dp"
                 android:nextFocusDown="@id/tvCreateAccount"
                 android:nextFocusUp="@id/etPassword"
@@ -90,14 +89,14 @@
             android:id="@+id/tvCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/mainLayout"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:nextFocusDown="@id/etEmail"
             android:nextFocusUp="@id/btLogin"
-            android:text="@string/create_account"
+            android:text="@string/create_account_u"
             android:textColor="@android:color/holo_blue_dark" />
     </RelativeLayout>
 </ScrollView>
