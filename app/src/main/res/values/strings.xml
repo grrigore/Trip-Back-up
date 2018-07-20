@@ -8,9 +8,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login_button">login</string>
-    <string name="create_account">Create account</string>
+    <string name="create_account"><u>Create account</u></string>
     <string name="signup_button">signup</string>
-    <string name="existing_account">Already have an account? Log-in</string>
+    <string name="existing_account"><u>Already have an account? Log-in</u></string>
     <string name="no_email">Enter email!</string>
     <string name="no_password">Enter password!</string>
     <string name="wrong_credentials">Wrong credentials!</string>
