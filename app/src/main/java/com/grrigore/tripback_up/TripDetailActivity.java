@@ -54,7 +54,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private String userUID;
     private int tripId;
 
-    private GoogleMap gMap;
+    private List<MarkerOptions> markerOptionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_trip_detail);
 
         ButterKnife.bind(this);
-
+        markerOptionsList = new ArrayList<>();
 
         //create instance of firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
@@ -117,17 +117,22 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         mvTripPlaces.getMapAsync(this);
     }
 
+    public void markAsFavourite(View view) {
+    }
+
+    public void openDetailMap(View view) {
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        gMap = googleMap;
         List<Place> places = trip.getPlaces();
         List<Marker> markers = new ArrayList<>();
         for (Place place : places) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(Double.parseDouble(place.getLat()), Double.parseDouble(place.getLng())));
-            //gMap.addMarker(markerOptions);
-            Marker marker = gMap.addMarker(markerOptions);
+            Marker marker = googleMap.addMarker(markerOptions);
             markers.add(marker);
+            markerOptionsList.add(markerOptions);
         }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -135,14 +140,32 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             builder.include(marker.getPosition());
         }
         LatLngBounds bounds = builder.build();
-        int padding = 15; // offset from edges of the map in pixels
+        int padding = 100; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        gMap.moveCamera(cu);
+        googleMap.moveCamera(cu);
     }
 
-    public void markAsFavourite(View view) {
+    @Override
+    public void onResume() {
+        mvTripPlaces.onResume();
+        super.onResume();
     }
 
-    public void openDetailMap(View view) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        mvTripPlaces.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mvTripPlaces.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mvTripPlaces.onLowMemory();
     }
 }
