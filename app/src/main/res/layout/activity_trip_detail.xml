@@ -61,7 +61,7 @@
         <com.google.android.gms.maps.MapView
             android:id="@+id/mvTripPlaces"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:onClick="openDetailMap" />
 
     </LinearLayout>

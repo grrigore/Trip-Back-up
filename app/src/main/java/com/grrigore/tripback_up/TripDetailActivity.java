@@ -12,12 +12,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.GalleryAdapter;
+import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 
 import java.util.ArrayList;
@@ -26,7 +35,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TripDetailActivity extends AppCompatActivity {
+//todo on screen rotation
+
+public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @BindView(R.id.tvTripTitle)
     TextView tvTripTitle;
@@ -39,11 +50,11 @@ public class TripDetailActivity extends AppCompatActivity {
 
     private FirebaseStorage firebaseStorage;
 
-
     private Trip trip;
     private String userUID;
     private int tripId;
-    private GalleryAdapter galleryAdapter;
+
+    private GoogleMap gMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +88,7 @@ public class TripDetailActivity extends AppCompatActivity {
             imageStorageReferences.add(firebaseStorage.getReferenceFromUrl(imageUrl));
         }
 
-        galleryAdapter = new GalleryAdapter(imageStorageReferences, getApplicationContext());
+        GalleryAdapter galleryAdapter = new GalleryAdapter(imageStorageReferences, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 3);
         galleryAdapter.setItemClickListener(new GalleryAdapter.ItemClickListener() {
             @Override
@@ -101,6 +112,32 @@ public class TripDetailActivity extends AppCompatActivity {
         rvTripGallery.setLayoutManager(layoutManager);
         rvTripGallery.setItemAnimator(new DefaultItemAnimator());
         rvTripGallery.setAdapter(galleryAdapter);
+
+        mvTripPlaces.onCreate(null);
+        mvTripPlaces.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        gMap = googleMap;
+        List<Place> places = trip.getPlaces();
+        List<Marker> markers = new ArrayList<>();
+        for (Place place : places) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(Double.parseDouble(place.getLat()), Double.parseDouble(place.getLng())));
+            //gMap.addMarker(markerOptions);
+            Marker marker = gMap.addMarker(markerOptions);
+            markers.add(marker);
+        }
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 15; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        gMap.moveCamera(cu);
     }
 
     public void markAsFavourite(View view) {
