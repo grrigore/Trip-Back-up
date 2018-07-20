@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="start"
         android:orientation="vertical">
 
         <TextView
@@ -103,7 +103,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_toRightOf="@id/tvPlaces"
                 android:nextFocusDown="@id/btSave"
                 android:nextFocusUp="@id/lvMedia"
                 android:onClick="addPlace"
