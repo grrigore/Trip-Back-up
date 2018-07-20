@@ -111,6 +111,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         rvTripGallery.setLayoutManager(layoutManager);
         rvTripGallery.setItemAnimator(new DefaultItemAnimator());
         rvTripGallery.setAdapter(galleryAdapter);
+        rvTripGallery.setNestedScrollingEnabled(false);
 
         mvTripPlaces.onCreate(null);
         mvTripPlaces.getMapAsync(this);
@@ -122,6 +123,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        final GoogleMap gMap = googleMap;
         final List<Place> places = trip.getPlaces();
         List<Marker> markers = new ArrayList<>();
         for (Place place : places) {
@@ -136,9 +138,20 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             builder.include(marker.getPosition());
         }
         LatLngBounds bounds = builder.build();
-        int padding = 100; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        googleMap.moveCamera(cu);
+        int padding = 50;
+        final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                gMap.moveCamera(cu);
+            }
+        });
+
+        //todo solve error
+        //Error using newLatLngBounds(LatLngBounds, int): Map size can't be 0.
+        //Most likely, layout has not yet occured for the map view.
+        //Either wait until layout has occurred or use newLatLngBounds(LatLngBounds, int, int, int)
+        //which allows you to specify the map's dimensions.
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
