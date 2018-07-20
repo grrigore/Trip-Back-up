@@ -3,6 +3,7 @@ package com.grrigore.tripback_up;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -54,7 +55,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private String userUID;
     private int tripId;
 
-    private List<MarkerOptions> markerOptionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_trip_detail);
 
         ButterKnife.bind(this);
-        markerOptionsList = new ArrayList<>();
 
         //create instance of firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
@@ -118,21 +117,18 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public void markAsFavourite(View view) {
-    }
-
-    public void openDetailMap(View view) {
+        //todo save in local database
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        List<Place> places = trip.getPlaces();
+        final List<Place> places = trip.getPlaces();
         List<Marker> markers = new ArrayList<>();
         for (Place place : places) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(Double.parseDouble(place.getLat()), Double.parseDouble(place.getLng())));
             Marker marker = googleMap.addMarker(markerOptions);
             markers.add(marker);
-            markerOptionsList.add(markerOptions);
         }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -143,6 +139,15 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         int padding = 100; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.moveCamera(cu);
+
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Intent intent = new Intent(getApplicationContext(), MapsDetailActivity.class);
+                intent.putParcelableArrayListExtra("places", (ArrayList<? extends Parcelable>) places);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

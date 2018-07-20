@@ -46,7 +46,9 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
         firebaseAuth = FirebaseAuth.getInstance();
 
         Bundle bundle = getIntent().getExtras();
-        tripId = bundle.getLong("tripId");
+        if (bundle != null) {
+            tripId = bundle.getLong("tripId");
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

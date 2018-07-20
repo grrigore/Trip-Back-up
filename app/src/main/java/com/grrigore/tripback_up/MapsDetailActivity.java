@@ -1,20 +1,28 @@
 package com.grrigore.tripback_up;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.grrigore.tripback_up.model.Place;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO implement this activity
 
 public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private List<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,13 @@ public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            places = bundle.getParcelableArrayList("places");
+        } else {
+            places = new ArrayList<>();
+        }
     }
 
 
@@ -39,10 +54,24 @@ public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        List<Marker> markers = new ArrayList<>();
+        if (places != null) {
+            for (Place place : places) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(new LatLng(Double.parseDouble(place.getLat()), Double.parseDouble(place.getLng())));
+                Marker marker = mMap.addMarker(markerOptions);
+                markers.add(marker);
+            }
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Marker marker : markers) {
+                builder.include(marker.getPosition());
+            }
+            LatLngBounds bounds = builder.build();
+            int padding = 200; // offset from edges of the map in pixels
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            mMap.moveCamera(cu);
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0, 0)));
+        }
     }
 }
