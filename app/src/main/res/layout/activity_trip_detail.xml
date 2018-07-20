@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
     android:padding="8dp"
+    android:scrollbars="none"
     tools:context=".TripDetailActivity">
 
     <LinearLayout
@@ -63,7 +64,7 @@
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
-
+        <!--todo fix recylcerview scroll-->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvTripGallery"
             android:layout_width="match_parent"
@@ -87,4 +88,4 @@
             android:layout_marginTop="8dp" />
 
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</ScrollView>

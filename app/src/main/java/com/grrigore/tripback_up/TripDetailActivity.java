@@ -111,7 +111,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         rvTripGallery.setLayoutManager(layoutManager);
         rvTripGallery.setItemAnimator(new DefaultItemAnimator());
         rvTripGallery.setAdapter(galleryAdapter);
-        rvTripGallery.setNestedScrollingEnabled(false);
 
         mvTripPlaces.onCreate(null);
         mvTripPlaces.getMapAsync(this);
