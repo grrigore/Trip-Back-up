@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background=" #48C0C0C0"
+        android:background=" #73C0C0C0"
         android:gravity="center"
         android:text="Trip name"
         android:textColor="@android:color/black"
