@@ -82,6 +82,10 @@ public class TripListActivity extends AppCompatActivity {
             });
         }
 
+        setUI();
+    }
+
+    private void setUI() {
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
