@@ -21,7 +21,6 @@ import java.util.List;
 
 public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
     private List<Place> places;
 
     @Override
@@ -53,13 +52,12 @@ public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCa
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         List<Marker> markers = new ArrayList<>();
         if (places != null) {
             for (Place place : places) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(Double.parseDouble(place.getLat()), Double.parseDouble(place.getLng())));
-                Marker marker = mMap.addMarker(markerOptions);
+                Marker marker = googleMap.addMarker(markerOptions);
                 markers.add(marker);
             }
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -69,9 +67,9 @@ public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCa
             LatLngBounds bounds = builder.build();
             int padding = 200; // offset from edges of the map in pixels
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-            mMap.moveCamera(cu);
+            googleMap.moveCamera(cu);
         } else {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0, 0)));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0, 0)));
         }
     }
 }
