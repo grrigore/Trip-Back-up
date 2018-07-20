@@ -4,22 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:padding="8dp"
     tools:context=".TripAdderActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/trip_title" />
+            android:text="@string/trip_title"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:focusable="true"
             android:hint="@string/trip_title"
             android:inputType="text"
@@ -30,12 +35,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/trip_description" />
+            android:layout_marginTop="16dp"
+            android:text="@string/trip_description"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:hint="@string/trip_description"
             android:inputType="text"
             android:nextFocusDown="@id/btMedia"
@@ -43,19 +52,24 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/tvGallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trip_gallery" />
+                android:layout_alignBaseline="@id/btMedia"
+                android:text="@string/trip_gallery"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btMedia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tvGallery"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:nextFocusDown="@id/lvMedia"
                 android:nextFocusUp="@id/etDescription"
                 android:onClick="addMedia"
@@ -66,23 +80,29 @@
             android:id="@+id/lvMedia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:nextFocusDown="@id/btPlaces"
             android:nextFocusUp="@id/btMedia" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/tvPlaces"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trip_places" />
+                android:text="@string/trip_places"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btPlaces"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_toRightOf="@id/tvPlaces"
                 android:nextFocusDown="@id/btSave"
                 android:nextFocusUp="@id/lvMedia"
@@ -94,6 +114,7 @@
             android:id="@+id/btSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:nextFocusDown="@id/etTitle"
             android:nextFocusUp="@id/btPlaces"
             android:onClick="saveTrip"
