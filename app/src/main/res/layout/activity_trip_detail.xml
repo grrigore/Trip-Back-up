@@ -64,7 +64,7 @@
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
-        <!--todo fix recylcerview scroll-->
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvTripGallery"
             android:layout_width="match_parent"

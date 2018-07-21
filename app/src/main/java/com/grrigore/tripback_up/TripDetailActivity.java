@@ -153,12 +153,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
-        //todo solve error
-        //Error using newLatLngBounds(LatLngBounds, int): Map size can't be 0.
-        //Most likely, layout has not yet occured for the map view.
-        //Either wait until layout has occurred or use newLatLngBounds(LatLngBounds, int, int, int)
-        //which allows you to specify the map's dimensions.
-
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -208,7 +202,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 //todo delete trip
                 return true;
             case R.id.addWidget:
-                //todo add trip as widget
                 SharedPreferences sharedPreferences = TripDetailActivity.this.getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
                 Bundle bundle = new Bundle();
