@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //todo on screen rotate
+//todo network state check
 
 public class MainActivity extends AppCompatActivity {
 
