@@ -1,6 +1,8 @@
 package com.grrigore.tripback_up;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +52,11 @@ public class SingUpActivity extends AppCompatActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SingUpActivity.this, MainActivity.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(new Intent(SingUpActivity.this, MainActivity.class), ActivityOptions.makeSceneTransitionAnimation(SingUpActivity.this).toBundle());
+                } else {
+                    startActivity(new Intent(SingUpActivity.this, MainActivity.class));
+                }
             }
         });
 
