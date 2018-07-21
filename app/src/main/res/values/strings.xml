@@ -35,4 +35,6 @@
     <string name="mark_as_favourite">mark as favourite</string>
     <string name="no_recent_trips_button">Click the button to see all trips!</string>
     <string name="make_magic">Make magic</string>
+    <string name="deleteTrip">Delete trip</string>
+    <string name="add_as_widget">Add as widget</string>
 </resources>

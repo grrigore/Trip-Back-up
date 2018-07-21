@@ -1,6 +1,7 @@
 package com.grrigore.tripback_up;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 
 //TODO on screen rotate
 
@@ -137,6 +142,12 @@ public class TripListActivity extends AppCompatActivity {
                 tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+
+                        SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
+                        sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
+                        sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, tripList.get(position).getDescription());
+                        sharedPreferencesEditor.apply();
+
                         Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
                         tripDetailIntent.putExtra("tripClicked", tripList.get(position));
                         tripDetailIntent.putExtra("tripId", position + 1);

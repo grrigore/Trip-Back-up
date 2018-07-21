@@ -1,6 +1,8 @@
 package com.grrigore.tripback_up;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -10,6 +12,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,6 +33,9 @@ import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.GalleryAdapter;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
+import com.grrigore.tripback_up.utils.Constants;
+import com.grrigore.tripback_up.utils.ToastUtil;
+import com.grrigore.tripback_up.widget.TripWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,5 +191,36 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     public void onLowMemory() {
         super.onLowMemory();
         mvTripPlaces.onLowMemory();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.trip_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.deleteTrip:
+                //todo delete trip
+                return true;
+            case R.id.addWidget:
+                //todo add trip as widget
+                SharedPreferences sharedPreferences = TripDetailActivity.this.getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                Bundle bundle = new Bundle();
+
+                int widgetId = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, sharedPreferences.getString(Constants.TRIP_CLICKED_TITLE, null),
+                        sharedPreferences.getString(Constants.TRIP_CLICKED_DESCRIPTION, null));
+                ToastUtil.showToast("Widget set for" + trip.getTitle(), this);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
