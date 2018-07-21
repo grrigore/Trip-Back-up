@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:background="@color/colorAccent"
                 android:text="@string/make_magic"
-                android:onClick="setAllTripsMode"/>
+                android:onClick="allTripsMode"/>
 
             <TextView
                 android:layout_width="0dp"
