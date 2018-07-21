@@ -11,12 +11,10 @@ import com.grrigore.tripback_up.utils.Constants;
 
 public class TripWidgetProvider extends AppWidgetProvider {
 
-    SharedPreferences sharedPreferences;
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
         String tripTitle = sharedPreferences.getString(Constants.TRIP_CLICKED_TITLE, null);
         String tripDescription = sharedPreferences.getString(Constants.TRIP_CLICKED_DESCRIPTION, null);
