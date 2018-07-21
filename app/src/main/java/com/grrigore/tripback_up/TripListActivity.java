@@ -95,7 +95,6 @@ public class TripListActivity extends AppCompatActivity {
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
                     Trip trip = new Trip();
-                    //Trip trip = tripDataSnapshot.getValue(Trip.class);
 
                     trip.setTitle((String) tripDataSnapshot.child("title").getValue());
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
