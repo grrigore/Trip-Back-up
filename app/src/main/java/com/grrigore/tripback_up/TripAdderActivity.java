@@ -232,22 +232,43 @@ public class TripAdderActivity extends AppCompatActivity {
      * @param view This method saves the Trip object to firebase database.
      */
     public void saveTrip(View view) {
-        String title = etTitle.getText().toString();
-        String description = etDescription.getText().toString();
+        String title = null;
+        String description = null;
+        boolean ok = false;
 
-        trip.setTitle(title);
-        trip.setDescription(description);
-        trip.setDate(date);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("title").setValue(trip.getTitle());
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("description").setValue(trip.getDescription());
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("date").setValue(trip.getDate());
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
+        if (!etTitle.getText().toString().isEmpty()) {
+            title = etTitle.getText().toString();
+            ok = true;
+        } else {
+            ToastUtil.showToast("Please insert trip title!", this);
+        }
 
-        ToastUtil.showToast("Trip saved!", getApplicationContext());
 
-        Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
-        Intent intentRecentTrips = new Intent(this, TripListActivity.class);
-        intentRecentTrips.putExtra("tripId", tripId);
-        startActivity(intentRecentTrips);
+        if (!etDescription.getText().toString().isEmpty()) {
+            description = etDescription.getText().toString();
+            ok = true;
+        } else {
+            ToastUtil.showToast("Please insert trip description!", this);
+        }
+
+        if (ok) {
+            trip.setTitle(title);
+            trip.setDescription(description);
+            trip.setDate(date);
+            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("title").setValue(trip.getTitle());
+            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("description").setValue(trip.getDescription());
+            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("date").setValue(trip.getDate());
+            databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
+
+            ToastUtil.showToast("Trip saved!", getApplicationContext());
+
+            Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
+            Intent intentRecentTrips = new Intent(this, TripListActivity.class);
+            intentRecentTrips.putExtra("tripId", tripId);
+            startActivity(intentRecentTrips);
+        } else {
+            ToastUtil.showToast("Trip couldn't be saved! Please check fields!", getApplicationContext());
+        }
+
     }
 }
