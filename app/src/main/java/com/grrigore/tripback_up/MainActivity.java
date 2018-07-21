@@ -1,6 +1,8 @@
 package com.grrigore.tripback_up;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -54,14 +56,17 @@ public class MainActivity extends AppCompatActivity {
         tvCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SingUpActivity.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(new Intent(MainActivity.this, SingUpActivity.class), ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                } else {
+                    startActivity(new Intent(MainActivity.this, SingUpActivity.class));
+                }
             }
         });
     }
 
     /**
-     * @param view
-     * This method allows the user to login using his credentials.
+     * @param view This method allows the user to login using his credentials.
      */
     public void login(View view) {
         String email = etEmail.getText().toString();

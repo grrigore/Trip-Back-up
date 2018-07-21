@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:padding="8dp"
+    android:scrollbars="none"
     tools:context=".TripAdderActivity">
 
     <LinearLayout
@@ -47,6 +48,7 @@
             android:layout_marginTop="8dp"
             android:hint="@string/trip_description"
             android:inputType="text"
+            android:maxLines="5"
             android:nextFocusDown="@id/btMedia"
             android:nextFocusUp="@id/etTitle" />
 
