@@ -49,45 +49,16 @@ public class TripListActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
     private long tripId;
+    private boolean isRecentTrip = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trip_list);
-
-        ButterKnife.bind(this);
-
-
-        //create instance of firebase auth
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        //create instance of firebase storage
-        firebaseStorage = FirebaseStorage.getInstance();
-
-        //create instance of firebase database
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            tripId = bundle.getLong("tripId");
-            Log.d(TripListActivity.class.getSimpleName(), "Trip id sent from trip adder = " + tripId);
+        if (isRecentTrip) {
+            viewAllTrips();
         } else {
-            // Read from the database
-            databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    tripId = (long) dataSnapshot.child("tripNumber").getValue();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
-                }
-            });
+            setContentView(R.layout.no_recent_trips_layout);
         }
-
-        setUI();
     }
 
     private void setUI() {
@@ -198,5 +169,46 @@ public class TripListActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void setAllTripsMode(View view) {
+        viewAllTrips();
+    }
+
+    private void viewAllTrips() {
+        setContentView(R.layout.activity_trip_list);
+
+        ButterKnife.bind(this);
+
+        //create instance of firebase auth
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //create instance of firebase storage
+        firebaseStorage = FirebaseStorage.getInstance();
+
+        //create instance of firebase database
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            tripId = bundle.getLong("tripId");
+            Log.d(TripListActivity.class.getSimpleName(), "Trip id sent from trip adder = " + tripId);
+        } else {
+            // Read from the database
+            databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    tripId = (long) dataSnapshot.child("tripNumber").getValue();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
+                }
+            });
+        }
+
+        setUI();
     }
 }
