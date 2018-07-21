@@ -216,7 +216,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 int widgetId = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
                 TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, sharedPreferences.getString(Constants.TRIP_CLICKED_TITLE, null),
                         sharedPreferences.getString(Constants.TRIP_CLICKED_DESCRIPTION, null));
-                ToastUtil.showToast("Widget set for" + trip.getTitle(), this);
+                ToastUtil.showToast("Widget set for " + trip.getTitle() + "!", this);
 
                 return true;
             default:

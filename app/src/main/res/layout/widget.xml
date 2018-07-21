@@ -2,29 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/trip_title"
-        android:id="@+id/tvTitle"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <View
+    <ImageView
+        android:id="@+id/ivSeparator"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_margin="4dp"
-        android:background="@android:color/black" />
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@android:color/white"/>
 
     <TextView
         android:id="@+id/tvDescrition"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/trip_description"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
 </LinearLayout>
