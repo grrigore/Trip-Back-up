@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,6 +93,7 @@ public class SingUpActivity extends AppCompatActivity {
                     }
                 } else {
                     initialiseTripNumber();
+                    ToastUtil.showToast("Account created! Log-in!", SingUpActivity.this);
                     startActivity(new Intent(SingUpActivity.this, MainActivity.class));
                     finish();
                 }

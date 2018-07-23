@@ -228,13 +228,10 @@ public class TripAdderActivity extends AppCompatActivity {
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    ToastUtil.showToast("Upload fail!", getApplicationContext());
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ToastUtil.showToast("Upload success!", getApplicationContext());
-
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, strings);
                     lvMedia.setAdapter(adapter);
                 }
@@ -252,33 +249,16 @@ public class TripAdderActivity extends AppCompatActivity {
         String description = null;
         boolean ok;
 
-        if (!etTitle.getText().toString().isEmpty()) {
+        if ((!etTitle.getText().toString().isEmpty()) &&
+                (!etDescription.getText().toString().isEmpty()) &&
+                (imageURIs.size() != 0) &&
+                (placesAdded)) {
             title = etTitle.getText().toString();
-            ok = true;
-        } else {
-            ok = false;
-        }
-
-        if (!etDescription.getText().toString().isEmpty()) {
             description = etDescription.getText().toString();
             ok = true;
         } else {
             ok = false;
         }
-
-        if (imageURIs.size() != 0) {
-            ok = true;
-        } else {
-            ok = false;
-        }
-
-
-        if (placesAdded) {
-            ok = true;
-        } else {
-            ok = false;
-        }
-
 
         if (ok) {
             trip.setTitle(title);
