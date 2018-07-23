@@ -32,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_SECONDS;
+import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MILISECONDS;
 import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
@@ -48,7 +48,7 @@ public class TripListActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
-    private long tripId;
+
     private List<Trip> recentTrips;
     private List<Trip> pastTrips;
     private List<StorageReference> imageRefsRecent;
@@ -66,22 +66,6 @@ public class TripListActivity extends AppCompatActivity {
 
         //create instance of firebase database
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-
-        // Read number of trips from the database
-        databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                tripId = (long) dataSnapshot.child("tripNumber").getValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
-            }
-        });
-
 
         recentTrips = new ArrayList<>();
         pastTrips = new ArrayList<>();
@@ -131,7 +115,7 @@ public class TripListActivity extends AppCompatActivity {
                     trip.setPlaces(placeList);
 
                     Log.d(TripListActivity.class.getSimpleName(), "Trip date = " + date.getTime() + "   current time = " + currentTime);
-                    if (currentTime - date.getTime() <= SEVEN_DAYS_IN_SECONDS) {
+                    if (currentTime - date.getTime() <= SEVEN_DAYS_IN_MILISECONDS) {
                         recentTrips.add(trip);
                         //get first image form each trip
                         imageRefsRecent.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));

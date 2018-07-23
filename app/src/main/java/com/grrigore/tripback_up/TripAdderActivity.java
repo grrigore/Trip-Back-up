@@ -38,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //TODO on screen rotate
+//todo async task
 
 public class TripAdderActivity extends AppCompatActivity {
 
