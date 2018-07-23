@@ -17,8 +17,11 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,11 +56,13 @@ public class TripAdderActivity extends AppCompatActivity {
     private ArrayList<Uri> imageURIs;
     private Trip trip;
     private Date date;
-    private Long tripId;
+    private long tripId;
 
     public static final int PICK_IMAGE_REQUEST = 1;
     private String imageEncoded;
     private List<String> imagesEncodedList;
+
+    static boolean placesAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +72,6 @@ public class TripAdderActivity extends AppCompatActivity {
         //bind views
         ButterKnife.bind(this);
 
-        Bundle bundle = getIntent().getExtras();
-        tripId = bundle.getLong("tripId");
-        Log.d(TripAdderActivity.class.getSimpleName(), "Trip id sent from trip list = " + tripId);
         trip = new Trip();
         imageURIs = new ArrayList<>();
 
@@ -85,6 +87,19 @@ public class TripAdderActivity extends AppCompatActivity {
         //get database reference
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //read number of trips from the database
+        databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tripId = (long) dataSnapshot.child("tripNumber").getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
+            }
+        });
     }
 
     /**
@@ -234,22 +249,35 @@ public class TripAdderActivity extends AppCompatActivity {
     public void saveTrip(View view) {
         String title = null;
         String description = null;
-        boolean ok = false;
+        boolean ok;
 
         if (!etTitle.getText().toString().isEmpty()) {
             title = etTitle.getText().toString();
             ok = true;
         } else {
-            ToastUtil.showToast("Please insert trip title!", this);
+            ok = false;
         }
-
 
         if (!etDescription.getText().toString().isEmpty()) {
             description = etDescription.getText().toString();
             ok = true;
         } else {
-            ToastUtil.showToast("Please insert trip description!", this);
+            ok = false;
         }
+
+        if (imageURIs.size() != 0) {
+            ok = true;
+        } else {
+            ok = false;
+        }
+
+
+        if (placesAdded) {
+            ok = true;
+        } else {
+            ok = false;
+        }
+
 
         if (ok) {
             trip.setTitle(title);
@@ -258,6 +286,7 @@ public class TripAdderActivity extends AppCompatActivity {
             databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("title").setValue(trip.getTitle());
             databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("description").setValue(trip.getDescription());
             databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("date").setValue(trip.getDate());
+            tripId++;
             databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
 
             ToastUtil.showToast("Trip saved!", getApplicationContext());

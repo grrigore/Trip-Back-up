@@ -101,6 +101,7 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
                 writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
             }
         }
+        TripAdderActivity.placesAdded = true;
         ToastUtil.showToast("Places added!", getApplicationContext());
     }
 

@@ -32,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MS;
+import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_SECONDS;
 import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
@@ -45,13 +45,14 @@ public class TripListActivity extends AppCompatActivity {
     @BindView(R.id.rlvTrips)
     RecyclerView rlvTrips;
 
-    private TripAdapter tripAdapter;
-
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
     private long tripId;
     private List<Trip> recentTrips;
+    private List<Trip> pastTrips;
+    private List<StorageReference> imageRefsRecent;
+    private List<StorageReference> imageRefsPast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,168 +67,36 @@ public class TripListActivity extends AppCompatActivity {
         //create instance of firebase database
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            tripId = bundle.getLong("tripId");
-            Log.d(TripListActivity.class.getSimpleName(), "Trip id sent from trip adder = " + tripId);
-        } else {
-            // Read from the database
-            databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    tripId = (long) dataSnapshot.child("tripNumber").getValue();
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
-                }
-            });
-        }
-
-        recentTrips = new ArrayList<>();
-        getRecentTrips();
-
-        boolean isRecentTrip;
-        if (recentTrips.size() == 0) {
-            isRecentTrip = false;
-        } else {
-            isRecentTrip = true;
-        }
-
-        if (!isRecentTrip) {
-            setContentView(R.layout.no_recent_trips_layout);
-        } else {
-            viewAllRecentTrips();
-        }
-    }
-
-    private void viewAllRecentTrips() {
-        setContentView(R.layout.activity_trip_list);
-
-        ButterKnife.bind(this);
-
-        //create instance of firebase auth
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        //create instance of firebase storage
-        firebaseStorage = FirebaseStorage.getInstance();
-
-        //create instance of firebase database
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            tripId = bundle.getLong("tripId");
-            Log.d(TripListActivity.class.getSimpleName(), "Trip id sent from trip adder = " + tripId);
-        } else {
-            // Read from the database
-            databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    tripId = (long) dataSnapshot.child("tripNumber").getValue();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
-                }
-            });
-        }
-
-        getRecentTrips();
-    }
-
-    private void getRecentTrips() {
-        Date currentDate = new Date();
-        final long currentTime = currentDate.getTime();
-
+        // Read number of trips from the database
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final List<Trip> tripList = new ArrayList<>();
-                final List<StorageReference> imageRefs = new ArrayList<>();
-
-                DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
-                for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
-                    Trip trip = new Trip();
-
-                    trip.setTitle((String) tripDataSnapshot.child("title").getValue());
-                    trip.setDescription((String) tripDataSnapshot.child("description").getValue());
-
-
-                    DataSnapshot dateDataSnapshot = tripDataSnapshot.child("date");
-                    Date date = new Date();
-                    if (dateDataSnapshot.child("time").getValue() != null) {
-                        date.setTime((Long) dateDataSnapshot.child("time").getValue());
-                    }
-                    trip.setDate(date);
-
-                    DataSnapshot imagesDataSnapshot = tripDataSnapshot.child("images");
-                    List<String> imageList = new ArrayList<>();
-                    for (int i = 1; i <= imagesDataSnapshot.getChildrenCount(); i++) {
-                        imageList.add(String.valueOf(imagesDataSnapshot.child("img" + i).getValue()));
-                    }
-                    trip.setImages(imageList);
-
-                    DataSnapshot placesDataSnapshot = tripDataSnapshot.child("places");
-                    List<Place> placeList = new ArrayList<>();
-                    for (int i = 0; i < placesDataSnapshot.getChildrenCount(); i++) {
-                        Place place = new Place();
-                        place.setLat((String) placesDataSnapshot.child(String.valueOf(i)).child("lat").getValue());
-                        place.setLng((String) placesDataSnapshot.child(String.valueOf(i)).child("lng").getValue());
-                        placeList.add(place);
-                    }
-                    trip.setPlaces(placeList);
-
-                    if (date.getTime() - currentTime <= SEVEN_DAYS_IN_MS) {
-                        recentTrips.add(trip);
-                    }
-
-                    //get first image form each trip
-                    imageRefs.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
-                }
-
-                tripAdapter = new TripAdapter(recentTrips, imageRefs, getApplicationContext());
-
-                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
-                //set on item click listener
-                tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                        SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
-                        sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
-                        sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, tripList.get(position).getDescription());
-                        sharedPreferencesEditor.apply();
-
-                        Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
-                        tripDetailIntent.putExtra("tripClicked", tripList.get(position));
-                        tripDetailIntent.putExtra("tripId", position + 1);
-                        tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
-                        startActivity(tripDetailIntent);
-                    }
-                });
-                rlvTrips.setLayoutManager(layoutManager);
-                rlvTrips.setItemAnimator(new DefaultItemAnimator());
-                rlvTrips.setAdapter(tripAdapter);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tripId = (long) dataSnapshot.child("tripNumber").getValue();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("-----Error-----", databaseError.getMessage());
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
             }
         });
+
+
+        recentTrips = new ArrayList<>();
+        pastTrips = new ArrayList<>();
+        imageRefsRecent = new ArrayList<>();
+        imageRefsPast = new ArrayList<>();
+
+        getAllTrips();
     }
 
     private void getAllTrips() {
+        final Date currentDate = new Date();
+        final long currentTime = currentDate.getTime();
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final List<Trip> tripList = new ArrayList<>();
-                final List<StorageReference> imageRefs = new ArrayList<>();
 
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
@@ -261,35 +130,26 @@ public class TripListActivity extends AppCompatActivity {
                     }
                     trip.setPlaces(placeList);
 
-                    tripList.add(trip);
+                    Log.d(TripListActivity.class.getSimpleName(), "Trip date = " + date.getTime() + "   current time = " + currentTime);
+                    if (currentTime - date.getTime() <= SEVEN_DAYS_IN_SECONDS) {
+                        recentTrips.add(trip);
+                        //get first image form each trip
+                        imageRefsRecent.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
+                    } else {
+                        pastTrips.add(trip);
+                        //get first image form each trip
+                        imageRefsPast.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
+                    }
 
-                    //get first image form each trip
-                    imageRefs.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
                 }
 
-                tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
-
-                RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
-                //set on item click listener
-                tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                        SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
-                        sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
-                        sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, tripList.get(position).getDescription());
-                        sharedPreferencesEditor.apply();
-
-                        Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
-                        tripDetailIntent.putExtra("tripClicked", tripList.get(position));
-                        tripDetailIntent.putExtra("tripId", position + 1);
-                        tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
-                        startActivity(tripDetailIntent);
-                    }
-                });
-                rlvTrips.setLayoutManager(layoutManager);
-                rlvTrips.setItemAnimator(new DefaultItemAnimator());
-                rlvTrips.setAdapter(tripAdapter);
+                if (recentTrips.size() != 0) {
+                    setContentView(R.layout.activity_trip_list);
+                    ButterKnife.bind(TripListActivity.this);
+                    populateTripList(recentTrips, imageRefsRecent);
+                } else {
+                    setContentView(R.layout.no_recent_trips_layout);
+                }
             }
 
             @Override
@@ -297,6 +157,32 @@ public class TripListActivity extends AppCompatActivity {
                 Log.d("-----Error-----", databaseError.getMessage());
             }
         });
+    }
+
+    private void populateTripList(final List<Trip> tripList, List<StorageReference> imageRefs) {
+        TripAdapter tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
+
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        //set on item click listener
+        tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
+                sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
+                sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, tripList.get(position).getDescription());
+                sharedPreferencesEditor.apply();
+
+                Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
+                tripDetailIntent.putExtra("tripClicked", tripList.get(position));
+                tripDetailIntent.putExtra("tripId", position + 1);
+                tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
+                startActivity(tripDetailIntent);
+            }
+        });
+        rlvTrips.setLayoutManager(layoutManager);
+        rlvTrips.setItemAnimator(new DefaultItemAnimator());
+        rlvTrips.setAdapter(tripAdapter);
     }
 
     @Override
@@ -311,21 +197,20 @@ public class TripListActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.recentTrips:
-                //todo recent trip selection
-                viewAllRecentTrips();
+                setContentView(R.layout.activity_trip_list);
+                ButterKnife.bind(TripListActivity.this);
+                populateTripList(recentTrips, imageRefsRecent);
                 return true;
             case R.id.pastTrips:
-                //todo past trip selection
-                viewAllTrips();
+                setContentView(R.layout.activity_trip_list);
+                ButterKnife.bind(TripListActivity.this);
+                populateTripList(pastTrips, imageRefsPast);
                 return true;
             case R.id.favTrips:
                 //todo fav trip selection
                 return true;
             case R.id.addTrip:
-                tripId++;
-                Log.d(TripListActivity.class.getSimpleName(), "Current trip id = " + tripId);
                 Intent intent = new Intent(this, TripAdderActivity.class);
-                intent.putExtra("tripId", tripId);
                 startActivity(intent);
                 return true;
             default:
@@ -334,43 +219,9 @@ public class TripListActivity extends AppCompatActivity {
     }
 
     public void allTripsMode(View view) {
-        viewAllTrips();
-    }
-
-    private void viewAllTrips() {
         setContentView(R.layout.activity_trip_list);
-
-        ButterKnife.bind(this);
-
-        //create instance of firebase auth
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        //create instance of firebase storage
-        firebaseStorage = FirebaseStorage.getInstance();
-
-        //create instance of firebase database
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            tripId = bundle.getLong("tripId");
-            Log.d(TripListActivity.class.getSimpleName(), "Trip id sent from trip adder = " + tripId);
-        } else {
-            // Read from the database
-            databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    tripId = (long) dataSnapshot.child("tripNumber").getValue();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
-                }
-            });
-        }
-
-        getAllTrips();
+        ButterKnife.bind(TripListActivity.this);
+        populateTripList(pastTrips, imageRefsPast);
     }
+
 }
