@@ -18,7 +18,7 @@
         android:layout_gravity="bottom"
         android:background="#73C0C0C0"
         android:gravity="center"
-        android:text="Trip name"
+        android:text="@string/trip_title"
         android:textColor="@android:color/black"
         android:textSize="32sp" />
 
