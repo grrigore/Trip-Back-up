@@ -35,4 +35,7 @@
     <string name="make_magic">Make magic</string>
     <string name="deleteTrip">Delete trip</string>
     <string name="add_as_widget">Add as widget</string>
+    <string name="app_logo">App logo</string>
+    <string name="simple_design_separator">Simple design separator</string>
+    <string name="cd_photo">Photo</string>
 </resources>
