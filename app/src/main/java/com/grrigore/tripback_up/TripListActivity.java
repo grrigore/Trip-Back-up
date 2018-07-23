@@ -24,6 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.TripAdapter;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -127,13 +128,7 @@ public class TripListActivity extends AppCompatActivity {
 
                 }
 
-                if (recentTrips.size() != 0) {
-                    setContentView(R.layout.activity_trip_list);
-                    ButterKnife.bind(TripListActivity.this);
-                    populateTripList(recentTrips, imageRefsRecent);
-                } else {
-                    setContentView(R.layout.no_recent_trips_layout);
-                }
+                provideRecentTripsUI();
             }
 
             @Override
@@ -181,14 +176,10 @@ public class TripListActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.recentTrips:
-                setContentView(R.layout.activity_trip_list);
-                ButterKnife.bind(TripListActivity.this);
-                populateTripList(recentTrips, imageRefsRecent);
+                provideRecentTripsUI();
                 return true;
             case R.id.pastTrips:
-                setContentView(R.layout.activity_trip_list);
-                ButterKnife.bind(TripListActivity.this);
-                populateTripList(pastTrips, imageRefsPast);
+                providePastTripsUI();
                 return true;
             case R.id.favTrips:
                 //todo fav trip selection
@@ -202,10 +193,27 @@ public class TripListActivity extends AppCompatActivity {
         }
     }
 
+    private void provideRecentTripsUI() {
+        if (recentTrips.size() != 0) {
+            setContentView(R.layout.activity_trip_list);
+            ButterKnife.bind(TripListActivity.this);
+            populateTripList(recentTrips, imageRefsRecent);
+        } else {
+            setContentView(R.layout.no_recent_trips_layout);
+        }
+    }
+
     public void allTripsMode(View view) {
+        providePastTripsUI();
+    }
+
+    private void providePastTripsUI() {
         setContentView(R.layout.activity_trip_list);
         ButterKnife.bind(TripListActivity.this);
         populateTripList(pastTrips, imageRefsPast);
+        if (pastTrips.size() == 0) {
+            ToastUtil.showToast("No past trips!", this);
+        }
     }
 
 }
