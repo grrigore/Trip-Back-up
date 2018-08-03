@@ -26,3 +26,6 @@ Icons from [Icons8](https://icons8.com).
 * network status
 * offline database
 * add video to trip (optional)
+* update widget (make it better)
+
+* add date range to trip + show 
