@@ -14,3 +14,15 @@ final project for Android Developer Nanodegree
 # Resources
 
 Icons from [Icons8](https://icons8.com).
+
+**TODOs**
+
+* update code
+* fix add places bug
+* splash screen
+* delete trip option
+* edit trip option
+* on screen rotate
+* network status
+* offline database
+* add video to trip (optional)
