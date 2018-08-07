@@ -82,6 +82,9 @@ public class TripListActivity extends AppCompatActivity {
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                Log.e("onDataChange ---- ", "onDataChange method was called");
+                //todo remove value event listener after the job is done
 
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
