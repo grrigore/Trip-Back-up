@@ -187,4 +187,3 @@ fabric.properties
 
 
 # End of https://www.gitignore.io/api/android,androidstudio
-/app/src/main/res/values/google_maps_api.xml
