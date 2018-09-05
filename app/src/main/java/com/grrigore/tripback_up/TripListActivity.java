@@ -49,6 +49,8 @@ public class TripListActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
+    private ValueEventListener tripsReferenceListener;
+    private DatabaseReference tripsReference;
 
     private List<Trip> recentTrips;
     private List<Trip> pastTrips;
@@ -79,7 +81,9 @@ public class TripListActivity extends AppCompatActivity {
     private void getAllTrips() {
         final Date currentDate = new Date();
         final long currentTime = currentDate.getTime();
-        databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
+
+        tripsReference = databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/");
+        tripsReferenceListener = tripsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -119,6 +123,7 @@ public class TripListActivity extends AppCompatActivity {
                     trip.setPlaces(placeList);
 
                     Log.d(TripListActivity.class.getSimpleName(), "Trip date = " + date.getTime() + "   current time = " + currentTime);
+
                     if (currentTime - date.getTime() <= SEVEN_DAYS_IN_MILISECONDS) {
                         recentTrips.add(trip);
                         //get first image form each trip
@@ -133,7 +138,6 @@ public class TripListActivity extends AppCompatActivity {
 
                 provideRecentTripsUI();
 
-                //databaseReference.removeEventListener(this);
             }
 
             @Override
@@ -220,5 +224,23 @@ public class TripListActivity extends AppCompatActivity {
         if (pastTrips.size() == 0) {
             ToastUtil.showToast("No past trips!", this);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        tripsReference.removeEventListener(tripsReferenceListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tripsReference.removeEventListener(tripsReferenceListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        tripsReference.removeEventListener(tripsReferenceListener);
     }
 }
