@@ -25,7 +25,7 @@ Icons from [Icons8](https://icons8.com).
 * on screen rotate
 * network status
 * offline database
+* room
 * add video to trip (optional)
 * update widget (make it better)
-
 * add date range to trip + show 
