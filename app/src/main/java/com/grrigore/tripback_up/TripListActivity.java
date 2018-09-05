@@ -87,9 +87,6 @@ public class TripListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                Log.e("onDataChange ---- ", "onDataChange method was called");
-                //todo remove value event listener after the job is done
-
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
                     Trip trip = new Trip();
@@ -122,8 +119,6 @@ public class TripListActivity extends AppCompatActivity {
                     }
                     trip.setPlaces(placeList);
 
-                    Log.d(TripListActivity.class.getSimpleName(), "Trip date = " + date.getTime() + "   current time = " + currentTime);
-
                     if (currentTime - date.getTime() <= SEVEN_DAYS_IN_MILISECONDS) {
                         recentTrips.add(trip);
                         //get first image form each trip
@@ -133,7 +128,6 @@ public class TripListActivity extends AppCompatActivity {
                         //get first image form each trip
                         imageRefsPast.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
                     }
-
                 }
 
                 provideRecentTripsUI();
@@ -163,7 +157,7 @@ public class TripListActivity extends AppCompatActivity {
 
                 Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
                 tripDetailIntent.putExtra("tripClicked", tripList.get(position));
-                tripDetailIntent.putExtra("tripId", position + 1);
+                tripDetailIntent.putExtra("tripId", position);
                 tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
                 startActivity(tripDetailIntent);
             }
@@ -194,6 +188,9 @@ public class TripListActivity extends AppCompatActivity {
             case R.id.favTrips:
                 //todo fav trip selection
                 return true;
+            case R.id.allTrips:
+                allTripsMode();
+                return true;
             case R.id.addTrip:
                 Intent intent = new Intent(this, TripAdderActivity.class);
                 startActivity(intent);
@@ -213,8 +210,21 @@ public class TripListActivity extends AppCompatActivity {
         }
     }
 
-    public void allTripsMode(View view) {
-        providePastTripsUI();
+    //todo no trips layout
+    public void allTripsMode() {
+        setContentView(R.layout.activity_trip_list);
+
+        ButterKnife.bind(TripListActivity.this);
+        List<Trip> allTrips = new ArrayList<>(recentTrips);
+        List<StorageReference> imageRefsAll = new ArrayList<>(imageRefsRecent);
+
+        allTrips.addAll(pastTrips);
+        imageRefsAll.addAll(imageRefsPast);
+        populateTripList(allTrips, imageRefsAll);
+
+        if (allTrips.size() == 0) {
+            ToastUtil.showToast("No trips.. Add your first trip!", this);
+        }
     }
 
     private void providePastTripsUI() {

@@ -78,6 +78,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             trip = bundle.getParcelable("tripClicked");
             userUID = bundle.getString("userUID");
             tripId = bundle.getInt("tripId");
+            Log.d(this.getApplicationContext().getClass().getSimpleName(),"Trip id = " + tripId);
         }
 
         Log.d(getApplicationContext().getClass().getSimpleName(), trip.toString());
