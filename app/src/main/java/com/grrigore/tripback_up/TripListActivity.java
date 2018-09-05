@@ -94,11 +94,10 @@ public class TripListActivity extends AppCompatActivity {
                     trip.setTitle((String) tripDataSnapshot.child("title").getValue());
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
 
-
                     DataSnapshot dateDataSnapshot = tripDataSnapshot.child("date");
                     Date date = new Date();
                     if (dateDataSnapshot.child("time").getValue() != null) {
-                        date.setTime((Long) dateDataSnapshot.child("time").getValue());
+                        date.setTime((long) dateDataSnapshot.child("time").getValue());
                     }
                     trip.setDate(date);
 
@@ -157,6 +156,7 @@ public class TripListActivity extends AppCompatActivity {
 
                 Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
                 tripDetailIntent.putExtra("tripClicked", tripList.get(position));
+                //todo get correct tripId
                 tripDetailIntent.putExtra("tripId", position);
                 tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
                 startActivity(tripDetailIntent);
