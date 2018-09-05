@@ -148,7 +148,7 @@ public class TripAdderActivity extends AppCompatActivity {
                 // Get the Image from data
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                imagesEncodedList = new ArrayList<String>();
+                imagesEncodedList = new ArrayList<>();
                 if (data.getData() != null) {
 
                     Uri mImageUri = data.getData();
@@ -166,7 +166,7 @@ public class TripAdderActivity extends AppCompatActivity {
                 } else {
                     if (data.getClipData() != null) {
                         ClipData mClipData = data.getClipData();
-                        ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
+                        ArrayList<Uri> mArrayUri = new ArrayList<>();
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
 
                             ClipData.Item item = mClipData.getItemAt(i);
@@ -232,7 +232,7 @@ public class TripAdderActivity extends AppCompatActivity {
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, strings);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, strings);
                     lvMedia.setAdapter(adapter);
                 }
             });

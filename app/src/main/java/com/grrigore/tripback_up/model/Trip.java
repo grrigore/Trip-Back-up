@@ -93,19 +93,19 @@ public class Trip implements Parcelable {
         long tmpDate = in.readLong();
         date = tmpDate != -1 ? new Date(tmpDate) : null;
         if (in.readByte() == 0x01) {
-            images = new ArrayList<String>();
+            images = new ArrayList<>();
             in.readList(images, String.class.getClassLoader());
         } else {
             images = null;
         }
         if (in.readByte() == 0x01) {
-            videos = new ArrayList<String>();
+            videos = new ArrayList<>();
             in.readList(videos, String.class.getClassLoader());
         } else {
             videos = null;
         }
         if (in.readByte() == 0x01) {
-            places = new ArrayList<Place>();
+            places = new ArrayList<>();
             in.readList(places, Place.class.getClassLoader());
         } else {
             places = null;

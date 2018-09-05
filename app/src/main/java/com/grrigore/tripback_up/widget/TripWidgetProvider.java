@@ -36,7 +36,7 @@ public class TripWidgetProvider extends AppWidgetProvider {
     public static void updateAppWidget(Context applicationContext, AppWidgetManager appWidgetManager, int widgetId, String title, String description) {
         RemoteViews remoteViews = new RemoteViews(applicationContext.getPackageName(), R.layout.widget);
         remoteViews.setTextViewText(R.id.tvTitle, title);
-        remoteViews.setTextViewText(R.id.tvDescrition, description);
+        remoteViews.setTextViewText(R.id.tvDescription, description);
 
         appWidgetManager.updateAppWidget(widgetId, remoteViews);
     }

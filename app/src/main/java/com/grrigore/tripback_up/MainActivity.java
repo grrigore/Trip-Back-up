@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //hide toolbar
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         onCreateAccountClick();
     }
