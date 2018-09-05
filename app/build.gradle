@@ -10,6 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -53,6 +54,7 @@ dependencies {
     //recyclerView
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
+
 
 //google services
 apply plugin: 'com.google.gms.google-services'
