@@ -117,6 +117,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         });
         rvTripGallery.setLayoutManager(layoutManager);
         rvTripGallery.setItemAnimator(new DefaultItemAnimator());
+        rvTripGallery.setHasFixedSize(true);
         rvTripGallery.setAdapter(galleryAdapter);
 
         mvTripPlaces.onCreate(null);

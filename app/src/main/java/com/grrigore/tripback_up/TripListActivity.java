@@ -82,7 +82,7 @@ public class TripListActivity extends AppCompatActivity {
         databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                
+
                 Log.e("onDataChange ---- ", "onDataChange method was called");
                 //todo remove value event listener after the job is done
 
@@ -132,6 +132,8 @@ public class TripListActivity extends AppCompatActivity {
                 }
 
                 provideRecentTripsUI();
+
+                //databaseReference.removeEventListener(this);
             }
 
             @Override
@@ -164,6 +166,7 @@ public class TripListActivity extends AppCompatActivity {
         });
         rlvTrips.setLayoutManager(layoutManager);
         rlvTrips.setItemAnimator(new DefaultItemAnimator());
+        rlvTrips.setHasFixedSize(true);
         rlvTrips.setAdapter(tripAdapter);
     }
 
@@ -218,5 +221,4 @@ public class TripListActivity extends AppCompatActivity {
             ToastUtil.showToast("No past trips!", this);
         }
     }
-
 }
