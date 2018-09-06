@@ -11,6 +11,7 @@ public class Trip implements Parcelable {
     private String title = null;
     private String description = null;
     private Date date = null;
+    private String id = null;
     private List<String> images = new ArrayList<>();
     private List<String> videos = new ArrayList<>();
     private List<Place> places = new ArrayList<>();
@@ -18,21 +19,14 @@ public class Trip implements Parcelable {
     public Trip() {
     }
 
-    public Trip(String title, String description, Date date, List<String> images, List<String> videos, List<Place> places) {
+    public Trip(String title, String description, Date date, String id, List<String> images, List<String> videos, List<Place> places) {
         this.title = title;
         this.description = description;
         this.date = date;
+        this.id = id;
         this.images = images;
         this.videos = videos;
         this.places = places;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public String getTitle() {
@@ -49,6 +43,22 @@ public class Trip implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public List<String> getImages() {
@@ -81,6 +91,7 @@ public class Trip implements Parcelable {
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", date=" + date +
+                ", id='" + id + '\'' +
                 ", images=" + images +
                 ", videos=" + videos +
                 ", places=" + places +
@@ -92,20 +103,21 @@ public class Trip implements Parcelable {
         description = in.readString();
         long tmpDate = in.readLong();
         date = tmpDate != -1 ? new Date(tmpDate) : null;
+        id = in.readString();
         if (in.readByte() == 0x01) {
-            images = new ArrayList<>();
+            images = new ArrayList<String>();
             in.readList(images, String.class.getClassLoader());
         } else {
             images = null;
         }
         if (in.readByte() == 0x01) {
-            videos = new ArrayList<>();
+            videos = new ArrayList<String>();
             in.readList(videos, String.class.getClassLoader());
         } else {
             videos = null;
         }
         if (in.readByte() == 0x01) {
-            places = new ArrayList<>();
+            places = new ArrayList<Place>();
             in.readList(places, Place.class.getClassLoader());
         } else {
             places = null;
@@ -122,6 +134,7 @@ public class Trip implements Parcelable {
         dest.writeString(title);
         dest.writeString(description);
         dest.writeLong(date != null ? date.getTime() : -1L);
+        dest.writeString(id);
         if (images == null) {
             dest.writeByte((byte) (0x00));
         } else {

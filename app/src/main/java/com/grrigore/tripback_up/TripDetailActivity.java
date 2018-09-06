@@ -60,7 +60,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     private Trip trip;
     private String userUID;
-    private int tripId;
+    private String tripId;
 
 
     @Override
@@ -77,7 +77,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         if (bundle != null) {
             trip = bundle.getParcelable("tripClicked");
             userUID = bundle.getString("userUID");
-            tripId = bundle.getInt("tripId");
+            tripId = bundle.getString("tripId");
             Log.d(this.getApplicationContext().getClass().getSimpleName(),"Trip id = " + tripId);
         }
 
@@ -100,7 +100,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         galleryAdapter.setItemClickListener(new GalleryAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
-                firebaseStorage.getReference().child("user/" + userUID + "/trips/trip" + tripId + "/images/img" + position).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                firebaseStorage.getReference().child("user/" + userUID + "/trips/" + tripId + "/images/img" + position).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         Intent displayImageIntent = new Intent();
