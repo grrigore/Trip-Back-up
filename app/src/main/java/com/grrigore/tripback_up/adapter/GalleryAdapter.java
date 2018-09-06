@@ -38,6 +38,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //todo update verison of FirebaseImageLoader
         Glide.with(context)
                 .using(new FirebaseImageLoader())
                 .load(imageStorageReferences.get(position))

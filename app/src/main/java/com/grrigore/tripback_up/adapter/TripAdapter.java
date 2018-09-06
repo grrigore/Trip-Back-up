@@ -43,6 +43,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         Trip trip = trips.get(position);
         holder.tvTitle.setText(trip.getTitle());
         // Load the image using Glide
+        //todo update version of FirebaseImageLoader
         Glide.with(context)
                 .using(new FirebaseImageLoader())
                 .load(storageReferences.get(position))

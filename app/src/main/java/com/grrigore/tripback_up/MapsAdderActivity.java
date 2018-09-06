@@ -19,6 +19,8 @@ import com.grrigore.tripback_up.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+//todo startActivityOnResult
+
 public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

@@ -9,6 +9,8 @@ import android.widget.RemoteViews;
 import com.grrigore.tripback_up.R;
 import com.grrigore.tripback_up.utils.Constants;
 
+//todo new widget design
+
 public class TripWidgetProvider extends AppWidgetProvider {
 
     @Override

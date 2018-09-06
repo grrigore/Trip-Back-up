@@ -150,6 +150,7 @@ public class TripListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
 
+                //todo separate class to manage the shared preferences values
                 SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
                 sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
                 sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, tripList.get(position).getDescription());

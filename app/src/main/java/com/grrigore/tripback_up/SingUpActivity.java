@@ -49,6 +49,7 @@ public class SingUpActivity extends AppCompatActivity {
         //hide toolbar
         getSupportActionBar().hide();
 
+        //todo add separate method for this onClick
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

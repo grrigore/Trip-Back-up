@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 public class NetworkState {
 
+    //todo implement layouts for no internet connection
     public static boolean isNetworkConnection(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();

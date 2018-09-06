@@ -37,8 +37,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//TODO on screen rotate
+//todo on screen rotate
 //todo async task
+//todo create an interface with all the methods related to the firebase functionality for each view
 
 public class TripAdderActivity extends AppCompatActivity {
 

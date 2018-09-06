@@ -44,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //todo on screen rotation
+//todo constants files per class with var names connected with the entity
 
 public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
