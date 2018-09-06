@@ -46,6 +46,7 @@ import butterknife.ButterKnife;
 //todo on screen rotation
 //todo constants files per class with var names connected with the entity
 
+//todo rethink trip gallery
 public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @BindView(R.id.tvTripTitle)
@@ -117,6 +118,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 });
             }
         });
+        //todo recycler view space between views
         rvTripGallery.setLayoutManager(layoutManager);
         rvTripGallery.setItemAnimator(new DefaultItemAnimator());
         rvTripGallery.setHasFixedSize(true);

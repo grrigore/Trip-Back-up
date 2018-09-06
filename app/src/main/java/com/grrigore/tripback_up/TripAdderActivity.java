@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 //todo async task
 //todo create an interface with all the methods related to the firebase functionality for each view
 
+//todo redesing MapsAdderActivity
 public class TripAdderActivity extends AppCompatActivity {
 
 

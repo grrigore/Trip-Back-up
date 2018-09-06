@@ -163,6 +163,7 @@ public class TripListActivity extends AppCompatActivity {
                 startActivity(tripDetailIntent);
             }
         });
+        //todo recycler view space between views
         rlvTrips.setLayoutManager(layoutManager);
         rlvTrips.setItemAnimator(new DefaultItemAnimator());
         rlvTrips.setHasFixedSize(true);
@@ -201,6 +202,7 @@ public class TripListActivity extends AppCompatActivity {
         }
     }
 
+    //todo create new method for layout&trips
     private void provideRecentTripsUI() {
         if (recentTrips.size() != 0) {
             setContentView(R.layout.activity_trip_list);
