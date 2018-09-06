@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
 
 public class SingUpActivity extends AppCompatActivity {
 
-
     @BindView(R.id.etEmail)
     EditText etEmail;
     @BindView(R.id.etPassword)
@@ -68,6 +67,7 @@ public class SingUpActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
+    //todo email verification
     /**
      * @param view This method allows the user to create a new account.
      */

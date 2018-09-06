@@ -95,6 +95,7 @@ public class TripListActivity extends AppCompatActivity {
                     trip.setTitle((String) tripDataSnapshot.child("title").getValue());
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
 
+                    //todo get only time value
                     DataSnapshot dateDataSnapshot = tripDataSnapshot.child("date");
                     Date date = new Date();
                     if (dateDataSnapshot.child("time").getValue() != null) {
@@ -149,7 +150,6 @@ public class TripListActivity extends AppCompatActivity {
         tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
                 //todo separate class to manage the shared preferences values
                 SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
                 sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
@@ -179,7 +179,6 @@ public class TripListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.recentTrips:
                 provideRecentTripsUI();

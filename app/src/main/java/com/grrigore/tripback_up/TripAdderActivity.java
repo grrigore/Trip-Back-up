@@ -119,20 +119,8 @@ public class TripAdderActivity extends AppCompatActivity {
      *             and stores the images in firebase storage.
      */
     public void addMedia(View view) {
-        (new AddImagesTask() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-            }
-        }).execute();
-
-
+        //todo review add image to firebase storage
+        //todo add video
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -140,7 +128,7 @@ public class TripAdderActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-
+    //todo review this method
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {

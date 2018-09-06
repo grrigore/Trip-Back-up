@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //todo startActivityOnResult
-
+//todo rethink class structure
 public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

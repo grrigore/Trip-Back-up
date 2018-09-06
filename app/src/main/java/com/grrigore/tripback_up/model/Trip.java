@@ -10,6 +10,7 @@ import java.util.List;
 public class Trip implements Parcelable {
     private String title = null;
     private String description = null;
+    //todo change Date to long - just time
     private Date date = null;
     private String id = null;
     private List<String> images = new ArrayList<>();

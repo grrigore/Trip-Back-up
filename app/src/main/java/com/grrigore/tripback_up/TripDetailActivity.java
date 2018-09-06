@@ -44,7 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //todo on screen rotation
-//todo constants files per class with var names connected with the entity
 
 //todo rethink trip gallery
 public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -77,6 +76,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+            //todo constants files per class with var names connected with the entity
             trip = bundle.getParcelable("tripClicked");
             userUID = bundle.getString("userUID");
             tripId = bundle.getString("tripId");

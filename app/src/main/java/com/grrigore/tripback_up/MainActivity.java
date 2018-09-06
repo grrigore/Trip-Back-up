@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.grrigore.tripback_up.utils.AddImagesTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         onCreateAccountClick();
+
+        //todo implement splash screen
+        (new AddImagesTask() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+            }
+        }).execute();
+
     }
 
     private void onCreateAccountClick() {
@@ -67,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //todo email verification
     /**
      * @param view This method allows the user to login using his credentials.
      */
