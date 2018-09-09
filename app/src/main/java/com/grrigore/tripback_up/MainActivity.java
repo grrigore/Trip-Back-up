@@ -53,21 +53,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         onCreateAccountClick();
-
-        //todo implement splash screen
-        (new AddImagesTask() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-            }
-        }).execute();
-
     }
 
     private void onCreateAccountClick() {
