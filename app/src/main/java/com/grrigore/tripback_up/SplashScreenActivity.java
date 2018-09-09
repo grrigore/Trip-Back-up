@@ -62,18 +62,22 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void imageTranslation() {
         ivProgress = findViewById(R.id.ivProgress);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        float width = displayMetrics.widthPixels;
+        float width = getDisplayWidth();
 
         float xCurrentPos, yCurrentPos;
         xCurrentPos = ivProgress.getLeft();
         yCurrentPos = ivProgress.getTop();
 
-        TranslateAnimation animation = new TranslateAnimation(xCurrentPos - ANIMATION_OFFSET, xCurrentPos + width, yCurrentPos, yCurrentPos);
+        TranslateAnimation animation = new TranslateAnimation(xCurrentPos - ANIMATION_OFFSET, xCurrentPos + width + ANIMATION_OFFSET, yCurrentPos, yCurrentPos);
         animation.setDuration(5000);
         animation.setFillAfter(true);
         animation.setFillBefore(true);
         ivProgress.startAnimation(animation);
+    }
+
+    private float getDisplayWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return (float) displayMetrics.widthPixels;
     }
 }
