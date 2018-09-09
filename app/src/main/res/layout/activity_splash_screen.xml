@@ -25,5 +25,15 @@
             android:textColor="@android:color/black"
             android:textSize="32sp" />
 
+
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/ivProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:layout_marginTop="40dp"
+        android:rotation="50"
+        android:src="@drawable/plane" />
 </FrameLayout>
