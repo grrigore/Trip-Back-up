@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,8 +30,6 @@ public class SingUpActivity extends AppCompatActivity {
     EditText etEmail;
     @BindView(R.id.etPassword)
     EditText etPassword;
-    @BindView(R.id.tvLogin)
-    TextView tvLogin;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -48,18 +45,6 @@ public class SingUpActivity extends AppCompatActivity {
         //hide toolbar
         getSupportActionBar().hide();
 
-        //todo add separate method for this onClick
-        tvLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(new Intent(SingUpActivity.this, MainActivity.class), ActivityOptions.makeSceneTransitionAnimation(SingUpActivity.this).toBundle());
-                } else {
-                    startActivity(new Intent(SingUpActivity.this, MainActivity.class));
-                }
-            }
-        });
-
         //get firebase auth instance
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -68,6 +53,7 @@ public class SingUpActivity extends AppCompatActivity {
     }
 
     //todo email verification
+
     /**
      * @param view This method allows the user to create a new account.
      */
@@ -76,11 +62,11 @@ public class SingUpActivity extends AppCompatActivity {
         final String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_email), Toast.LENGTH_LONG).show();
+            ToastUtil.showToast(getString(R.string.no_email), getApplicationContext());
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
+            ToastUtil.showToast(getString(R.string.no_password), getApplicationContext());
         }
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SingUpActivity.this, new OnCompleteListener<AuthResult>() {
@@ -88,18 +74,26 @@ public class SingUpActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     if (password.length() < 6) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.password_shot), Toast.LENGTH_LONG).show();
+                        ToastUtil.showToast(getString(R.string.password_shot), getApplicationContext());
                     } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.create_account_error), Toast.LENGTH_LONG).show();
+                        ToastUtil.showToast(getString(R.string.create_account_error), getApplicationContext());
                     }
                 } else {
                     initialiseTripNumber();
-                    ToastUtil.showToast("Account created! Log-in!", SingUpActivity.this);
+                    ToastUtil.showToast(getString(R.string.account_created), SingUpActivity.this);
                     startActivity(new Intent(SingUpActivity.this, MainActivity.class));
                     finish();
                 }
             }
         });
+    }
+
+    public void switchToLoginActivity(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(new Intent(SingUpActivity.this, MainActivity.class), ActivityOptions.makeSceneTransitionAnimation(SingUpActivity.this).toBundle());
+        } else {
+            startActivity(new Intent(SingUpActivity.this, MainActivity.class));
+        }
     }
 
     private void initialiseTripNumber() {

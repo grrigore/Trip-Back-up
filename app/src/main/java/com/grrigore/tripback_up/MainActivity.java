@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.grrigore.tripback_up.utils.AddImagesTask;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,21 +78,21 @@ public class MainActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_email), Toast.LENGTH_LONG).show();
+            ToastUtil.showToast(getString(R.string.no_email), getApplicationContext());
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_password), Toast.LENGTH_LONG).show();
+            ToastUtil.showToast(getString(R.string.no_password), getApplicationContext());
         }
 
         if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG).show();
+            ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
         }
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG).show();
+                    ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
                 } else {
                     Intent intent = new Intent(MainActivity.this, TripListActivity.class);
                     startActivity(intent);

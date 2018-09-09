@@ -39,4 +39,5 @@
     <string name="simple_design_separator">Simple design separator</string>
     <string name="cd_photo">Photo</string>
     <string name="all_trips">All trips</string>
+    <string name="account_created">Account created! Log-in!</string>
 </resources>
