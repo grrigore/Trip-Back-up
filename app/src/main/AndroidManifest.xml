@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,13 +21,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".SingUpActivity" />
         <activity android:name=".TripListActivity" />
         <activity android:name=".TripDetailActivity" />
@@ -51,9 +51,9 @@
         <activity android:name=".TripAdderActivity" />
         <activity
             android:name=".MapsAdderActivity"
-            android:label="@string/title_activity_maps_adder"></activity>
+            android:label="@string/title_activity_maps_adder" />
 
-        <receiver android:name="com.grrigore.tripback_up.widget.TripWidgetProvider">
+        <receiver android:name=".widget.TripWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -61,8 +61,8 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
-        </receiver>
 
+        </receiver>
     </application>
 
 </manifest>

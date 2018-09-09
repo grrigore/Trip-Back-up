@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), getString(R.string.password_shot), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG).show();
         }
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
