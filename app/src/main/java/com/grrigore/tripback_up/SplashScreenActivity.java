@@ -22,6 +22,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
@@ -39,6 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private class SplashScreenAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        //todo check network connection
         @Override
         protected Void doInBackground(Void... voids) {
             try {
