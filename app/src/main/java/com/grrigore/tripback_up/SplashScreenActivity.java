@@ -5,19 +5,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     //todo move into constants class
-    public static final int ANIMATION_OFFSET = 60;
+    public static final int ANIMATION_OFFSET = 50;
 
-    @BindView(R.id.ivProgress)
     ImageView ivProgress;
 
     @Override
@@ -33,9 +30,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        //todo laggy animation
         imageTranslation();
         new SplashScreenAsyncTask().execute();
-
     }
 
     private class SplashScreenAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -63,6 +60,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void imageTranslation() {
+        ivProgress = findViewById(R.id.ivProgress);
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         float width = displayMetrics.widthPixels;
@@ -71,7 +70,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         xCurrentPos = ivProgress.getLeft();
         yCurrentPos = ivProgress.getTop();
 
-        Animation animation = new TranslateAnimation(xCurrentPos - ANIMATION_OFFSET, xCurrentPos + width, yCurrentPos, yCurrentPos);
+        TranslateAnimation animation = new TranslateAnimation(xCurrentPos - ANIMATION_OFFSET, xCurrentPos + width, yCurrentPos, yCurrentPos);
         animation.setDuration(5000);
         animation.setFillAfter(true);
         animation.setFillBefore(true);
