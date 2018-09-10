@@ -179,6 +179,7 @@ public class TripListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        //todo transitions between layouts
         switch (id) {
             case R.id.recentTrips:
                 provideRecentTripsUI();
