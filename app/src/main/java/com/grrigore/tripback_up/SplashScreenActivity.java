@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
@@ -72,6 +73,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         animation.setDuration(5000);
         animation.setFillAfter(true);
         animation.setFillBefore(true);
+        animation.setInterpolator(new LinearInterpolator());
         ivProgress.startAnimation(animation);
     }
 
