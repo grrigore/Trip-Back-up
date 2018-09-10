@@ -31,7 +31,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        //todo laggy animation
         imageTranslation();
         new SplashScreenAsyncTask().execute();
     }
