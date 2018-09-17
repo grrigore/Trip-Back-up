@@ -271,7 +271,18 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                ToastUtil.showToast(item.getTitle().toString(), getApplicationContext());
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.editTrip:
+                        //todo edit trip
+                        return true;
+                    case R.id.deleteTrip:
+                        //todo delete trip
+                        return true;
+                    case R.id.addWidget:
+                        //todo add as widget
+                        return true;
+                }
                 return true;
             }
         });
