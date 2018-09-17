@@ -4,6 +4,9 @@
         android:id="@+id/deleteTrip"
         android:title="@string/deleteTrip" />
     <item
+        android:id="@+id/editTrip"
+        android:title="@string/editTrip" />
+    <item
         android:id="@+id/addWidget"
         android:title="@string/add_as_widget" />
 </menu>

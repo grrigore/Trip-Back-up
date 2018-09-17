@@ -40,4 +40,5 @@
     <string name="cd_photo">Photo</string>
     <string name="all_trips">All trips</string>
     <string name="account_created">Account created! Log-in!</string>
+    <string name="editTrip">Edit trip</string>
 </resources>
