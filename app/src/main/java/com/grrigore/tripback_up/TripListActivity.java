@@ -132,7 +132,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     }
                 }
 
-                provideRecentTripsUI();
+                provideTripsForUi(recentTrips, imageRefsRecent, R.id.recentTrips);
 
             }
 
@@ -171,16 +171,19 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         //todo transitions between layouts
         switch (id) {
             case R.id.recentTrips:
-                provideRecentTripsUI();
+                provideTripsForUi(recentTrips, imageRefsRecent, id);
                 return true;
             case R.id.pastTrips:
-                providePastTripsUI();
+                provideTripsForUi(pastTrips, imageRefsPast, id);
                 return true;
             case R.id.favTrips:
                 //todo fav trip selection
                 return true;
             case R.id.allTrips:
-                //allTripsMode();
+                List<Trip> allTrips = mergeTrips();
+                List<StorageReference> imageRefsAll = mergeImageRefs();
+
+                provideTripsForUi(allTrips, imageRefsAll, id);
                 return true;
             case R.id.addTrip:
                 Intent intent = new Intent(this, TripAdderActivity.class);
@@ -191,27 +194,29 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         }
     }
 
-    //todo create new method for layout&trips
-    private void provideRecentTripsUI() {
-        if (recentTrips.size() != 0) {
+    private void provideTripsForUi(List<Trip> trips, List<StorageReference> tripImages, int menuItemId) {
+        if (trips.size() != 0) {
             setContentView(R.layout.activity_trip_list);
             ButterKnife.bind(TripListActivity.this);
-            populateTripList(recentTrips, imageRefsRecent);
-        } else {
+            populateTripList(trips, tripImages);
+        } else if (menuItemId == R.id.recentTrips) {
             setContentView(R.layout.no_recent_trips_layout);
+        } else if (menuItemId == R.id.pastTrips) {
+            ToastUtil.showToast("No past trips!", this);
+        } else if (menuItemId == R.id.allTrips) {
+            ToastUtil.showToast("No trips.. Add your first trip!", this);
         }
     }
+
 
     //todo no trips layout
     public void allTripsMode(View view) {
         setContentView(R.layout.activity_trip_list);
-
         ButterKnife.bind(TripListActivity.this);
-        List<Trip> allTrips = new ArrayList<>(recentTrips);
-        List<StorageReference> imageRefsAll = new ArrayList<>(imageRefsRecent);
 
-        allTrips.addAll(pastTrips);
-        imageRefsAll.addAll(imageRefsPast);
+        List<Trip> allTrips = mergeTrips();
+        List<StorageReference> imageRefsAll = mergeImageRefs();
+
         populateTripList(allTrips, imageRefsAll);
 
         if (allTrips.size() == 0) {
@@ -219,13 +224,18 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         }
     }
 
-    private void providePastTripsUI() {
-        setContentView(R.layout.activity_trip_list);
-        ButterKnife.bind(TripListActivity.this);
-        populateTripList(pastTrips, imageRefsPast);
-        if (pastTrips.size() == 0) {
-            ToastUtil.showToast("No past trips!", this);
-        }
+    @NonNull
+    private List<StorageReference> mergeImageRefs() {
+        List<StorageReference> imageRefsAll = new ArrayList<>(imageRefsRecent);
+        imageRefsAll.addAll(imageRefsPast);
+        return imageRefsAll;
+    }
+
+    @NonNull
+    private List<Trip> mergeTrips() {
+        List<Trip> allTrips = new ArrayList<>(recentTrips);
+        allTrips.addAll(pastTrips);
+        return allTrips;
     }
 
     @Override
@@ -263,8 +273,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
     @Override
     public void onLongItemClick(View view, Trip trip) {
-        //ToastUtil.showToast("LONG " + trip.getTitle(), getApplicationContext());
-
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.trip_menu, popupMenu.getMenu());
         popupMenu.show();
