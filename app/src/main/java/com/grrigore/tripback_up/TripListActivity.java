@@ -41,7 +41,7 @@ import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 //TODO on screen rotate
 //TODO think
 
-public class TripListActivity extends AppCompatActivity {
+public class TripListActivity extends AppCompatActivity implements TripAdapter.ItemClickListener, TripAdapter.ItemLongClickListener {
 
     @BindView(R.id.rlvTrips)
     RecyclerView rlvTrips;
@@ -142,31 +142,19 @@ public class TripListActivity extends AppCompatActivity {
         });
     }
 
-    private void populateTripList(final List<Trip> tripList, List<StorageReference> imageRefs) {
+    private void populateTripList(List<Trip> tripList, List<StorageReference> imageRefs) {
         TripAdapter tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         //set on item click listener
-        tripAdapter.setItemClickListener(new TripAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //todo separate class to manage the shared preferences values
-                SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
-                sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, tripList.get(position).getTitle());
-                sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, tripList.get(position).getDescription());
-                sharedPreferencesEditor.apply();
+        tripAdapter.setItemClickListener(this);
+        tripAdapter.setOnLongClickListener(this);
 
-                Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
-                tripDetailIntent.putExtra("tripClicked", tripList.get(position));
-                tripDetailIntent.putExtra("tripId", tripList.get(position).getId());
-                tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
-                startActivity(tripDetailIntent);
-            }
-        });
         //todo recycler view space between views
         rlvTrips.setLayoutManager(layoutManager);
         rlvTrips.setItemAnimator(new DefaultItemAnimator());
         rlvTrips.setHasFixedSize(true);
+        rlvTrips.setLongClickable(true);
         rlvTrips.setAdapter(tripAdapter);
     }
 
@@ -191,7 +179,7 @@ public class TripListActivity extends AppCompatActivity {
                 //todo fav trip selection
                 return true;
             case R.id.allTrips:
-                allTripsMode();
+                //allTripsMode();
                 return true;
             case R.id.addTrip:
                 Intent intent = new Intent(this, TripAdderActivity.class);
@@ -214,7 +202,7 @@ public class TripListActivity extends AppCompatActivity {
     }
 
     //todo no trips layout
-    public void allTripsMode() {
+    public void allTripsMode(View view) {
         setContentView(R.layout.activity_trip_list);
 
         ButterKnife.bind(TripListActivity.this);
@@ -255,5 +243,25 @@ public class TripListActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         tripsReference.removeEventListener(tripsReferenceListener);
+    }
+
+    @Override
+    public void onItemClick(View view, Trip trip) {
+        //todo separate class to manage the shared preferences values
+        SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
+        sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, trip.getTitle());
+        sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, trip.getDescription());
+        sharedPreferencesEditor.apply();
+
+        Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
+        tripDetailIntent.putExtra("tripClicked", trip);
+        tripDetailIntent.putExtra("tripId",trip.getId());
+        tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
+        startActivity(tripDetailIntent);
+    }
+
+    @Override
+    public void onLongItemClick(View view, Trip trip) {
+        ToastUtil.showToast("LONG " + trip.getTitle(), getApplicationContext());
     }
 }
