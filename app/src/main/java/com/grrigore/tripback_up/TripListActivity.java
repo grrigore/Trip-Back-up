@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -255,13 +256,25 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
         Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
         tripDetailIntent.putExtra("tripClicked", trip);
-        tripDetailIntent.putExtra("tripId",trip.getId());
+        tripDetailIntent.putExtra("tripId", trip.getId());
         tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
         startActivity(tripDetailIntent);
     }
 
     @Override
     public void onLongItemClick(View view, Trip trip) {
-        ToastUtil.showToast("LONG " + trip.getTitle(), getApplicationContext());
+        //ToastUtil.showToast("LONG " + trip.getTitle(), getApplicationContext());
+
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.trip_menu, popupMenu.getMenu());
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ToastUtil.showToast(item.getTitle().toString(), getApplicationContext());
+                return true;
+            }
+        });
+
     }
 }
