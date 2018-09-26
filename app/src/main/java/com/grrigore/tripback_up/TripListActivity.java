@@ -194,7 +194,8 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         }
     }
 
-    private void provideTripsForUi(List<Trip> trips, List<StorageReference> tripImages, int menuItemId) {
+    private void provideTripsForUi(List<Trip> trips, List<StorageReference> tripImages,
+                                   int menuItemId) {
         if (trips.size() != 0) {
             setContentView(R.layout.activity_trip_list);
             ButterKnife.bind(TripListActivity.this);
