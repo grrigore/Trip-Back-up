@@ -185,5 +185,7 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+# Checkstyle file
+/.idea/checkstyle-idea.xml
 
 # End of https://www.gitignore.io/api/android,androidstudio
