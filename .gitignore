@@ -188,4 +188,6 @@ fabric.properties
 # Checkstyle file
 /.idea/checkstyle-idea.xml
 
+/.idea/kotlinc.xml
+
 # End of https://www.gitignore.io/api/android,androidstudio
