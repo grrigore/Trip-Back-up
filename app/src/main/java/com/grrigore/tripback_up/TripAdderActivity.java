@@ -193,13 +193,7 @@ public class TripAdderActivity extends AppCompatActivity {
                 if (placeList.size() != 0) {
                     placesAdded = true;
                     ToastUtil.showToast("Places added!", getApplicationContext());
-                } else {
-                    placesAdded = false;
-                    ToastUtil.showToast("You haven't added places to your trip.", this);
                 }
-            } else if (requestCode == PICK_PLACE_REQUEST) {
-                placesAdded = false;
-                ToastUtil.showToast("You haven't added places to your trip.", this);
             }
         } catch (Exception e) {
             ToastUtil.showToast("Something went wrong!", this);

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.grrigore.tripback_up.model.Place;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,16 +74,22 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     public void addMarkerToMap(View view) {
         places.add(place);
+        ToastUtil.showToast("Marker added.", this);
     }
 
     public void saveMarkers(View view) {
-        Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("placeList", (ArrayList<? extends Parcelable>) places);
-        setResult(RESULT_OK, intent);
-        finish();
+        if (places.size() == 0) {
+            ToastUtil.showToast("You haven't added any marker.", this);
+        } else {
+            Intent intent = new Intent();
+            intent.putParcelableArrayListExtra("placeList", (ArrayList<? extends Parcelable>) places);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 
     public void cleanMarkers(View view) {
         places.clear();
+        ToastUtil.showToast("Markers deleted.", this);
     }
 }
