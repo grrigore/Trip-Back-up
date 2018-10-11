@@ -41,4 +41,7 @@
     <string name="all_trips">All trips</string>
     <string name="account_created">Account created! Log-in!</string>
     <string name="editTrip">Edit trip</string>
+    <string name="added_marker">Marked added!</string>
+    <string name="no_marker">You haven\'t added any marker.</string>
+    <string name="delete_marker">Markers deleted.</string>
 </resources>

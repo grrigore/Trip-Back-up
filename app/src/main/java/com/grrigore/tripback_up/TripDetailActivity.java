@@ -43,6 +43,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
+
 //todo on screen rotation
 
 //todo rethink trip gallery
@@ -80,7 +82,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             trip = bundle.getParcelable("tripClicked");
             userUID = bundle.getString("userUID");
             tripId = bundle.getString("tripId");
-            Log.d(this.getApplicationContext().getClass().getSimpleName(),"Trip id = " + tripId);
+            Log.d(this.getApplicationContext().getClass().getSimpleName(), "Trip id = " + tripId);
         }
 
         Log.d(getApplicationContext().getClass().getSimpleName(), trip.toString());
@@ -162,7 +164,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onMapClick(LatLng latLng) {
                 Intent intent = new Intent(getApplicationContext(), MapsDetailActivity.class);
-                intent.putParcelableArrayListExtra("places", (ArrayList<? extends Parcelable>) places);
+                intent.putParcelableArrayListExtra(PLACE_LIST_KEY_MDA_TDA, (ArrayList<? extends Parcelable>) places);
                 startActivity(intent);
             }
         });

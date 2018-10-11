@@ -37,6 +37,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MAA_TAA;
+import static com.grrigore.tripback_up.utils.Constants.TRIP;
+import static com.grrigore.tripback_up.utils.Constants.TRIPS;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
+import static com.grrigore.tripback_up.utils.Constants.USER;
+import static com.grrigore.tripback_up.utils.Constants.USERS;
+
 //todo on screen rotate
 //todo async task
 //todo create an interface with all the methods related to the firebase functionality for each view
@@ -93,10 +100,10 @@ public class TripAdderActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         //read number of trips from the database
-        databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
+        databaseReference.child(USERS + "/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                tripId = (long) dataSnapshot.child("tripNumber").getValue();
+                tripId = (long) dataSnapshot.child(TRIP_NUMBER).getValue();
             }
 
             @Override
@@ -112,7 +119,6 @@ public class TripAdderActivity extends AppCompatActivity {
      */
     public void addPlace(View view) {
         Intent intent = new Intent(this, MapsAdderActivity.class);
-        intent.putExtra("tripId", tripId);
         startActivityForResult(intent, PICK_PLACE_REQUEST);
     }
 
@@ -187,7 +193,7 @@ public class TripAdderActivity extends AppCompatActivity {
 
             if (requestCode == PICK_PLACE_REQUEST && resultCode == RESULT_OK
                     && null != data) {
-                placeList = data.getParcelableArrayListExtra("placeList");
+                placeList = data.getParcelableArrayListExtra(PLACE_LIST_KEY_MAA_TAA);
                 if (placeList.size() != 0) {
                     placesAdded = true;
                     ToastUtil.showToast("Places added!", getApplicationContext());
@@ -208,7 +214,7 @@ public class TripAdderActivity extends AppCompatActivity {
         StorageReference storageReference = firebaseStorage.getReference();
         //create storage reference for user folder
         //points to the trip folder
-        StorageReference userReference = storageReference.child("user/" + firebaseAuth.getCurrentUser().getUid()).child("trips").child("trip" + tripId);
+        StorageReference userReference = storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId);
         StorageReference imageReference;
         UploadTask uploadTask;
 
@@ -236,7 +242,7 @@ public class TripAdderActivity extends AppCompatActivity {
                 }
             });
 
-            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("images").child("img" + i).setValue(imageReference.toString());
+            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("images").child("img" + i).setValue(imageReference.toString());
         }
     }
 
@@ -264,21 +270,22 @@ public class TripAdderActivity extends AppCompatActivity {
             trip.setDescription(description);
             trip.setDate(date);
             trip.setPlaces(placeList);
-            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("title").setValue(trip.getTitle());
-            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("description").setValue(trip.getDescription());
-            databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("date").setValue(trip.getDate());
+            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("title").setValue(trip.getTitle());
+            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("description").setValue(trip.getDescription());
+            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("date").setValue(trip.getDate());
             int placeId = 0;
             for (Place place : placeList) {
-                databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
+                databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
                 placeId++;
             }
             uploadImagesToFirebase();
             tripId++;
-            databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
+            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
 
             ToastUtil.showToast("Trip saved!", getApplicationContext());
 
             Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
+
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
             intentRecentTrips.putExtra("tripId", tripId);
             startActivity(intentRecentTrips);

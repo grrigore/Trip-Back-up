@@ -18,6 +18,8 @@ import com.grrigore.tripback_up.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MAA_TAA;
+
 //todo search for places/address
 public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -72,15 +74,15 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     public void addMarkerToMap(View view) {
         places.add(place);
-        ToastUtil.showToast("Marker added.", this);
+        ToastUtil.showToast(String.valueOf(R.string.added_marker), this);
     }
 
     public void saveMarkers(View view) {
         if (places.size() == 0) {
-            ToastUtil.showToast("You haven't added any marker.", this);
+            ToastUtil.showToast(String.valueOf(R.string.no_marker), this);
         } else {
             Intent intent = new Intent();
-            intent.putParcelableArrayListExtra("placeList", (ArrayList<? extends Parcelable>) places);
+            intent.putParcelableArrayListExtra(PLACE_LIST_KEY_MAA_TAA, (ArrayList<? extends Parcelable>) places);
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -88,6 +90,6 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     public void cleanMarkers(View view) {
         places.clear();
-        ToastUtil.showToast("Markers deleted.", this);
+        ToastUtil.showToast(String.valueOf(R.string.delete_marker), this);
     }
 }

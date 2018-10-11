@@ -11,11 +11,12 @@ import android.widget.ImageView;
 
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.ANIMATION_DURATION_SSA;
+import static com.grrigore.tripback_up.utils.Constants.ANIMATION_OFFSET_SSA;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     //todo move into constants class
-    public static final int ANIMATION_OFFSET = 50;
-
     ImageView ivProgress;
 
     @Override
@@ -41,7 +42,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(ANIMATION_DURATION_SSA);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -68,8 +69,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         xCurrentPos = ivProgress.getLeft();
         yCurrentPos = ivProgress.getTop();
 
-        TranslateAnimation animation = new TranslateAnimation(xCurrentPos - ANIMATION_OFFSET, xCurrentPos + width + ANIMATION_OFFSET, yCurrentPos, yCurrentPos);
-        animation.setDuration(5000);
+        TranslateAnimation animation = new TranslateAnimation(xCurrentPos - ANIMATION_OFFSET_SSA, xCurrentPos + width + ANIMATION_OFFSET_SSA, yCurrentPos, yCurrentPos);
+        animation.setDuration(ANIMATION_DURATION_SSA);
         animation.setFillAfter(true);
         animation.setFillBefore(true);
         animation.setInterpolator(new LinearInterpolator());

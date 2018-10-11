@@ -17,6 +17,8 @@ import com.grrigore.tripback_up.model.Place;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
+
 public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private List<Place> places;
@@ -32,7 +34,7 @@ public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCa
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            places = bundle.getParcelableArrayList("places");
+            places = bundle.getParcelableArrayList(PLACE_LIST_KEY_MDA_TDA);
         } else {
             places = new ArrayList<>();
         }

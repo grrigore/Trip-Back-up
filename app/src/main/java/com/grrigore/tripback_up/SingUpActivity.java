@@ -21,6 +21,9 @@ import com.grrigore.tripback_up.utils.ToastUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
+import static com.grrigore.tripback_up.utils.Constants.USERS;
+
 //todo on screen rotate
 
 public class SingUpActivity extends AppCompatActivity {
@@ -98,7 +101,7 @@ public class SingUpActivity extends AppCompatActivity {
     }
 
     private void initialiseTripNumber() {
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(0);
+        databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(0);
     }
 
 }
