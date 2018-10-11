@@ -17,7 +17,6 @@ import com.grrigore.tripback_up.model.Place;
 import java.util.ArrayList;
 import java.util.List;
 
-//todo rethink class structure
 public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private List<Place> places;

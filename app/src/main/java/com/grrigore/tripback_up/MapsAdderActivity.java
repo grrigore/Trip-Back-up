@@ -18,8 +18,6 @@ import com.grrigore.tripback_up.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-//todo startActivityOnResult
-//todo rethink class structure
 //todo search for places/address
 public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCallback {
 
