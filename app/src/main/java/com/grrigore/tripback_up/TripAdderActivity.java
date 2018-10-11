@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.utils.ToastUtil;
 
@@ -64,7 +65,9 @@ public class TripAdderActivity extends AppCompatActivity {
     private String imageEncoded;
     private List<String> imagesEncodedList;
 
-    static boolean placesAdded = false;
+    public static final int PICK_PLACE_REQUEST = 2;
+    private List<Place> placeList;
+    private boolean placesAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +113,7 @@ public class TripAdderActivity extends AppCompatActivity {
     public void addPlace(View view) {
         Intent intent = new Intent(this, MapsAdderActivity.class);
         intent.putExtra("tripId", tripId);
-        startActivity(intent);
+        startActivityForResult(intent, PICK_PLACE_REQUEST);
     }
 
     /**
@@ -130,6 +133,8 @@ public class TripAdderActivity extends AppCompatActivity {
     //todo review this method
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         try {
             // When an Image is picked
             if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
@@ -172,21 +177,33 @@ public class TripAdderActivity extends AppCompatActivity {
                             cursor.close();
 
                         }
-                        Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
 
                         imageURIs = mArrayUri;
 
                         uploadImagesToFirebase();
                     }
                 }
-            } else {
-                ToastUtil.showToast("You haven't picked Image", this);
+            } else if (requestCode == PICK_IMAGE_REQUEST) {
+                ToastUtil.showToast("You haven't picked an image.", this);
+            }
+
+            if (requestCode == PICK_PLACE_REQUEST && resultCode == RESULT_OK
+                    && null != data) {
+                placeList = data.getParcelableArrayListExtra("placeList");
+                if (placeList.size() != 0) {
+                    placesAdded = true;
+                    ToastUtil.showToast("Places added!", getApplicationContext());
+                } else {
+                    placesAdded = false;
+                    ToastUtil.showToast("You haven't added places to your trip.", this);
+                }
+            } else if (requestCode == PICK_PLACE_REQUEST) {
+                placesAdded = false;
+                ToastUtil.showToast("You haven't added places to your trip.", this);
             }
         } catch (Exception e) {
-            ToastUtil.showToast("Something went wrong", this);
+            ToastUtil.showToast("Something went wrong!", this);
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -253,9 +270,15 @@ public class TripAdderActivity extends AppCompatActivity {
             trip.setTitle(title);
             trip.setDescription(description);
             trip.setDate(date);
+            trip.setPlaces(placeList);
             databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("title").setValue(trip.getTitle());
             databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("description").setValue(trip.getDescription());
             databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("date").setValue(trip.getDate());
+            int placeId = 0;
+            for (Place place : placeList) {
+                databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
+                placeId++;
+            }
             tripId++;
             databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
 

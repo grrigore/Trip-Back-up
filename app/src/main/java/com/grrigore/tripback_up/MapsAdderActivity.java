@@ -1,6 +1,8 @@
 package com.grrigore.tripback_up;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
@@ -10,11 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.grrigore.tripback_up.model.Place;
-import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +25,6 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     private GoogleMap mMap;
     private List<Place> places;
     private Place place;
-    private int placeId = 0;
-    private long tripId;
-
-    private DatabaseReference databaseReference;
-    private FirebaseAuth firebaseAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +33,6 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
         //array list used to store the places added
         places = new ArrayList<>();
-
-        //get database reference
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        //create instance of firebase auth
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            tripId = bundle.getLong("tripId");
-        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,28 +76,13 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     }
 
     public void saveMarkers(View view) {
-        if (placeId != 0) {
-            for (int i = placeId; i < places.size(); i++) {
-                writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
-            }
-        } else {
-            for (int i = 0; i < places.size(); i++) {
-                writeNewPlace(places.get(i).getLat(), places.get(i).getLng());
-            }
-        }
-        TripAdderActivity.placesAdded = true;
-        ToastUtil.showToast("Places added!", getApplicationContext());
-    }
-
-    private void writeNewPlace(String lat, String lng) {
-        Place place = new Place(lat, lng);
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
-        placeId++;
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra("placeList", (ArrayList<? extends Parcelable>) places);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public void cleanMarkers(View view) {
         places.clear();
-        placeId = 0;
-        databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").removeValue();
     }
 }
