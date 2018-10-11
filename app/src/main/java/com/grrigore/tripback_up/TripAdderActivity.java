@@ -179,8 +179,6 @@ public class TripAdderActivity extends AppCompatActivity {
                         }
 
                         imageURIs = mArrayUri;
-
-                        uploadImagesToFirebase();
                     }
                 }
             } else if (requestCode == PICK_IMAGE_REQUEST) {
@@ -203,6 +201,7 @@ public class TripAdderActivity extends AppCompatActivity {
     /**
      * This method is used to upload images to Firebase Storage.
      */
+    //todo review this method & usage
     private void uploadImagesToFirebase() {
         //create storage reference from our app
         //points to the root reference
@@ -273,6 +272,7 @@ public class TripAdderActivity extends AppCompatActivity {
                 databaseReference.child("users").child(firebaseAuth.getUid()).child("trips").child("trip" + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
                 placeId++;
             }
+            uploadImagesToFirebase();
             tripId++;
             databaseReference.child("users").child(firebaseAuth.getUid()).child("tripNumber").setValue(tripId);
 
