@@ -1,5 +1,7 @@
 package com.grrigore.tripback_up;
 
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
+
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,10 +45,7 @@ import com.grrigore.tripback_up.widget.TripWidgetProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
-import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
 
 //todo on screen rotation
 
@@ -96,6 +98,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         final List<StorageReference> imageStorageReferences = new ArrayList<>();
         for (String imageUrl : trip.getImages()) {
+            Log.d(getApplicationContext().getClass().getSimpleName(), "\n" + "Image Url: " + imageUrl +"\n");
             imageStorageReferences.add(firebaseStorage.getReferenceFromUrl(imageUrl));
         }
 

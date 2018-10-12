@@ -250,7 +250,6 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             trip.setImages(imageList);
 
             addImagesToStorage(imageURIs);
-
             addTripToDatabase(trip);
 
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
@@ -268,7 +267,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         //toask cum pot scapa de astea? fac o variabila?
         DatabaseReference tripReference = databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId);
         int placeId = 0;
-        int imageId = 0;
+        int imageId = 1;
 
         tripReference.child("title").setValue(trip.getTitle());
         tripReference.child("description").setValue(trip.getDescription());
@@ -333,6 +332,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ToastUtil.showToast("Images added!", getApplicationContext());
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
                     lvMedia.setAdapter(adapter);
                 }

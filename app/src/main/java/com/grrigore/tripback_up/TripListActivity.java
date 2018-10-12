@@ -111,6 +111,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         imageList.add(String.valueOf(imagesDataSnapshot.child("img" + i).getValue()));
                     }
                     trip.setImages(imageList);
+                    Log.d(getApplicationContext().getClass().getSimpleName(), "\n" +"Image List: " + imageList.get(0) + "\n");
 
                     DataSnapshot placesDataSnapshot = tripDataSnapshot.child("places");
                     List<Place> placeList = new ArrayList<>();
