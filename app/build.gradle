@@ -50,6 +50,9 @@ dependencies {
 
     //recyclerView
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+
+    //room
+    implementation "android.arch.persistence.room:runtime:1.1.1"
 }
 
 //google services
