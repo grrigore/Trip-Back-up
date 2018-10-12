@@ -27,6 +27,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
+import com.grrigore.tripback_up.utils.FirebaseDatabaseUtils;
+import com.grrigore.tripback_up.utils.FirebaseStorageUtils;
 import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ import static com.grrigore.tripback_up.utils.Constants.USERS;
 //todo create an interface with all the methods related to the firebase functionality for each view
 
 //todo redesing MapsAdderActivity
-public class TripAdderActivity extends AppCompatActivity {
+public class TripAdderActivity extends AppCompatActivity implements FirebaseDatabaseUtils, FirebaseStorageUtils {
 
 
     @BindView(R.id.etTitle)
@@ -293,6 +295,36 @@ public class TripAdderActivity extends AppCompatActivity {
         } else {
             ToastUtil.showToast("Trip couldn't be saved! Please check fields!", getApplicationContext());
         }
+
+    }
+
+    @Override
+    public void addTripToDatabase(Trip trip) {
+
+    }
+
+    @Override
+    public void editTripFromDatabase(String tripId) {
+
+    }
+
+    @Override
+    public void deleteTripFromDatabase(String tripId) {
+
+    }
+
+    @Override
+    public void addImagesToStorage() {
+
+    }
+
+    @Override
+    public void editImagesFromStorage(String tripId) {
+
+    }
+
+    @Override
+    public void deleteImagesFromStorage(String tripId) {
 
     }
 }
