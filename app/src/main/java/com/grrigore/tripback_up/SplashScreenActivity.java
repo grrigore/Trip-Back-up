@@ -16,9 +16,6 @@ import static com.grrigore.tripback_up.utils.Constants.ANIMATION_OFFSET_SSA;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    //todo move into constants class
-    ImageView ivProgress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -61,7 +58,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void imageTranslation() {
-        ivProgress = findViewById(R.id.ivProgress);
+        ImageView ivProgress = findViewById(R.id.ivProgress);
 
         float width = getDisplayWidth();
 

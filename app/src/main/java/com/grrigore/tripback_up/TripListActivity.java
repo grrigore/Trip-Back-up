@@ -39,8 +39,8 @@ import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 
-//TODO on screen rotate
-//TODO think
+//todo on screen rotate
+//todo think
 
 public class TripListActivity extends AppCompatActivity implements TripAdapter.ItemClickListener, TripAdapter.ItemLongClickListener {
 
