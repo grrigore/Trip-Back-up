@@ -213,13 +213,6 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     }
 
     /**
-     * This method is used to upload images to Firebase Storage.
-     */
-    //todo review this method & usage
-    private void uploadImagesToFirebase() {
-    }
-
-    /**
      * @param view This method saves the Trip object to firebase database.
      */
     public void saveTrip(View view) {
@@ -293,16 +286,6 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     }
 
     @Override
-    public void editTripFromDatabase(String tripId) {
-
-    }
-
-    @Override
-    public void deleteTripFromDatabase(String tripId) {
-
-    }
-
-    @Override
     public void addImagesToStorage(ArrayList<Uri> imageURIs) {
         //create storage reference from our app
         //points to the root reference
@@ -332,13 +315,23 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    //todo change activity xml
+                    //todo change activity
                     ToastUtil.showToast("Images added!", getApplicationContext());
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
                     lvMedia.setAdapter(adapter);
                 }
             });
         }
+    }
+
+    @Override
+    public void editTripFromDatabase(String tripId) {
+
+    }
+
+    @Override
+    public void deleteTripFromDatabase(String tripId) {
+
     }
 
     @Override
