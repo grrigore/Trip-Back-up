@@ -332,6 +332,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //todo change activity xml
                     ToastUtil.showToast("Images added!", getApplicationContext());
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
                     lvMedia.setAdapter(adapter);
