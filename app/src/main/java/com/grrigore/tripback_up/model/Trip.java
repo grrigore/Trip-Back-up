@@ -8,7 +8,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,9 +16,8 @@ public class Trip implements Parcelable {
     private String title = null;
     @ColumnInfo(name = "description")
     private String description = null;
-    //todo change Date to long - just time
     @ColumnInfo(name = "time")
-    private Date date = null;
+    private long time = 0L;
     @PrimaryKey
     @ColumnInfo(name = "id")
     private String id = null;
@@ -33,10 +31,10 @@ public class Trip implements Parcelable {
     public Trip() {
     }
 
-    public Trip(String title, String description, Date date, String id, List<String> images, List<String> videos, List<Place> places) {
+    public Trip(String title, String description, long time, String id, List<String> images, List<String> videos, List<Place> places) {
         this.title = title;
         this.description = description;
-        this.date = date;
+        this.time = time;
         this.id = id;
         this.images = images;
         this.videos = videos;
@@ -59,12 +57,12 @@ public class Trip implements Parcelable {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
+    public long getTime() {
+        return time;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public String getId() {
@@ -99,24 +97,10 @@ public class Trip implements Parcelable {
         this.places = places;
     }
 
-    @Override
-    public String toString() {
-        return "Trip{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                ", id='" + id + '\'' +
-                ", images=" + images +
-                ", videos=" + videos +
-                ", places=" + places +
-                '}';
-    }
-
     protected Trip(Parcel in) {
         title = in.readString();
         description = in.readString();
-        long tmpDate = in.readLong();
-        date = tmpDate != -1 ? new Date(tmpDate) : null;
+        time = in.readLong();
         id = in.readString();
         if (in.readByte() == 0x01) {
             images = new ArrayList<String>();
@@ -147,7 +131,7 @@ public class Trip implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(description);
-        dest.writeLong(date != null ? date.getTime() : -1L);
+        dest.writeLong(time);
         dest.writeString(id);
         if (images == null) {
             dest.writeByte((byte) (0x00));

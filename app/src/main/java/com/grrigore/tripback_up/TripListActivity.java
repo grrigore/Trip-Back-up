@@ -81,8 +81,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     private void getAllTrips() {
-        final Date currentDate = new Date();
-        final long currentTime = currentDate.getTime();
+        final long currentTime = new Date().getTime();
 
         tripsReference = databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/");
         tripsReferenceListener = tripsReference.addValueEventListener(new ValueEventListener() {
@@ -98,12 +97,11 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
 
                     //todo get only time value
-                    DataSnapshot dateDataSnapshot = tripDataSnapshot.child("date");
-                    Date date = new Date();
-                    if (dateDataSnapshot.child("time").getValue() != null) {
-                        date.setTime((long) dateDataSnapshot.child("time").getValue());
+                    DataSnapshot timeDataSnapshot = tripDataSnapshot.child("time");
+                    long time = 0L;
+                    if (timeDataSnapshot.getValue() != null) {
+                        trip.setTime((long) timeDataSnapshot.getValue());
                     }
-                    trip.setDate(date);
 
                     DataSnapshot imagesDataSnapshot = tripDataSnapshot.child("images");
                     List<String> imageList = new ArrayList<>();
@@ -111,7 +109,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         imageList.add(String.valueOf(imagesDataSnapshot.child("img" + i).getValue()));
                     }
                     trip.setImages(imageList);
-                    Log.d(getApplicationContext().getClass().getSimpleName(), "\n" +"Image List: " + imageList.get(0) + "\n");
+                    Log.d(getApplicationContext().getClass().getSimpleName(), "\n" + "Image List: " + imageList.get(0) + "\n");
 
                     DataSnapshot placesDataSnapshot = tripDataSnapshot.child("places");
                     List<Place> placeList = new ArrayList<>();
@@ -123,7 +121,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     }
                     trip.setPlaces(placeList);
 
-                    if (currentTime - date.getTime() <= SEVEN_DAYS_IN_MILISECONDS) {
+                    if (currentTime - time <= SEVEN_DAYS_IN_MILISECONDS) {
                         recentTrips.add(trip);
                         //get first image form each trip
                         imageRefsRecent.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));

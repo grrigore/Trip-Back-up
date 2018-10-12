@@ -232,7 +232,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         if (ok) {
             trip.setTitle(title);
             trip.setDescription(description);
-            trip.setDate(date);
+            trip.setTime(date.getTime());
             trip.setPlaces(placeList);
             List<String> imageList = new ArrayList<>();
             for (int i = 0; i < imageURIs.size(); i++) {
@@ -262,7 +262,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
         tripReference.child("title").setValue(trip.getTitle());
         tripReference.child("description").setValue(trip.getDescription());
-        tripReference.child("date").setValue(trip.getDate());
+        tripReference.child("time").setValue(trip.getTime());
 
         for (Place place : trip.getPlaces()) {
             tripReference.child("places").child(String.valueOf(placeId)).setValue(place);
