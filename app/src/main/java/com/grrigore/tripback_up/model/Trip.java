@@ -1,5 +1,9 @@
 package com.grrigore.tripback_up.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,14 +11,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Trip implements Parcelable {
+    @ColumnInfo(name = "title")
     private String title = null;
+    @ColumnInfo(name = "description")
     private String description = null;
     //todo change Date to long - just time
+    @ColumnInfo(name = "time")
     private Date date = null;
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     private String id = null;
+    @Ignore
     private List<String> images = new ArrayList<>();
+    @Ignore
     private List<String> videos = new ArrayList<>();
+    @Ignore
     private List<Place> places = new ArrayList<>();
 
     public Trip() {
