@@ -270,6 +270,7 @@ public class TripAdderActivity extends AppCompatActivity {
             trip.setDescription(description);
             trip.setDate(date);
             trip.setPlaces(placeList);
+            //toask cum pot scapa de astea? fac o variabila?
             databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("title").setValue(trip.getTitle());
             databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("description").setValue(trip.getDescription());
             databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("date").setValue(trip.getDate());
