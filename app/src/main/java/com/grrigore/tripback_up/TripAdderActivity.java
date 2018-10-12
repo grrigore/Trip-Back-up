@@ -272,22 +272,8 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             trip.setDescription(description);
             trip.setDate(date);
             trip.setPlaces(placeList);
-            //toask cum pot scapa de astea? fac o variabila?
-            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("title").setValue(trip.getTitle());
-            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("description").setValue(trip.getDescription());
-            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("date").setValue(trip.getDate());
-            int placeId = 0;
-            for (Place place : placeList) {
-                databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("places").child(String.valueOf(placeId)).setValue(place);
-                placeId++;
-            }
-            uploadImagesToFirebase();
-            tripId++;
-            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
 
-            ToastUtil.showToast("Trip saved!", getApplicationContext());
-
-            Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
+            addTripToDatabase(trip);
 
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
             intentRecentTrips.putExtra("tripId", tripId);
@@ -301,6 +287,27 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     @Override
     public void addTripToDatabase(Trip trip) {
 
+        //toask cum pot scapa de astea? fac o variabila?
+        DatabaseReference tripReference = databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId);
+        int placeId = 0;
+
+        tripReference.child("title").setValue(trip.getTitle());
+        tripReference.child("description").setValue(trip.getDescription());
+        tripReference.child("date").setValue(trip.getDate());
+
+        for (Place place : placeList) {
+            tripReference.child("places").child(String.valueOf(placeId)).setValue(place);
+            placeId++;
+        }
+
+        uploadImagesToFirebase();
+
+        tripId++;
+        databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
+
+        ToastUtil.showToast("Trip saved!", getApplicationContext());
+
+        Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
     }
 
     @Override
