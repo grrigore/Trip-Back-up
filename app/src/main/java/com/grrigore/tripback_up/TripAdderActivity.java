@@ -64,6 +64,8 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
     private DatabaseReference databaseReference;
+    private StorageReference storageReference;
+
 
     private ArrayList<Uri> imageURIs;
     private Trip trip;
@@ -100,6 +102,10 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
         //get database reference
         databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        //get storage reference
+        storageReference = firebaseStorage.getReference();
+
 
         //read number of trips from the database
         databaseReference.child(USERS + "/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
@@ -211,41 +217,6 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
      */
     //todo review this method & usage
     private void uploadImagesToFirebase() {
-        //create storage reference from our app
-        //points to the root reference
-        StorageReference storageReference = firebaseStorage.getReference();
-        //create storage reference for user folder
-        //points to the trip folder
-        StorageReference userReference = storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId);
-        StorageReference imageReference;
-        UploadTask uploadTask;
-
-        //array list used to store images paths
-        final ArrayList<String> strings = new ArrayList<>();
-        int i = 0;
-        for (Uri imageURI : imageURIs) {
-
-            //create storage reference for user's image folder
-            //points to the images folder
-            imageReference = userReference.child("images/" + "img" + i);
-            i++;
-            uploadTask = imageReference.putFile(imageURI);
-            strings.add(imageURI.getPath());
-            // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, strings);
-                    lvMedia.setAdapter(adapter);
-                }
-            });
-
-            databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId).child("images").child("img" + i).setValue(imageReference.toString());
-        }
     }
 
     /**
@@ -272,6 +243,13 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             trip.setDescription(description);
             trip.setDate(date);
             trip.setPlaces(placeList);
+            List<String> imageList = new ArrayList<>();
+            for (int i = 0; i < imageURIs.size(); i++) {
+                imageList.add(storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId).child("images/" + "img" + i).toString());
+            }
+            trip.setImages(imageList);
+
+            addImagesToStorage(imageURIs);
 
             addTripToDatabase(trip);
 
@@ -290,17 +268,22 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         //toask cum pot scapa de astea? fac o variabila?
         DatabaseReference tripReference = databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId);
         int placeId = 0;
+        int imageId = 0;
 
         tripReference.child("title").setValue(trip.getTitle());
         tripReference.child("description").setValue(trip.getDescription());
         tripReference.child("date").setValue(trip.getDate());
 
-        for (Place place : placeList) {
+        for (Place place : trip.getPlaces()) {
             tripReference.child("places").child(String.valueOf(placeId)).setValue(place);
             placeId++;
         }
 
-        uploadImagesToFirebase();
+        for (String imageRef : trip.getImages()) {
+            tripReference.child("images").child("img" + imageId).setValue(imageRef);
+            imageId++;
+        }
+
 
         tripId++;
         databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
@@ -321,8 +304,40 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     }
 
     @Override
-    public void addImagesToStorage() {
+    public void addImagesToStorage(ArrayList<Uri> imageURIs) {
+        //create storage reference from our app
+        //points to the root reference
+        storageReference = firebaseStorage.getReference();
+        //create storage reference for user folder
+        //points to the trip folder
+        StorageReference userReference = storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId);
+        StorageReference imageReference;
+        UploadTask uploadTask;
 
+        //array list used to store images paths
+        final ArrayList<String> imageNameList = new ArrayList<>();
+        int i = 0;
+        for (Uri imageURI : imageURIs) {
+
+            //create storage reference for user's image folder
+            //points to the images folder
+            imageReference = userReference.child("images/" + "img" + i);
+            i++;
+            uploadTask = imageReference.putFile(imageURI);
+            imageNameList.add(imageURI.getPath());
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
+                    lvMedia.setAdapter(adapter);
+                }
+            });
+        }
     }
 
     @Override

@@ -50,6 +50,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
+
     private ValueEventListener tripsReferenceListener;
     private DatabaseReference tripsReference;
 
