@@ -2,11 +2,12 @@ package com.grrigore.tripback_up.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@Entity
+@Entity(tableName = "Place")
 public class Place implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
@@ -16,6 +17,7 @@ public class Place implements Parcelable {
     @ColumnInfo(name = "lng")
     private String lng = null;
 
+    @Ignore
     public Place() {
     }
 

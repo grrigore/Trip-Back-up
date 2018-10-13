@@ -10,7 +10,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(tableName = "Trip")
 public class Trip implements Parcelable {
     @ColumnInfo(name = "title")
     private String title = null;
@@ -21,6 +21,8 @@ public class Trip implements Parcelable {
     @PrimaryKey
     @ColumnInfo(name = "id")
     private String id = null;
+    @ColumnInfo(name = "favourite")
+    private int favourite = 0;
     @Ignore
     private List<String> images = new ArrayList<>();
     @Ignore
@@ -28,6 +30,7 @@ public class Trip implements Parcelable {
     @Ignore
     private List<Place> places = new ArrayList<>();
 
+    @Ignore
     public Trip() {
     }
 
