@@ -9,6 +9,7 @@ import com.grrigore.tripback_up.model.Trip;
 
 import java.util.List;
 
+//toask nu stiu cum sa abordez toata treaba asta :(
 @Dao
 public interface TripDao {
 
