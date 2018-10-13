@@ -50,7 +50,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashScreenActivity.this,git  MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -62,7 +62,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         float width = getDisplayWidth();
 
-        float xCurrentPos, yCurrentPos;
+        float xCurrentPos;
+        float yCurrentPos;
         xCurrentPos = ivProgress.getLeft();
         yCurrentPos = ivProgress.getTop();
 
