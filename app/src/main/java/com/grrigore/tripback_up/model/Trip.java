@@ -12,15 +12,15 @@ import java.util.List;
 
 @Entity(tableName = "Trip")
 public class Trip implements Parcelable {
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    private String id = null;
     @ColumnInfo(name = "title")
     private String title = null;
     @ColumnInfo(name = "description")
     private String description = null;
     @ColumnInfo(name = "time")
     private long time = 0L;
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    private String id = null;
     @ColumnInfo(name = "favourite")
     private int favourite = 0;
     @Ignore

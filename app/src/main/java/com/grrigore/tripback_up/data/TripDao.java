@@ -19,8 +19,8 @@ public interface TripDao {
     Trip findById(String id);
 
     @Insert
-    void insertTrip(Trip trip);
+    void insert(Trip trip);
 
     @Delete
-    void deleteTrip(Trip trip);
+    void delete(Trip trip);
 }

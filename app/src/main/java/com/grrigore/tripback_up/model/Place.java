@@ -2,12 +2,18 @@ package com.grrigore.tripback_up.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@Entity(tableName = "Place")
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(foreignKeys = @ForeignKey(entity = Trip.class,
+        parentColumns = "id",
+        childColumns = "tripId",
+        onDelete = CASCADE))
 public class Place implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
@@ -16,6 +22,8 @@ public class Place implements Parcelable {
     private String lat = null;
     @ColumnInfo(name = "lng")
     private String lng = null;
+    @ColumnInfo(name = "tripId")
+    private String tripId;
 
     @Ignore
     public Place() {
