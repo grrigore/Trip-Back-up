@@ -50,7 +50,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Intent intent = new Intent(SplashScreenActivity.this,git  MainActivity.class);
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
