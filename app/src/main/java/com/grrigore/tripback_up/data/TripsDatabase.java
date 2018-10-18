@@ -26,4 +26,8 @@ public abstract class TripsDatabase extends RoomDatabase {
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
+    public abstract TripDao getTripDao();
+
+    public abstract PlaceDao getPlaceDao();
 }
