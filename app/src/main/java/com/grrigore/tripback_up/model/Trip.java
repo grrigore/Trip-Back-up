@@ -1,6 +1,5 @@
 package com.grrigore.tripback_up.model;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -10,19 +9,15 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "Trip")
+@Entity(tableName = "trip")
 public class Trip implements Parcelable {
     @PrimaryKey
-    @ColumnInfo(name = "id")
     private String id = null;
-    @ColumnInfo(name = "title")
     private String title = null;
-    @ColumnInfo(name = "description")
     private String description = null;
-    @ColumnInfo(name = "time")
     private long time = 0L;
-    @ColumnInfo(name = "favourite")
     private int favourite = 0;
+
     @Ignore
     private List<String> images = new ArrayList<>();
     @Ignore

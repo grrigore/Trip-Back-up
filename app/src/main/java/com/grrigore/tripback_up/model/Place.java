@@ -4,25 +4,23 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import static android.arch.persistence.room.ForeignKey.CASCADE;
-
-@Entity(foreignKeys = @ForeignKey(entity = Trip.class,
-        parentColumns = "id",
-        childColumns = "tripId",
-        onDelete = CASCADE))
+@Entity(tableName = "place",
+        indices = @Index("trip_id"),
+        foreignKeys = @ForeignKey(entity = Trip.class,
+                parentColumns = "id",
+                childColumns = "trip_id"))
 public class Place implements Parcelable {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private String id;
-    @ColumnInfo(name = "lat")
     private String lat = null;
-    @ColumnInfo(name = "lng")
     private String lng = null;
-    @ColumnInfo(name = "tripId")
+    @ColumnInfo(name = "trip_id")
     private String tripId;
 
     @Ignore

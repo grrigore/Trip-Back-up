@@ -12,12 +12,11 @@ import java.util.List;
 //toask nu stiu cum sa abordez toata treaba asta :(
 @Dao
 public interface TripDao {
+    @Query("SELECT * FROM trip")
+    List<Trip> getAllTrips();
 
-    @Query("SELECT * FROM Trip")
-    List<Trip> getTrips();
-
-    @Query("SELECT * FROM Trip WHERE id LIKE :id")
-    Trip findById(String id);
+    @Query("SELECT * FROM trip WHERE id = :id")
+    Trip getTripById(int id);
 
     @Insert
     void insert(Trip trip);
