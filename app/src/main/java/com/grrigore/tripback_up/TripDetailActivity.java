@@ -1,7 +1,5 @@
 package com.grrigore.tripback_up;
 
-import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
-
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,9 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,24 +28,40 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.GalleryAdapter;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.utils.Constants;
+import com.grrigore.tripback_up.utils.FirebaseDatabaseUtils;
+import com.grrigore.tripback_up.utils.FirebaseStorageUtils;
 import com.grrigore.tripback_up.utils.ToastUtil;
 import com.grrigore.tripback_up.widget.TripWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
+import static com.grrigore.tripback_up.utils.Constants.TRIPS;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
+import static com.grrigore.tripback_up.utils.Constants.USERS;
 
 
 //todo on screen rotation
 
 //todo rethink trip gallery
-public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback,
+        FirebaseDatabaseUtils, FirebaseStorageUtils {
 
     @BindView(R.id.tvTripTitle)
     TextView tvTripTitle;
@@ -62,11 +73,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     MapView mvTripPlaces;
 
     private FirebaseStorage firebaseStorage;
+    private FirebaseDatabase firebaseDatabase;
 
     private Trip trip;
     private String userUID;
     private String tripId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +88,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         //create instance of firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -98,7 +110,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         final List<StorageReference> imageStorageReferences = new ArrayList<>();
         for (String imageUrl : trip.getImages()) {
-            Log.d(getApplicationContext().getClass().getSimpleName(), "\n" + "Image Url: " + imageUrl +"\n");
+            Log.d(getApplicationContext().getClass().getSimpleName(), "\n" + "Image Url: " + imageUrl + "\n");
             imageStorageReferences.add(firebaseStorage.getReferenceFromUrl(imageUrl));
         }
 
@@ -209,7 +221,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         switch (id) {
             case R.id.deleteTrip:
-                //todo delete trip
+                String currentUser = FirebaseAuth.getInstance().getUid();
+                deleteTripFromDatabase(tripId, currentUser);
+                deleteImagesFromStorage(tripId, currentUser);
+                Intent intent = new Intent(this, TripListActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.addWidget:
                 SharedPreferences sharedPreferences = TripDetailActivity.this.getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
@@ -225,5 +241,47 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void deleteTripFromDatabase(String tripId, String currentUser) {
+        DatabaseReference tripReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId);
+        tripReference.removeValue();
+        final DatabaseReference tripNumberReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIP_NUMBER);
+        tripNumberReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long numberOfTrips = (long) dataSnapshot.getValue();
+                numberOfTrips--;
+                tripNumberReference.setValue(numberOfTrips);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Error: ", databaseError.getMessage());
+            }
+        });
+    }
+
+    //todo delete images from storage
+    @Override
+    public void deleteImagesFromStorage(String tripId, String currentUser) {
+
+    }
+
+    @Override
+    public void addTripToDatabase(Trip trip, String currentUser) {
+    }
+
+    @Override
+    public void editTripFromDatabase(String tripId, String currentUser) {
+    }
+
+    @Override
+    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
+    }
+
+    @Override
+    public void editImagesFromStorage(String tripId, String currentUser) {
     }
 }

@@ -2,6 +2,7 @@ package com.grrigore.tripback_up;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.TripAdapter;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
+import com.grrigore.tripback_up.utils.FirebaseDatabaseUtils;
+import com.grrigore.tripback_up.utils.FirebaseStorageUtils;
 import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -36,13 +39,17 @@ import butterknife.ButterKnife;
 
 import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MILISECONDS;
 import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
+import static com.grrigore.tripback_up.utils.Constants.TRIPS;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
+import static com.grrigore.tripback_up.utils.Constants.USERS;
 
 //todo on screen rotate
 //todo think
 
-public class TripListActivity extends AppCompatActivity implements TripAdapter.ItemClickListener, TripAdapter.ItemLongClickListener {
+public class TripListActivity extends AppCompatActivity implements TripAdapter.ItemClickListener,
+        TripAdapter.ItemLongClickListener, FirebaseDatabaseUtils, FirebaseStorageUtils {
 
     @BindView(R.id.rlvTrips)
     RecyclerView rlvTrips;
@@ -87,7 +94,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         tripsReferenceListener = tripsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
                     Trip trip = new Trip();
@@ -97,11 +103,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
 
                     //todo get only time value
-                    DataSnapshot timeDataSnapshot = tripDataSnapshot.child("time");
-                    long time = 0L;
-                    if (timeDataSnapshot.getValue() != null) {
-                        trip.setTime((long) timeDataSnapshot.getValue());
-                    }
+                    trip.setTime((long) tripDataSnapshot.child("time").getValue());
 
                     DataSnapshot imagesDataSnapshot = tripDataSnapshot.child("images");
                     List<String> imageList = new ArrayList<>();
@@ -121,7 +123,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     }
                     trip.setPlaces(placeList);
 
-                    if (currentTime - time <= SEVEN_DAYS_IN_MILISECONDS) {
+                    if (currentTime - trip.getTime() <= SEVEN_DAYS_IN_MILISECONDS) {
                         recentTrips.add(trip);
                         //get first image form each trip
                         imageRefsRecent.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
@@ -273,7 +275,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     @Override
-    public void onLongItemClick(View view, Trip trip) {
+    public void onLongItemClick(View view, final Trip trip) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.trip_menu, popupMenu.getMenu());
         popupMenu.show();
@@ -281,12 +283,14 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
+                String currentUser = firebaseAuth.getUid();
                 switch (id) {
                     case R.id.editTrip:
                         //todo edit trip
                         return true;
                     case R.id.deleteTrip:
-                        //todo delete trip
+                        deleteTripFromDatabase(trip.getId(), currentUser);
+                        deleteImagesFromStorage(trip.getId(), currentUser);
                         return true;
                     case R.id.addWidget:
                         //todo add as widget
@@ -295,6 +299,51 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                 return true;
             }
         });
+
+    }
+
+    @Override
+    public void addTripToDatabase(Trip trip, String currentUser) {
+
+    }
+
+    @Override
+    public void editTripFromDatabase(String tripId, String currentUser) {
+
+    }
+
+    @Override
+    public void deleteTripFromDatabase(String tripId, String currentUser) {
+        DatabaseReference tripReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(tripId);
+        tripReference.removeValue();
+        final DatabaseReference tripNumberReference = databaseReference.child(USERS).child(currentUser).child(TRIP_NUMBER);
+        tripNumberReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long numberOfTrips = (long) dataSnapshot.getValue();
+                numberOfTrips--;
+                tripNumberReference.setValue(numberOfTrips);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Error: ", databaseError.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
+
+    }
+
+    @Override
+    public void editImagesFromStorage(String tripId, String currentUser) {
+
+    }
+
+    @Override
+    public void deleteImagesFromStorage(String tripId, String currentUser) {
 
     }
 }

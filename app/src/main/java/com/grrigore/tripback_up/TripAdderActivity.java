@@ -240,8 +240,9 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             }
             trip.setImages(imageList);
 
-            addImagesToStorage(imageURIs);
-            addTripToDatabase(trip);
+            String currentUser = firebaseAuth.getUid();
+            addImagesToStorage(imageURIs, currentUser);
+            addTripToDatabase(trip, currentUser);
 
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
             intentRecentTrips.putExtra("tripId", tripId);
@@ -253,10 +254,9 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     }
 
     @Override
-    public void addTripToDatabase(Trip trip) {
-
+    public void addTripToDatabase(Trip trip, String currentUser) {
         //toask cum pot scapa de astea? fac o variabila?
-        DatabaseReference tripReference = databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIPS).child(TRIP + tripId);
+        DatabaseReference tripReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(TRIP + tripId);
         int placeId = 0;
         int imageId = 1;
 
@@ -284,13 +284,13 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     }
 
     @Override
-    public void addImagesToStorage(ArrayList<Uri> imageURIs) {
+    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
         //create storage reference from our app
         //points to the root reference
         storageReference = firebaseStorage.getReference();
         //create storage reference for user folder
         //points to the trip folder
-        StorageReference userReference = storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId);
+        StorageReference userReference = storageReference.child(USER + "/" + currentUser).child(TRIPS).child(TRIP + tripId);
         StorageReference imageReference;
         UploadTask uploadTask;
 
@@ -323,22 +323,18 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     }
 
     @Override
-    public void editTripFromDatabase(String tripId) {
-
+    public void editTripFromDatabase(String tripId, String currentUser) {
     }
 
     @Override
-    public void deleteTripFromDatabase(String tripId) {
-
+    public void deleteTripFromDatabase(String tripId, String currentUser) {
     }
 
     @Override
-    public void editImagesFromStorage(String tripId) {
-
+    public void editImagesFromStorage(String tripId, String currentUser) {
     }
 
     @Override
-    public void deleteImagesFromStorage(String tripId) {
-
+    public void deleteImagesFromStorage(String tripId, String currentUser) {
     }
 }

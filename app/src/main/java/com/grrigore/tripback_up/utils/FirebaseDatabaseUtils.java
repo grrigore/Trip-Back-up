@@ -5,10 +5,10 @@ import com.grrigore.tripback_up.model.Trip;
 public interface FirebaseDatabaseUtils {
 
     //Firebase database
-    void addTripToDatabase(Trip trip);
+    void addTripToDatabase(Trip trip, String currentUser);
 
-    void editTripFromDatabase(String tripId);
+    void editTripFromDatabase(String tripId, String currentUser);
 
-    void deleteTripFromDatabase(String tripId);
+    void deleteTripFromDatabase(String tripId, String currentUser);
 
 }
