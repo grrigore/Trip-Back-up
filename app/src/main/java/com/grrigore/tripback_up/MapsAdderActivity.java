@@ -74,12 +74,12 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     public void addMarkerToMap(View view) {
         places.add(place);
-        ToastUtil.showToast(String.valueOf(R.string.added_marker), this);
+        ToastUtil.showToast(getString(R.string.added_marker), this);
     }
 
     public void saveMarkers(View view) {
         if (places.size() == 0) {
-            ToastUtil.showToast(String.valueOf(R.string.no_marker), this);
+            ToastUtil.showToast(getString(R.string.no_marker), this);
         } else {
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra(PLACE_LIST_KEY_MAA_TAA, (ArrayList<? extends Parcelable>) places);
@@ -90,6 +90,6 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
 
     public void cleanMarkers(View view) {
         places.clear();
-        ToastUtil.showToast(String.valueOf(R.string.delete_marker), this);
+        ToastUtil.showToast(getString(R.string.delete_marker), this);
     }
 }
