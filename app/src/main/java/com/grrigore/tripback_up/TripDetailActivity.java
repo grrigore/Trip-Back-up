@@ -223,8 +223,8 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         switch (id) {
             case R.id.deleteTrip:
                 String currentUser = FirebaseAuth.getInstance().getUid();
-                deleteTripFromDatabase(tripId, currentUser);
                 deleteImagesFromStorage(tripId, currentUser);
+                deleteTripFromDatabase(tripId, currentUser);
                 Intent intent = new Intent(this, TripListActivity.class);
                 startActivity(intent);
                 return true;

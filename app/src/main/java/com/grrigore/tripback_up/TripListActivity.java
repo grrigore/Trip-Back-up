@@ -113,14 +113,17 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         imageList.add(String.valueOf(imagesDataSnapshot.child("img" + i).getValue()));
                     }
                     trip.setImages(imageList);
-                    Log.d(getApplicationContext().getClass().getSimpleName(), "\n" + "Image List: " + imageList.get(0) + "\n");
+                    Log.d(getApplicationContext().getClass().getSimpleName(),
+                            "\n" + "Image List: " + imageList.get(0) + "\n");
 
                     DataSnapshot placesDataSnapshot = tripDataSnapshot.child("places");
                     List<Place> placeList = new ArrayList<>();
                     for (int i = 0; i < placesDataSnapshot.getChildrenCount(); i++) {
                         Place place = new Place();
-                        place.setLat((String) placesDataSnapshot.child(String.valueOf(i)).child("lat").getValue());
-                        place.setLng((String) placesDataSnapshot.child(String.valueOf(i)).child("lng").getValue());
+                        place.setLat((String) placesDataSnapshot.child(String.valueOf(i))
+                                .child("lat").getValue());
+                        place.setLng((String) placesDataSnapshot.child(String.valueOf(i))
+                                .child("lng").getValue());
                         placeList.add(place);
                     }
                     trip.setPlaces(placeList);
@@ -150,10 +153,12 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     private void populateTripList(List<Trip> tripList, List<StorageReference> imageRefs) {
         TripAdapter tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),
+                2);
         //set on item click listener
         tripAdapter.setItemClickListener(this);
         tripAdapter.setOnLongClickListener(this);
+        tripAdapter.notifyDataSetChanged();
 
         //todo recycler view space between views
         rlvTrips.setLayoutManager(layoutManager);
@@ -186,7 +191,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
             case R.id.allTrips:
                 List<Trip> allTrips = mergeTrips();
                 List<StorageReference> imageRefsAll = mergeImageRefs();
-
                 provideTripsForUi(allTrips, imageRefsAll, id);
                 return true;
             case R.id.addTrip:
@@ -291,8 +295,11 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         //todo edit trips
                         return true;
                     case R.id.deleteTrip:
-                        deleteTripFromDatabase(trip.getId(), currentUser);
                         deleteImagesFromStorage(trip.getId(), currentUser);
+                        deleteTripFromDatabase(trip.getId(), currentUser);
+                        //todo refresh UI after trip is deleted
+                        finish();
+                        startActivity(getIntent());
                         return true;
                     case R.id.addWidget:
                         //todo add as widget
@@ -306,9 +313,11 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
     @Override
     public void deleteTripFromDatabase(String tripId, String currentUser) {
-        DatabaseReference tripReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(tripId);
+        DatabaseReference tripReference = databaseReference.child(USERS).child(currentUser)
+                .child(TRIPS).child(tripId);
         tripReference.removeValue();
-        final DatabaseReference tripNumberReference = databaseReference.child(USERS).child(currentUser).child(TRIP_NUMBER);
+        final DatabaseReference tripNumberReference = databaseReference.child(USERS)
+                .child(currentUser).child(TRIP_NUMBER);
         tripNumberReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -326,7 +335,8 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
     @Override
     public void deleteImagesFromStorage(String tripId, String currentUser) {
-        DatabaseReference imagesReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(tripId).child(IMAGES);
+        DatabaseReference imagesReference = databaseReference.child(USERS).child(currentUser)
+                .child(TRIPS).child(tripId).child(IMAGES);
         imagesReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -334,17 +344,20 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     final String imageRefecence = image.getValue().toString();
 
                     StorageReference imageStorageReference = firebaseStorage.getReferenceFromUrl(imageRefecence);
-                    Log.d(getApplicationContext().getClass().getSimpleName(), "Image storage reference: " + imageStorageReference);
+                    Log.d(getApplicationContext().getClass().getSimpleName(),
+                            "Image storage reference: " + imageStorageReference);
 
                     imageStorageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(getApplicationContext().getClass().getSimpleName(), "Deleted file: " + imageRefecence);
+                            Log.d(getApplicationContext().getClass().getSimpleName(),
+                                    "Deleted file: " + imageRefecence);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d(getApplicationContext().getClass().getSimpleName(), "Cannot delete file: " + imageRefecence);
+                            Log.d(getApplicationContext().getClass().getSimpleName(),
+                                    "Cannot delete file: " + imageRefecence);
                         }
                     });
                 }
