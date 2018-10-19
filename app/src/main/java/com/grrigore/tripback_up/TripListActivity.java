@@ -303,16 +303,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     @Override
-    public void addTripToDatabase(Trip trip, String currentUser) {
-
-    }
-
-    @Override
-    public void editTripFromDatabase(String tripId, String currentUser) {
-
-    }
-
-    @Override
     public void deleteTripFromDatabase(String tripId, String currentUser) {
         DatabaseReference tripReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(tripId);
         tripReference.removeValue();
@@ -333,17 +323,23 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     @Override
-    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
+    public void deleteImagesFromStorage(String tripId, String currentUser) {
 
+    }
+
+    @Override
+    public void addTripToDatabase(Trip trip, String currentUser) {
+    }
+
+    @Override
+    public void editTripFromDatabase(String tripId, String currentUser) {
+    }
+
+    @Override
+    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
     }
 
     @Override
     public void editImagesFromStorage(String tripId, String currentUser) {
-
-    }
-
-    @Override
-    public void deleteImagesFromStorage(String tripId, String currentUser) {
-
     }
 }
