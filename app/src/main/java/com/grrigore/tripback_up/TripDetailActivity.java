@@ -51,6 +51,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.IMAGES;
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
@@ -266,7 +267,35 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     //todo delete images from storage
     @Override
     public void deleteImagesFromStorage(String tripId, String currentUser) {
+        DatabaseReference imagesReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId).child(IMAGES);
+        imagesReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot image : dataSnapshot.getChildren()) {
+                    final String imageRefecence = image.getValue().toString();
 
+                    StorageReference imageStorageReference = firebaseStorage.getReferenceFromUrl(imageRefecence);
+                    Log.d(getApplicationContext().getClass().getSimpleName(), "Image storage reference: " + imageStorageReference);
+
+                    imageStorageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(getApplicationContext().getClass().getSimpleName(), "Deleted file: " + imageRefecence);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(getApplicationContext().getClass().getSimpleName(), "Cannot delete file: " + imageRefecence);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.IMAGES;
 import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MILISECONDS;
 import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
@@ -286,7 +289,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                 String currentUser = firebaseAuth.getUid();
                 switch (id) {
                     case R.id.editTrip:
-                        //todo edit trip
+                        //todo edit trips
                         return true;
                     case R.id.deleteTrip:
                         deleteTripFromDatabase(trip.getId(), currentUser);
@@ -324,7 +327,35 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
     @Override
     public void deleteImagesFromStorage(String tripId, String currentUser) {
+        DatabaseReference imagesReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(tripId).child(IMAGES);
+        imagesReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot image : dataSnapshot.getChildren()) {
+                    final String imageRefecence = image.getValue().toString();
 
+                    StorageReference imageStorageReference = firebaseStorage.getReferenceFromUrl(imageRefecence);
+                    Log.d(getApplicationContext().getClass().getSimpleName(), "Image storage reference: " + imageStorageReference);
+
+                    imageStorageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(getApplicationContext().getClass().getSimpleName(), "Deleted file: " + imageRefecence);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(getApplicationContext().getClass().getSimpleName(), "Cannot delete file: " + imageRefecence);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

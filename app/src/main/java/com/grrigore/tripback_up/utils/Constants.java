@@ -31,6 +31,7 @@ public class Constants {
     public static final String USER = "user";
     public static final String TRIP = "trip";
     public static final String TRIPS = "trips";
+    public static final String IMAGES = "images";
 
 
 }
