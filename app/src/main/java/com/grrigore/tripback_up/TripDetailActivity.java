@@ -264,7 +264,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         });
     }
 
-    //todo delete images from storage
     @Override
     public void deleteImagesFromStorage(String tripId, String currentUser) {
         DatabaseReference imagesReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId).child(IMAGES);

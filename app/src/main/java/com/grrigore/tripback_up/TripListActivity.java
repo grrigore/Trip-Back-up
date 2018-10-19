@@ -105,7 +105,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     trip.setTitle((String) tripDataSnapshot.child("title").getValue());
                     trip.setDescription((String) tripDataSnapshot.child("description").getValue());
 
-                    //todo get only time value
                     trip.setTime((long) tripDataSnapshot.child("time").getValue());
 
                     DataSnapshot imagesDataSnapshot = tripDataSnapshot.child("images");
