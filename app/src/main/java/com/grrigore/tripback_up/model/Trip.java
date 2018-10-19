@@ -5,13 +5,16 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "trip")
 public class Trip implements Parcelable {
+
     @PrimaryKey
+    @NonNull
     private String id = null;
     private String title = null;
     private String description = null;
@@ -29,6 +32,7 @@ public class Trip implements Parcelable {
     public Trip() {
     }
 
+    @Ignore
     public Trip(String title, String description, long time, String id, List<String> images, List<String> videos, List<Place> places) {
         this.title = title;
         this.description = description;
@@ -37,6 +41,14 @@ public class Trip implements Parcelable {
         this.images = images;
         this.videos = videos;
         this.places = places;
+    }
+
+    public Trip(String id, String title, String description, long time, int favourite) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.time = time;
+        this.favourite = favourite;
     }
 
     public String getTitle() {
@@ -69,6 +81,14 @@ public class Trip implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(int favourite) {
+        this.favourite = favourite;
     }
 
     public List<String> getImages() {

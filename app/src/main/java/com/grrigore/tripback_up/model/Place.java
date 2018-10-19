@@ -8,6 +8,7 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "place",
         indices = @Index("trip_id"),
@@ -17,6 +18,7 @@ import android.os.Parcelable;
 public class Place implements Parcelable {
 
     @PrimaryKey
+    @NonNull
     private String id;
     private String lat = null;
     private String lng = null;
@@ -27,10 +29,17 @@ public class Place implements Parcelable {
     public Place() {
     }
 
-    public Place(String id, String lat, String lng) {
+    @Ignore
+    public Place(String lat, String lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+    public Place(String id, String lat, String lng, String tripId) {
         this.id = id;
         this.lat = lat;
         this.lng = lng;
+        this.tripId = tripId;
     }
 
     public String getId() {
@@ -55,6 +64,14 @@ public class Place implements Parcelable {
 
     public void setLng(String lng) {
         this.lng = lng;
+    }
+
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 
     @Override
