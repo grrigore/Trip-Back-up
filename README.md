@@ -18,9 +18,9 @@ Icons from [Icons8](https://icons8.com).
 **TODOs**
 
 * update code
-* fix add places bug
+* ~fix add places bug~
 * splash screen
-* delete trip option
+* ~delete trip option~
 * edit trip option
 * on screen rotate
 * network status
