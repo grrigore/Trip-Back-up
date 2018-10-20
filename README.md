@@ -11,6 +11,7 @@ final project for Android Developer Nanodegree
 
 * [Butterknife](http://jakewharton.github.io/butterknife/)
 * [Glide](https://bumptech.github.io/glide/)
+* [Room](https://developer.android.com/topic/libraries/architecture/room)
 # Resources
 
 Icons from [Icons8](https://icons8.com).
