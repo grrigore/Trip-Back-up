@@ -60,6 +60,22 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         }
     }
 
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public void setOnLongClickListener(ItemLongClickListener itemLongClickListener) {
+        this.itemLongClickListener = itemLongClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, Trip trip);
+    }
+
+    public interface ItemLongClickListener {
+        void onLongItemClick(View view, Trip trip);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.tvTitle)
@@ -86,22 +102,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             itemLongClickListener.onLongItemClick(v, trips.get(getAdapterPosition()));
             return true;
         }
-    }
-
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    public void setOnLongClickListener(ItemLongClickListener itemLongClickListener) {
-        this.itemLongClickListener = itemLongClickListener;
-    }
-
-    public interface ItemClickListener {
-        void onItemClick(View view, Trip trip);
-    }
-
-    public interface ItemLongClickListener {
-        void onLongItemClick(View view, Trip trip);
     }
 
 }

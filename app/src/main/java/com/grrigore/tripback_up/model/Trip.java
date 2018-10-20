@@ -13,6 +13,18 @@ import java.util.List;
 @Entity(tableName = "trip")
 public class Trip implements Parcelable {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
     @PrimaryKey
     @NonNull
     private String id = null;
@@ -20,7 +32,6 @@ public class Trip implements Parcelable {
     private String description = null;
     private long time = 0L;
     private int favourite = 0;
-
     @Ignore
     private List<String> images = new ArrayList<>();
     @Ignore
@@ -49,6 +60,31 @@ public class Trip implements Parcelable {
         this.description = description;
         this.time = time;
         this.favourite = favourite;
+    }
+
+    protected Trip(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        time = in.readLong();
+        id = in.readString();
+        if (in.readByte() == 0x01) {
+            images = new ArrayList<String>();
+            in.readList(images, String.class.getClassLoader());
+        } else {
+            images = null;
+        }
+        if (in.readByte() == 0x01) {
+            videos = new ArrayList<String>();
+            in.readList(videos, String.class.getClassLoader());
+        } else {
+            videos = null;
+        }
+        if (in.readByte() == 0x01) {
+            places = new ArrayList<Place>();
+            in.readList(places, Place.class.getClassLoader());
+        } else {
+            places = null;
+        }
     }
 
     public String getTitle() {
@@ -115,31 +151,6 @@ public class Trip implements Parcelable {
         this.places = places;
     }
 
-    protected Trip(Parcel in) {
-        title = in.readString();
-        description = in.readString();
-        time = in.readLong();
-        id = in.readString();
-        if (in.readByte() == 0x01) {
-            images = new ArrayList<String>();
-            in.readList(images, String.class.getClassLoader());
-        } else {
-            images = null;
-        }
-        if (in.readByte() == 0x01) {
-            videos = new ArrayList<String>();
-            in.readList(videos, String.class.getClassLoader());
-        } else {
-            videos = null;
-        }
-        if (in.readByte() == 0x01) {
-            places = new ArrayList<Place>();
-            in.readList(places, Place.class.getClassLoader());
-        } else {
-            places = null;
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -170,17 +181,4 @@ public class Trip implements Parcelable {
             dest.writeList(places);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
-        @Override
-        public Trip createFromParcel(Parcel in) {
-            return new Trip(in);
-        }
-
-        @Override
-        public Trip[] newArray(int size) {
-            return new Trip[size];
-        }
-    };
 }

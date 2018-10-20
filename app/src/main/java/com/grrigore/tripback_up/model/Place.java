@@ -17,6 +17,18 @@ import android.support.annotation.NonNull;
                 childColumns = "trip_id"))
 public class Place implements Parcelable {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>() {
+        @Override
+        public Place createFromParcel(Parcel in) {
+            return new Place(in);
+        }
+
+        @Override
+        public Place[] newArray(int size) {
+            return new Place[size];
+        }
+    };
     @PrimaryKey
     @NonNull
     private String id;
@@ -40,6 +52,12 @@ public class Place implements Parcelable {
         this.lat = lat;
         this.lng = lng;
         this.tripId = tripId;
+    }
+
+    protected Place(Parcel in) {
+        id = in.readString();
+        lat = in.readString();
+        lng = in.readString();
     }
 
     public String getId() {
@@ -83,12 +101,6 @@ public class Place implements Parcelable {
                 '}';
     }
 
-    protected Place(Parcel in) {
-        id = in.readString();
-        lat = in.readString();
-        lng = in.readString();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -100,17 +112,4 @@ public class Place implements Parcelable {
         dest.writeString(lat);
         dest.writeString(lng);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>() {
-        @Override
-        public Place createFromParcel(Parcel in) {
-            return new Place(in);
-        }
-
-        @Override
-        public Place[] newArray(int size) {
-            return new Place[size];
-        }
-    };
 }

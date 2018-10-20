@@ -13,6 +13,14 @@ import com.grrigore.tripback_up.utils.Constants;
 
 public class TripWidgetProvider extends AppWidgetProvider {
 
+    public static void updateAppWidget(Context applicationContext, AppWidgetManager appWidgetManager, int widgetId, String title, String description) {
+        RemoteViews remoteViews = new RemoteViews(applicationContext.getPackageName(), R.layout.widget);
+        remoteViews.setTextViewText(R.id.tvTitle, title);
+        remoteViews.setTextViewText(R.id.tvDescription, description);
+
+        appWidgetManager.updateAppWidget(widgetId, remoteViews);
+    }
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -33,13 +41,5 @@ public class TripWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-    }
-
-    public static void updateAppWidget(Context applicationContext, AppWidgetManager appWidgetManager, int widgetId, String title, String description) {
-        RemoteViews remoteViews = new RemoteViews(applicationContext.getPackageName(), R.layout.widget);
-        remoteViews.setTextViewText(R.id.tvTitle, title);
-        remoteViews.setTextViewText(R.id.tvDescription, description);
-
-        appWidgetManager.updateAppWidget(widgetId, remoteViews);
     }
 }

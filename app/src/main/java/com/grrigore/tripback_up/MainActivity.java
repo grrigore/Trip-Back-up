@@ -10,17 +10,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.grrigore.tripback_up.utils.AddImagesTask;
 import com.grrigore.tripback_up.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 //todo on screen rotate
 //todo network state check
@@ -61,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(new Intent(MainActivity.this, SingUpActivity.class), ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                    startActivity(new Intent(MainActivity.this, SingUpActivity.class),
+                            ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
                 } else {
                     startActivity(new Intent(MainActivity.this, SingUpActivity.class));
                 }
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //todo email verification
+
     /**
      * @param view This method allows the user to login using his credentials.
      */
@@ -88,17 +89,18 @@ public class MainActivity extends AppCompatActivity {
         if (password.length() < 6) {
             ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
         }
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (!task.isSuccessful()) {
-                    ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
-                } else {
-                    Intent intent = new Intent(MainActivity.this, TripListActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
+                        } else {
+                            Intent intent = new Intent(MainActivity.this, TripListActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
     }
 }

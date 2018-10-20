@@ -52,29 +52,24 @@ import static com.grrigore.tripback_up.utils.Constants.USERS;
 public class TripAdderActivity extends AppCompatActivity implements FirebaseDatabaseUtils, FirebaseStorageUtils {
 
 
+    public static final int PICK_IMAGE_REQUEST = 1;
+    public static final int PICK_PLACE_REQUEST = 2;
     @BindView(R.id.etTitle)
     EditText etTitle;
     @BindView(R.id.etDescription)
     EditText etDescription;
     @BindView(R.id.lvMedia)
     ListView lvMedia;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-
-
     private ArrayList<Uri> imageURIs;
     private Trip trip;
     private Date date;
     private long tripId;
-
-    public static final int PICK_IMAGE_REQUEST = 1;
     private String imageEncoded;
     private List<String> imagesEncodedList;
-
-    public static final int PICK_PLACE_REQUEST = 2;
     private List<Place> placeList;
     private boolean placesAdded = false;
 

@@ -33,30 +33,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         new SplashScreenAsyncTask().execute();
     }
 
-    private class SplashScreenAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        //todo check network connection
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Thread.sleep(ANIMATION_DURATION_SSA);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-    }
-
     private void imageTranslation() {
         ImageView ivProgress = findViewById(R.id.ivProgress);
 
@@ -79,5 +55,29 @@ public class SplashScreenActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return (float) displayMetrics.widthPixels;
+    }
+
+    private class SplashScreenAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        //todo check network connection
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(ANIMATION_DURATION_SSA);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 }
