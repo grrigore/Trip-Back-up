@@ -1,4 +1,4 @@
-package com.grrigore.tripback_up.utils;
+package com.grrigore.tripback_up.network;
 
 import com.grrigore.tripback_up.model.Trip;
 

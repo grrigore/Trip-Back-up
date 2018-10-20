@@ -27,8 +27,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
-import com.grrigore.tripback_up.utils.FirebaseDatabaseUtils;
-import com.grrigore.tripback_up.utils.FirebaseStorageUtils;
+import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
+import com.grrigore.tripback_up.network.FirebaseStorageUtils;
 import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.ArrayList;

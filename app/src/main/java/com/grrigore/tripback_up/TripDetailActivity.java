@@ -39,9 +39,9 @@ import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.GalleryAdapter;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
+import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
+import com.grrigore.tripback_up.network.FirebaseStorageUtils;
 import com.grrigore.tripback_up.utils.Constants;
-import com.grrigore.tripback_up.utils.FirebaseDatabaseUtils;
-import com.grrigore.tripback_up.utils.FirebaseStorageUtils;
 import com.grrigore.tripback_up.utils.ToastUtil;
 import com.grrigore.tripback_up.widget.TripWidgetProvider;
 
