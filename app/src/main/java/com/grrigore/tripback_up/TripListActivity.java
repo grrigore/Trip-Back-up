@@ -388,6 +388,11 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     @Override
+    public void downloadImagesFromStorage(String tripId, String currentUser) {
+
+    }
+
+    @Override
     public void addTripToDatabase(Trip trip, String currentUser) {
     }
 
@@ -396,7 +401,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     @Override
-    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
+    public void addImagesToStorage(ArrayList<Uri> imageUris, String currentUser) {
     }
 
     @Override

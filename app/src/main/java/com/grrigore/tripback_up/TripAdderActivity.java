@@ -64,7 +64,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     private FirebaseStorage firebaseStorage;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    private ArrayList<Uri> imageURIs;
+    private ArrayList<Uri> imageUris;
     private Trip trip;
     private Date date;
     private long tripId;
@@ -82,7 +82,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         ButterKnife.bind(this);
 
         trip = new Trip();
-        imageURIs = new ArrayList<>();
+        imageUris = new ArrayList<>();
 
         //get current time
         date = Calendar.getInstance().getTime();
@@ -185,7 +185,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
                         }
 
-                        imageURIs = mArrayUri;
+                        imageUris = mArrayUri;
                     }
                 }
             } else if (requestCode == PICK_IMAGE_REQUEST) {
@@ -215,7 +215,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
         if ((!etTitle.getText().toString().isEmpty()) &&
                 (!etDescription.getText().toString().isEmpty()) &&
-                (imageURIs.size() != 0) &&
+                (imageUris.size() != 0) &&
                 (placesAdded)) {
             title = etTitle.getText().toString();
             description = etDescription.getText().toString();
@@ -230,13 +230,13 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             trip.setTime(date.getTime());
             trip.setPlaces(placeList);
             List<String> imageList = new ArrayList<>();
-            for (int i = 0; i < imageURIs.size(); i++) {
+            for (int i = 0; i < imageUris.size(); i++) {
                 imageList.add(storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId).child("images/" + "img" + i).toString());
             }
             trip.setImages(imageList);
 
             String currentUser = firebaseAuth.getUid();
-            addImagesToStorage(imageURIs, currentUser);
+            addImagesToStorage(imageUris, currentUser);
             addTripToDatabase(trip, currentUser);
 
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
@@ -331,5 +331,10 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
     @Override
     public void deleteImagesFromStorage(String tripId, String currentUser) {
+    }
+
+    @Override
+    public void downloadImagesFromStorage(String tripId, String currentUser) {
+
     }
 }

@@ -338,6 +338,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
+    public void downloadImagesFromStorage(String tripId, String currentUser) {
+
+    }
+
+    @Override
     public void addTripToDatabase(Trip trip, String currentUser) {
     }
 
@@ -346,7 +351,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
+    public void addImagesToStorage(ArrayList<Uri> imageUris, String currentUser) {
     }
 
     @Override

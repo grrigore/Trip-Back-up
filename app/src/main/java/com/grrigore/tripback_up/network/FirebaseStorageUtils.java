@@ -7,10 +7,12 @@ import java.util.ArrayList;
 public interface FirebaseStorageUtils {
 
     //Firebase storage
-    void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser);
+    void addImagesToStorage(ArrayList<Uri> imageUri, String currentUser);
 
     void editImagesFromStorage(String tripId, String currentUser);
 
     void deleteImagesFromStorage(String tripId, String currentUser);
+
+    void downloadImagesFromStorage(String tripId, String currentUser);
 
 }
