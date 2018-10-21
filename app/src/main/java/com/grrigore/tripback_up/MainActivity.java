@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             showToast(getString(R.string.wrong_credentials), getApplicationContext());
                         } else {
-
                             FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                             Log.d(getClass().getSimpleName(), "Is verified:  " + currentUser.isEmailVerified());
                             if (currentUser.isEmailVerified()) {
