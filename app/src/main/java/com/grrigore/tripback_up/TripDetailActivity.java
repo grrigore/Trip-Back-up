@@ -164,11 +164,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
 
         tripDao.insert(trip);
-
+        int i = 0;
         for (Place place : trip.getPlaces()) {
             //set trip id for each place
             place.setTripId(trip.getId());
-
+            place.setId(String.valueOf(i++));
             Log.d(getClass().getSimpleName(), "Place id:" + place.getId());
             Log.d(getClass().getSimpleName(), "Place lat:" + place.getLat());
             Log.d(getClass().getSimpleName(), "Place lng:" + place.getLng());
@@ -177,6 +177,17 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             placeDao.insert(place);
         }
 
+        List<Trip> trips = tripDao.getAllTrips();
+        List<Place> places = placeDao.getAllPlaces();
+        List<Place> placesByTrip = placeDao.getPlacesByTripId(trip.getId());
+
+        Log.d(getApplicationContext().getClass().getSimpleName(), "Trip" + trips.get(0).toString());
+
+        Log.d(getApplicationContext().getClass().getSimpleName(), "Place:" + places.get(0).toString());
+        Log.d(getApplicationContext().getClass().getSimpleName(), "Place:" + places.get(1).toString());
+
+        Log.d(getApplicationContext().getClass().getSimpleName(), "Place by trip:" + placesByTrip.get(0).toString());
+        Log.d(getApplicationContext().getClass().getSimpleName(), "Place by trip:" + placesByTrip.get(1).toString());
     }
 
     @Override

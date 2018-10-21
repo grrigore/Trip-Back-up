@@ -15,8 +15,8 @@ public interface TripDao {
     @Query("SELECT * FROM trip")
     List<Trip> getAllTrips();
 
-    @Query("SELECT * FROM trip WHERE id = :id")
-    Trip getTripById(int id);
+    @Query("SELECT * FROM trip WHERE id LIKE :id")
+    Trip getTripById(String id);
 
     @Insert
     void insert(Trip trip);

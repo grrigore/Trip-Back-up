@@ -13,8 +13,8 @@ public interface PlaceDao {
     @Query("SELECT * FROM place")
     List<Place> getAllPlaces();
 
-    @Query("SELECT * FROM place WHERE id = :id")
-    Place getPlaceById(int id);
+    @Query("SELECT * FROM place WHERE id LIKE :id")
+    Place getPlaceById(String id);
 
     @Query("SELECT * FROM place WHERE trip_id LIKE :tripId")
     List<Place> getPlacesByTripId(String tripId);
