@@ -57,8 +57,6 @@ public class SingUpActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
-    //todo email verification
-
     /**
      * @param view This method allows the user to create a new account.
      */
@@ -74,7 +72,7 @@ public class SingUpActivity extends AppCompatActivity {
             showToast(getString(R.string.no_password), getApplicationContext());
         }
 
-
+        //toask este ok?
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SingUpActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

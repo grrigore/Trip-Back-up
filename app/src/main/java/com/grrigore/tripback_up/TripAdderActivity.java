@@ -47,7 +47,6 @@ import static com.grrigore.tripback_up.utils.Constants.USER;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
 
 //todo on screen rotate
-//todo create an interface with all the methods related to the firebase functionality for each view
 
 public class TripAdderActivity extends AppCompatActivity implements FirebaseDatabaseUtils, FirebaseStorageUtils {
 

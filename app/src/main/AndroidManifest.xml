@@ -34,7 +34,6 @@
         <activity android:name=".SingUpActivity" />
         <activity android:name=".TripListActivity" />
         <activity android:name=".TripDetailActivity" />
-        <activity android:name=".MediaActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

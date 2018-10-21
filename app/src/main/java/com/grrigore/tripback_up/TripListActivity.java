@@ -52,7 +52,6 @@ import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
 
 //todo on screen rotate
-//todo think
 
 public class TripListActivity extends AppCompatActivity implements TripAdapter.ItemClickListener,
         TripAdapter.ItemLongClickListener, FirebaseDatabaseUtils, FirebaseStorageUtils {

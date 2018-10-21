@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //todo email verification
-
     /**
      * @param view This method allows the user to login using his credentials.
      */
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             showToast(getString(R.string.wrong_credentials), getApplicationContext());
         }
 
-
+        //toask este ok?
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
