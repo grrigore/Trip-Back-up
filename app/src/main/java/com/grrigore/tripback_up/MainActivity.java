@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,10 +16,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.grrigore.tripback_up.utils.ToastUtil;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.grrigore.tripback_up.utils.ToastUtil.showToast;
 
 
 //todo on screen rotate
@@ -79,28 +82,38 @@ public class MainActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            ToastUtil.showToast(getString(R.string.no_email), getApplicationContext());
+            showToast(getString(R.string.no_email), getApplicationContext());
         }
 
         if (TextUtils.isEmpty(password)) {
-            ToastUtil.showToast(getString(R.string.no_password), getApplicationContext());
+            showToast(getString(R.string.no_password), getApplicationContext());
         }
 
         if (password.length() < 6) {
-            ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
+            showToast(getString(R.string.wrong_credentials), getApplicationContext());
         }
+
+
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            ToastUtil.showToast(getString(R.string.wrong_credentials), getApplicationContext());
+                            showToast(getString(R.string.wrong_credentials), getApplicationContext());
                         } else {
-                            Intent intent = new Intent(MainActivity.this, TripListActivity.class);
-                            startActivity(intent);
-                            finish();
+
+                            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                            Log.d(getClass().getSimpleName(), "Is verified:  " + currentUser.isEmailVerified());
+                            if (currentUser.isEmailVerified()) {
+                                Intent intent = new Intent(MainActivity.this, TripListActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                showToast("Please verify your email!", getApplicationContext());
+                            }
                         }
                     }
                 });
+
     }
 }
