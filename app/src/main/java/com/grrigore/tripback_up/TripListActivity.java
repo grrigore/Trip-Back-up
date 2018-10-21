@@ -26,6 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.TripAdapter;
+import com.grrigore.tripback_up.data.PlaceDao;
+import com.grrigore.tripback_up.data.TripDao;
+import com.grrigore.tripback_up.data.TripsDatabase;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
@@ -152,7 +155,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
     private void populateTripList(List<Trip> tripList, List<StorageReference> imageRefs) {
         TripAdapter tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
-
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),
                 2);
         //set on item click listener
@@ -187,6 +189,21 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                 return true;
             case R.id.favTrips:
                 //todo fav trip selection
+
+                TripDao tripDao = TripsDatabase.getInstance(getApplicationContext()).getTripDao();
+                PlaceDao placeDao = TripsDatabase.getInstance(getApplicationContext()).getPlaceDao();
+
+                List<Trip> favouriteTrips = new ArrayList<>();
+
+                List<Trip> databaseTrips = tripDao.getAllTrips();
+                for (Trip trip : databaseTrips) {
+                    List<Place> tripPlaces = placeDao.getPlacesByTripId(trip.getId());
+                    trip.setPlaces(tripPlaces);
+                    favouriteTrips.add(trip);
+                }
+
+                provideTripsForUi(favouriteTrips, null, id);
+
                 return true;
             case R.id.allTrips:
                 List<Trip> allTrips = mergeTrips();

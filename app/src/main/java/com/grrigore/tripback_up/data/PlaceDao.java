@@ -16,8 +16,8 @@ public interface PlaceDao {
     @Query("SELECT * FROM place WHERE id = :id")
     Place getPlaceById(int id);
 
-    @Query("SELECT * FROM place WHERE trip_id = :tripId")
-    List<Place> getPlacesByTripId(int tripId);
+    @Query("SELECT * FROM place WHERE trip_id LIKE :tripId")
+    List<Place> getPlacesByTripId(String tripId);
 
     @Insert
     void insert(Place place);

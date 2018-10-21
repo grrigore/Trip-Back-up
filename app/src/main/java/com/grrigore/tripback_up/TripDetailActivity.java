@@ -37,6 +37,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.GalleryAdapter;
+import com.grrigore.tripback_up.data.PlaceDao;
+import com.grrigore.tripback_up.data.TripDao;
+import com.grrigore.tripback_up.data.TripsDatabase;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
@@ -148,6 +151,32 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     public void markAsFavourite(View view) {
         //todo save in local database
+        TripDao tripDao = TripsDatabase.getInstance(getApplicationContext()).getTripDao();
+        PlaceDao placeDao = TripsDatabase.getInstance(getApplicationContext()).getPlaceDao();
+
+        //set 1 to mark trip as favourite
+        trip.setFavourite(1);
+        Log.d(getClass().getSimpleName(), "Trip id: " + trip.getId());
+        Log.d(getClass().getSimpleName(), "Trip title: " + trip.getTitle());
+        Log.d(getClass().getSimpleName(), "Trip time: " + trip.getTime());
+        Log.d(getClass().getSimpleName(), "Trip description: " + trip.getDescription());
+        Log.d(getClass().getSimpleName(), "Trip favourite: " + trip.getFavourite());
+
+
+        tripDao.insert(trip);
+
+        for (Place place : trip.getPlaces()) {
+            //set trip id for each place
+            place.setTripId(trip.getId());
+
+            Log.d(getClass().getSimpleName(), "Place id:" + place.getId());
+            Log.d(getClass().getSimpleName(), "Place lat:" + place.getLat());
+            Log.d(getClass().getSimpleName(), "Place lng:" + place.getLng());
+            Log.d(getClass().getSimpleName(), "Place tripId:" + place.getTripId());
+
+            placeDao.insert(place);
+        }
+
     }
 
     @Override

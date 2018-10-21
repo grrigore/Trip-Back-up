@@ -10,19 +10,22 @@ import com.grrigore.tripback_up.model.Trip;
 
 @Database(entities = {Trip.class, Place.class}, version = 1, exportSchema = false)
 public abstract class TripsDatabase extends RoomDatabase {
+    private static final String DB_NAME = "tripDatabase.db";
+    private static volatile TripsDatabase instance;
 
-    public static final String DB_NAME = "tripDatabase.db";
-    private static TripsDatabase INSTANCE;
-
-    public static TripsDatabase getTripDatabase(Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), TripsDatabase.class, DB_NAME).build();
+    public static synchronized TripsDatabase getInstance(Context context) {
+        if (instance == null) {
+            instance = create(context);
         }
-        return INSTANCE;
+        return instance;
     }
 
-    public static void destroyInstance() {
-        INSTANCE = null;
+    private static TripsDatabase create(final Context context) {
+        //todo not on the main thread
+        return Room.databaseBuilder(
+                context,
+                TripsDatabase.class,
+                DB_NAME).allowMainThreadQueries().build();
     }
 
     public abstract TripDao getTripDao();
