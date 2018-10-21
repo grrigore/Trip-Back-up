@@ -14,15 +14,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.grrigore.tripback_up.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
+import static com.grrigore.tripback_up.utils.ToastUtil.showToast;
 
 //todo on screen rotate
 
@@ -66,25 +67,39 @@ public class SingUpActivity extends AppCompatActivity {
         final String password = etPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            ToastUtil.showToast(getString(R.string.no_email), getApplicationContext());
+            showToast(getString(R.string.no_email), getApplicationContext());
         }
 
         if (TextUtils.isEmpty(password)) {
-            ToastUtil.showToast(getString(R.string.no_password), getApplicationContext());
+            showToast(getString(R.string.no_password), getApplicationContext());
         }
+
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SingUpActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     if (password.length() < 6) {
-                        ToastUtil.showToast(getString(R.string.password_shot), getApplicationContext());
+                        showToast(getString(R.string.password_shot), getApplicationContext());
                     } else {
-                        ToastUtil.showToast(getString(R.string.create_account_error), getApplicationContext());
+                        showToast(getString(R.string.create_account_error), getApplicationContext());
                     }
                 } else {
                     initialiseTripNumber();
-                    ToastUtil.showToast(getString(R.string.account_created), SingUpActivity.this);
+                    showToast(getString(R.string.account_created), SingUpActivity.this);
+
+                    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                    if (currentUser != null) {
+                        currentUser.sendEmailVerification()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            showToast("Email sent.", getApplicationContext());
+                                        }
+                                    }
+                                });
+                    }
                     startActivity(new Intent(SingUpActivity.this, MainActivity.class));
                     finish();
                 }
