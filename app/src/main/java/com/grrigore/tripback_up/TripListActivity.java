@@ -311,6 +311,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         //todo edit trips
                         Intent tripEditorIntent = new Intent(TripListActivity.this, TripEditorActivity.class);
                         tripEditorIntent.putExtra("tripClicked", trip);
+                        tripEditorIntent.putExtra("currentUser", currentUser);
                         startActivity(tripEditorIntent);
                         return true;
                     case R.id.deleteTrip:
