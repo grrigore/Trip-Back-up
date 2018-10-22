@@ -22,8 +22,10 @@
     <string name="trip_title">Title</string>
     <string name="trip_description">Description</string>
     <string name="trip_add_media">Add media</string>
+    <string name="trip_edit_media">Edit media</string>
     <string name="trip_places">Places</string>
     <string name="trip_add_places">Add places</string>
+    <string name="trip_edit_places">Edit places</string>
     <string name="trip_save">Save trip</string>
     <string name="add_marker">add marker</string>
     <string name="save_markers">save markers</string>
