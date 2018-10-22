@@ -69,9 +69,11 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
         startActivity(tripListIntent);
     }
 
+    //todo edit places
     public void editPlaces(View view) {
     }
 
+    //todo edit images
     public void editMedia(View view) {
     }
 
