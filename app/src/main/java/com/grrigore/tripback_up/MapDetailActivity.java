@@ -19,14 +19,14 @@ import java.util.List;
 
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
 
-public class MapsDetailActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapDetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private List<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps_detail);
+        setContentView(R.layout.activity_map_detail);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

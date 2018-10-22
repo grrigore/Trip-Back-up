@@ -309,6 +309,9 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                 switch (id) {
                     case R.id.editTrip:
                         //todo edit trips
+                        Intent tripEditorIntent = new Intent(TripListActivity.this, TripEditorActivity.class);
+                        tripEditorIntent.putExtra("tripClicked", trip);
+                        startActivity(tripEditorIntent);
                         return true;
                     case R.id.deleteTrip:
                         deleteImagesFromStorage(trip.getId(), currentUser);

@@ -219,7 +219,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Intent intent = new Intent(getApplicationContext(), MapsDetailActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MapDetailActivity.class);
                 intent.putParcelableArrayListExtra(PLACE_LIST_KEY_MDA_TDA, (ArrayList<? extends Parcelable>) places);
                 startActivity(intent);
             }

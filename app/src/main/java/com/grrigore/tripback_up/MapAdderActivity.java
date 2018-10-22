@@ -21,7 +21,7 @@ import java.util.List;
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MAA_TAA;
 
 //todo search for places/address
-public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapAdderActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private List<Place> places;
@@ -30,7 +30,7 @@ public class MapsAdderActivity extends FragmentActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps_adder);
+        setContentView(R.layout.activity_map_adder);
 
         //array list used to store the places added
         places = new ArrayList<>();

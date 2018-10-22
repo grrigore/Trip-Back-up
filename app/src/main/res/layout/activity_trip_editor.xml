@@ -74,7 +74,7 @@
                 android:layout_alignParentRight="true"
                 android:nextFocusDown="@id/lvMedia"
                 android:nextFocusUp="@id/etDescription"
-                android:onClick="addMedia"
+                android:onClick="editMedia"
                 android:text="@string/trip_edit_media" />
         </RelativeLayout>
 
@@ -108,7 +108,7 @@
                 android:layout_alignParentRight="true"
                 android:nextFocusDown="@id/btSave"
                 android:nextFocusUp="@id/lvMedia"
-                android:onClick="addPlace"
+                android:onClick="editPlaces"
                 android:text="@string/trip_edit_places" />
         </RelativeLayout>
 

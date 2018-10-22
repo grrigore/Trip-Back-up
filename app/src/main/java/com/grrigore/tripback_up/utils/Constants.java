@@ -11,11 +11,11 @@ public class Constants {
 
     //TripAddedActivity - TAA
 
-    //MapsAdderActivity - MAA +
+    //MapAdderActivity - MAA +
     //TripAdderActivity - TAA
     public static final String PLACE_LIST_KEY_MAA_TAA = "placeList";
 
-    //MapsDetailActivity - MDA +
+    //MapDetailActivity - MDA +
     //TripDetailActivity - TDA
     public static final String PLACE_LIST_KEY_MDA_TDA = "placeList";
 

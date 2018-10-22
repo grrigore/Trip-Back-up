@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:orientation="vertical"
     android:scrollbars="none"
-    tools:context=".MapsAdderActivity">
+    tools:context=".MapAdderActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                tools:context=".MapsAdderActivity" />
+                tools:context=".MapAdderActivity" />
         </FrameLayout>
 
         <Button

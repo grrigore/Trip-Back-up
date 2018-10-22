@@ -48,11 +48,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsDetailActivity"
+            android:name=".MapDetailActivity"
             android:label="@string/title_activity_maps_detail" />
         <activity android:name=".TripAdderActivity" />
         <activity
-            android:name=".MapsAdderActivity"
+            android:name=".MapAdderActivity"
             android:label="@string/title_activity_maps_adder" />
 
         <receiver android:name=".widget.TripWidgetProvider">

@@ -118,7 +118,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
      * @param view This method sends the user to a MapActivity.
      */
     public void addPlace(View view) {
-        Intent intent = new Intent(this, MapsAdderActivity.class);
+        Intent intent = new Intent(this, MapAdderActivity.class);
         startActivityForResult(intent, PICK_PLACE_REQUEST);
     }
 
