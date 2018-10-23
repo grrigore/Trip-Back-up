@@ -54,12 +54,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
-import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
+import static com.grrigore.tripback_up.utils.Constants.IMG;
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_ID;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
+import static com.grrigore.tripback_up.utils.Constants.USER;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
+import static com.grrigore.tripback_up.utils.Constants.CURRENT_USER;
 
 
 //todo on screen rotation
@@ -98,9 +103,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             //todo constants files per class with var names connected with the entity
-            trip = bundle.getParcelable("tripClicked");
-            userUID = bundle.getString("userUID");
-            tripId = bundle.getString("tripId");
+            trip = bundle.getParcelable(TRIP_CLICKED);
+            userUID = bundle.getString(CURRENT_USER);
+            tripId = bundle.getString(TRIP_ID);
+
             Log.d(this.getApplicationContext().getClass().getSimpleName(), "Trip id = " + tripId);
         }
 
@@ -115,7 +121,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         final List<StorageReference> imageStorageReferences = new ArrayList<>();
         for (String imageUrl : trip.getImages()) {
+
             Log.d(getApplicationContext().getClass().getSimpleName(), "\n" + "Image Url: " + imageUrl + "\n");
+
             imageStorageReferences.add(firebaseStorage.getReferenceFromUrl(imageUrl));
         }
 
@@ -124,7 +132,8 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         galleryAdapter.setItemClickListener(new GalleryAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
-                firebaseStorage.getReference().child("user/" + userUID + "/trips/" + tripId + "/images/img" + position).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                firebaseStorage.getReference().child(USER + userUID).child(TRIPS).child(tripId)
+                        .child(IMAGES).child(IMG + position).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         Intent displayImageIntent = new Intent();
@@ -156,7 +165,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         PlaceDao placeDao = TripsDatabase.getInstance(getApplicationContext()).getPlaceDao();
 
         //set 1 to mark trip as favourite
+        //todo think if this is needed
         trip.setFavourite(1);
+
         Log.d(getClass().getSimpleName(), "Trip id: " + trip.getId());
         Log.d(getClass().getSimpleName(), "Trip title: " + trip.getTitle());
         Log.d(getClass().getSimpleName(), "Trip time: " + trip.getTime());
@@ -221,7 +232,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onMapClick(LatLng latLng) {
                 Intent intent = new Intent(getApplicationContext(), MapDetailActivity.class);
-                intent.putParcelableArrayListExtra(PLACE_LIST_KEY_MDA_TDA, (ArrayList<? extends Parcelable>) places);
+                intent.putParcelableArrayListExtra(PLACE_LIST_KEY, (ArrayList<? extends Parcelable>) places);
                 startActivity(intent);
             }
         });
@@ -276,11 +287,17 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 int widgetId = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
 
-                String tripTitle = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_TITLE, null);
-                String tripDescription = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_DESCRIPTION, null);
-                TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, tripTitle, tripDescription);
+                String tripTitle = SharedPrefs.getInstance(getApplicationContext())
+                        .getStringValue(TRIP_CLICKED_TITLE, null);
 
-                ToastUtil.showToast("Widget set for " + trip.getTitle() + "!", this);
+                String tripDescription = SharedPrefs.getInstance(getApplicationContext())
+                        .getStringValue(TRIP_CLICKED_DESCRIPTION, null);
+
+                TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager,
+                        widgetId, tripTitle, tripDescription);
+
+                ToastUtil.showToast(getString(R.string.wiget_set_for) + trip.getTitle()
+                        + getString(R.string.exclamation_mark), this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

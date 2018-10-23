@@ -65,7 +65,7 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <activity android:name=".TripEditorActivity"></activity>
+        <activity android:name=".TripEditorActivity"/>
     </application>
 
 </manifest>

@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:src="@drawable/ic_logo" />
+            android:src="@drawable/ic_logo"
+            android:contentDescription="@string/trip_back_up_logo"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -35,5 +36,6 @@
         android:layout_marginTop="40dp"
         android:rotation="50"
         android:scaleType="center"
+        android:contentDescription="@string/splash_screen_loader"
         android:src="@drawable/plane" />
 </FrameLayout>

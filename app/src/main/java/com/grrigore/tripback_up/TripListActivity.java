@@ -44,13 +44,23 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.DESC;
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
-import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MILISECONDS;
+import static com.grrigore.tripback_up.utils.Constants.IMG;
+import static com.grrigore.tripback_up.utils.Constants.LAT;
+import static com.grrigore.tripback_up.utils.Constants.LNG;
+import static com.grrigore.tripback_up.utils.Constants.PLACE;
+import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MILLISECONDS;
+import static com.grrigore.tripback_up.utils.Constants.TIME;
+import static com.grrigore.tripback_up.utils.Constants.TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_ID;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
+import static com.grrigore.tripback_up.utils.Constants.CURRENT_USER;
 
 //todo on screen rotate
 
@@ -96,42 +106,43 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     private void getAllTrips() {
         final long currentTime = new Date().getTime();
 
-        tripsReference = databaseReference.child("users/" + firebaseAuth.getCurrentUser().getUid() + "/");
+        tripsReference = databaseReference.child(USERS).child(firebaseAuth.getCurrentUser().getUid());
         tripsReferenceListener = tripsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                DataSnapshot tripsDataSnapshot = dataSnapshot.child("trips");
+                DataSnapshot tripsDataSnapshot = dataSnapshot.child(TRIPS);
                 for (DataSnapshot tripDataSnapshot : tripsDataSnapshot.getChildren()) {
                     Trip trip = new Trip();
 
                     trip.setId(tripDataSnapshot.getKey());
-                    trip.setTitle((String) tripDataSnapshot.child("title").getValue());
-                    trip.setDescription((String) tripDataSnapshot.child("description").getValue());
+                    trip.setTitle((String) tripDataSnapshot.child(TITLE).getValue());
+                    trip.setDescription((String) tripDataSnapshot.child(DESC).getValue());
 
-                    trip.setTime((long) tripDataSnapshot.child("time").getValue());
+                    trip.setTime((long) tripDataSnapshot.child(TIME).getValue());
 
-                    DataSnapshot imagesDataSnapshot = tripDataSnapshot.child("images");
+                    DataSnapshot imagesDataSnapshot = tripDataSnapshot.child(IMAGES);
                     List<String> imageList = new ArrayList<>();
                     for (int i = 1; i <= imagesDataSnapshot.getChildrenCount(); i++) {
-                        imageList.add(String.valueOf(imagesDataSnapshot.child("img" + i).getValue()));
+                        imageList.add(String.valueOf(imagesDataSnapshot.child(IMG + i).getValue()));
                     }
                     trip.setImages(imageList);
+
                     Log.d(getApplicationContext().getClass().getSimpleName(),
                             "\n" + "Image List: " + imageList.get(0) + "\n");
 
-                    DataSnapshot placesDataSnapshot = tripDataSnapshot.child("places");
+                    DataSnapshot placesDataSnapshot = tripDataSnapshot.child(PLACE);
                     List<Place> placeList = new ArrayList<>();
                     for (int i = 0; i < placesDataSnapshot.getChildrenCount(); i++) {
                         Place place = new Place();
                         place.setLat((String) placesDataSnapshot.child(String.valueOf(i))
-                                .child("lat").getValue());
+                                .child(LAT).getValue());
                         place.setLng((String) placesDataSnapshot.child(String.valueOf(i))
-                                .child("lng").getValue());
+                                .child(LNG).getValue());
                         placeList.add(place);
                     }
                     trip.setPlaces(placeList);
 
-                    if (currentTime - trip.getTime() <= SEVEN_DAYS_IN_MILISECONDS) {
+                    if (currentTime - trip.getTime() <= SEVEN_DAYS_IN_MILLISECONDS) {
                         recentTrips.add(trip);
                         //get first image form each trip
                         imageRefsRecent.add(firebaseStorage.getReferenceFromUrl(imageList.get(0)));
@@ -228,14 +239,14 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         } else if (menuItemId == R.id.recentTrips) {
             setContentView(R.layout.no_recent_trips_layout);
         } else if (menuItemId == R.id.pastTrips) {
+            //todo UI for no past trips
             ToastUtil.showToast("No past trips!", this);
         } else if (menuItemId == R.id.allTrips) {
+            //todo UI for no trips
             ToastUtil.showToast("No trips.. Add your first trip!", this);
         }
     }
 
-
-    //todo no trips layout
     public void allTripsMode(View view) {
         setContentView(R.layout.activity_trip_list);
         ButterKnife.bind(TripListActivity.this);
@@ -246,6 +257,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         populateTripList(allTrips, imageRefsAll);
 
         if (allTrips.size() == 0) {
+            //todo UI for no trips
             ToastUtil.showToast("No trips.. Add your first trip!", this);
         }
     }
@@ -288,9 +300,9 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         SharedPrefs.getInstance(getApplicationContext()).setValue(TRIP_CLICKED_DESCRIPTION, trip.getDescription());
 
         Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
-        tripDetailIntent.putExtra("tripClicked", trip);
-        tripDetailIntent.putExtra("tripId", trip.getId());
-        tripDetailIntent.putExtra("userUID", firebaseAuth.getCurrentUser().getUid());
+        tripDetailIntent.putExtra(TRIP_CLICKED, trip);
+        tripDetailIntent.putExtra(TRIP_ID, trip.getId());
+        tripDetailIntent.putExtra(CURRENT_USER, firebaseAuth.getCurrentUser().getUid());
         startActivity(tripDetailIntent);
     }
 
@@ -307,13 +319,14 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                 switch (id) {
                     case R.id.editTrip:
                         Intent tripEditorIntent = new Intent(TripListActivity.this, TripEditorActivity.class);
-                        tripEditorIntent.putExtra("tripClicked", trip);
-                        tripEditorIntent.putExtra("currentUser", currentUser);
+                        tripEditorIntent.putExtra(TRIP_CLICKED, trip);
+                        tripEditorIntent.putExtra(CURRENT_USER, currentUser);
                         startActivity(tripEditorIntent);
                         return true;
                     case R.id.deleteTrip:
                         deleteImagesFromStorage(trip.getId(), currentUser);
                         deleteTripFromDatabase(trip.getId(), currentUser);
+                        ToastUtil.showToast(getString(R.string.trip_deleted), getApplicationContext());
                         //todo refresh UI after trip is deleted
                         finish();
                         startActivity(getIntent());
@@ -328,7 +341,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         String tripDescription = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_DESCRIPTION, null);
                         TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, tripTitle, tripDescription);
 
-                        ToastUtil.showToast("Widget set for " + trip.getTitle() + "!", getApplicationContext());
+                        ToastUtil.showToast(getString(R.string.wiget_set_for) + trip.getTitle() + getString(R.string.exclamation_mark), getApplicationContext());
                         return true;
                 }
                 return true;
@@ -370,18 +383,21 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                     final String imageRefecence = image.getValue().toString();
 
                     StorageReference imageStorageReference = firebaseStorage.getReferenceFromUrl(imageRefecence);
+
                     Log.d(getApplicationContext().getClass().getSimpleName(),
                             "Image storage reference: " + imageStorageReference);
 
                     imageStorageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+
                             Log.d(getApplicationContext().getClass().getSimpleName(),
                                     "Deleted file: " + imageRefecence);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+
                             Log.d(getApplicationContext().getClass().getSimpleName(),
                                     "Cannot delete file: " + imageRefecence);
                         }

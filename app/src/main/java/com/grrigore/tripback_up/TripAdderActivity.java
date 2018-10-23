@@ -39,7 +39,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MAA_TAA;
+import static com.grrigore.tripback_up.utils.Constants.DESC;
+import static com.grrigore.tripback_up.utils.Constants.ID;
+import static com.grrigore.tripback_up.utils.Constants.IMAGES;
+import static com.grrigore.tripback_up.utils.Constants.IMG;
+import static com.grrigore.tripback_up.utils.Constants.PLACE;
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY;
+import static com.grrigore.tripback_up.utils.Constants.TIME;
+import static com.grrigore.tripback_up.utils.Constants.TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIP;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
@@ -100,7 +107,8 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
 
         //read number of trips from the database
-        databaseReference.child(USERS + "/" + firebaseAuth.getCurrentUser().getUid() + "/").addValueEventListener(new ValueEventListener() {
+        //error POSSIBLE REASON
+        databaseReference.child(USERS).child(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 tripId = (long) dataSnapshot.child(TRIP_NUMBER).getValue();
@@ -109,7 +117,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TripListActivity.class.getSimpleName(), "Failed to read trip.");
+                Log.d(TripListActivity.class.getSimpleName(), "Failed to read trip.");
             }
         });
     }
@@ -188,19 +196,19 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
                     }
                 }
             } else if (requestCode == PICK_IMAGE_REQUEST) {
-                ToastUtil.showToast("You haven't picked an image.", this);
+                ToastUtil.showToast(getString(R.string.no_picked_image_warning), this);
             }
 
             if (requestCode == PICK_PLACE_REQUEST && resultCode == RESULT_OK
                     && null != data) {
-                placeList = data.getParcelableArrayListExtra(PLACE_LIST_KEY_MAA_TAA);
+                placeList = data.getParcelableArrayListExtra(PLACE_LIST_KEY);
                 if (placeList.size() != 0) {
                     placesAdded = true;
-                    ToastUtil.showToast("Places added!", getApplicationContext());
+                    ToastUtil.showToast(getString(R.string.places_added), getApplicationContext());
                 }
             }
         } catch (Exception e) {
-            ToastUtil.showToast("Something went wrong!", this);
+            Log.d(getClass().getSimpleName(), e.getMessage());
         }
     }
 
@@ -230,7 +238,8 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             trip.setPlaces(placeList);
             List<String> imageList = new ArrayList<>();
             for (int i = 0; i < imageUris.size(); i++) {
-                imageList.add(storageReference.child(USER + "/" + firebaseAuth.getCurrentUser().getUid()).child(TRIPS).child(TRIP + tripId).child("images/" + "img" + i).toString());
+                imageList.add(storageReference.child(USER).child(firebaseAuth.getCurrentUser().getUid())
+                        .child(TRIPS).child(TRIP + tripId).child(IMAGES).child(IMG + i).toString());
             }
             trip.setImages(imageList);
 
@@ -239,10 +248,10 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             addTripToDatabase(trip, currentUser);
 
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
-            intentRecentTrips.putExtra("tripId", tripId);
+            intentRecentTrips.putExtra(ID, tripId);
             startActivity(intentRecentTrips);
         } else {
-            ToastUtil.showToast("Trip couldn't be saved! Please check fields!", getApplicationContext());
+            ToastUtil.showToast(getString(R.string.trip_not_saved), getApplicationContext());
         }
 
     }
@@ -254,17 +263,17 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         int placeId = 0;
         int imageId = 1;
 
-        tripReference.child("title").setValue(trip.getTitle());
-        tripReference.child("description").setValue(trip.getDescription());
-        tripReference.child("time").setValue(trip.getTime());
+        tripReference.child(TITLE).setValue(trip.getTitle());
+        tripReference.child(DESC).setValue(trip.getDescription());
+        tripReference.child(TIME).setValue(trip.getTime());
 
         for (Place place : trip.getPlaces()) {
-            tripReference.child("places").child(String.valueOf(placeId)).setValue(place);
+            tripReference.child(PLACE).child(String.valueOf(placeId)).setValue(place);
             placeId++;
         }
 
         for (String imageRef : trip.getImages()) {
-            tripReference.child("images").child("img" + imageId).setValue(imageRef);
+            tripReference.child(IMAGES).child(IMG + imageId).setValue(imageRef);
             imageId++;
         }
 
@@ -272,7 +281,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         tripId++;
         databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
 
-        ToastUtil.showToast("Trip saved!", getApplicationContext());
+        ToastUtil.showToast(getString(R.string.trip_saved), getApplicationContext());
 
         Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
     }
@@ -284,7 +293,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
         storageReference = firebaseStorage.getReference();
         //create storage reference for user folder
         //points to the trip folder
-        StorageReference userReference = storageReference.child(USER + "/" + currentUser).child(TRIPS).child(TRIP + tripId);
+        StorageReference userReference = storageReference.child(USER).child(currentUser).child(TRIPS).child(TRIP + tripId);
         StorageReference imageReference;
         UploadTask uploadTask;
 
@@ -295,7 +304,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
             //create storage reference for user's image folder
             //points to the images folder
-            imageReference = userReference.child("images/" + "img" + i);
+            imageReference = userReference.child(IMAGES + IMG + i);
             i++;
             uploadTask = imageReference.putFile(imageURI);
             imageNameList.add(imageURI.getPath());
@@ -308,7 +317,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //todo change activity
-                    ToastUtil.showToast("Images added!", getApplicationContext());
+                    ToastUtil.showToast(getString(R.string.images_added), getApplicationContext());
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
                     lvMedia.setAdapter(adapter);
                 }

@@ -18,8 +18,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.DESC;
+import static com.grrigore.tripback_up.utils.Constants.TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
+import static com.grrigore.tripback_up.utils.Constants.CURRENT_USER;
 
 public class TripEditorActivity extends AppCompatActivity implements FirebaseDatabaseUtils {
 
@@ -46,11 +50,11 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            trip = bundle.getParcelable("tripClicked");
+            trip = bundle.getParcelable(TRIP_CLICKED);
             if (trip != null) {
                 places = trip.getPlaces();
             }
-            currentUser = bundle.getString("currentUser");
+            currentUser = bundle.getString(CURRENT_USER);
         }
 
         setUI();
@@ -81,10 +85,10 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
     public void editTripFromDatabase(String tripId, String currentUser) {
         DatabaseReference tripReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId);
 
-        tripReference.child("title").setValue(trip.getTitle());
-        tripReference.child("description").setValue(trip.getDescription());
+        tripReference.child(TITLE).setValue(trip.getTitle());
+        tripReference.child(DESC).setValue(trip.getDescription());
 
-        ToastUtil.showToast("Trip edits saved!", getApplicationContext());
+        ToastUtil.showToast(getString(R.string.trip_saved), getApplicationContext());
     }
 
     @Override

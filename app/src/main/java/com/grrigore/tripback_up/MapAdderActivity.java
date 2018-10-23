@@ -18,7 +18,7 @@ import com.grrigore.tripback_up.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MAA_TAA;
+import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY;
 
 //todo search for places/address
 public class MapAdderActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -82,7 +82,7 @@ public class MapAdderActivity extends FragmentActivity implements OnMapReadyCall
             ToastUtil.showToast(getString(R.string.no_marker), this);
         } else {
             Intent intent = new Intent();
-            intent.putParcelableArrayListExtra(PLACE_LIST_KEY_MAA_TAA, (ArrayList<? extends Parcelable>) places);
+            intent.putParcelableArrayListExtra(PLACE_LIST_KEY, (ArrayList<? extends Parcelable>) places);
             setResult(RESULT_OK, intent);
             finish();
         }

@@ -93,7 +93,7 @@ public class SingUpActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            showToast("Email sent.", getApplicationContext());
+                                            showToast(getString(R.string.email_verification), getApplicationContext());
                                         }
                                     }
                                 });

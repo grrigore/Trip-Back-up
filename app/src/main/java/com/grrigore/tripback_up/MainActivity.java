@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                showToast("Please verify your email!", getApplicationContext());
+                                showToast(getString(R.string.email_verification), getApplicationContext());
                             }
                         }
                     }

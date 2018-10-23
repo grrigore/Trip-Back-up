@@ -33,14 +33,4 @@ public class TripWidgetProvider extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, id, tripTitle, tripDescription);
         }
     }
-
-    @Override
-    public void onEnabled(Context context) {
-        super.onEnabled(context);
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        super.onDisabled(context);
-    }
 }

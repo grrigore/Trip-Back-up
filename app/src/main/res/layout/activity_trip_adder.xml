@@ -29,8 +29,8 @@
             android:focusable="true"
             android:hint="@string/trip_title"
             android:inputType="text"
-            android:nextFocusDown="@id/etDescription"
             android:nextFocusUp="@id/btPlaces"
+            android:nextFocusDown="@id/etDescription"
             android:singleLine="true" />
 
         <TextView
@@ -49,8 +49,8 @@
             android:hint="@string/trip_description"
             android:inputType="text"
             android:maxLines="5"
-            android:nextFocusDown="@id/btMedia"
-            android:nextFocusUp="@id/etTitle" />
+            android:nextFocusUp="@id/etTitle"
+            android:nextFocusDown="@id/btMedia" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -72,8 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:nextFocusDown="@id/lvMedia"
                 android:nextFocusUp="@id/etDescription"
+                android:nextFocusDown="@id/lvMedia"
                 android:onClick="addMedia"
                 android:text="@string/trip_add_media" />
         </RelativeLayout>
@@ -83,8 +83,8 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
-            android:nextFocusDown="@id/btPlaces"
-            android:nextFocusUp="@id/btMedia" />
+            android:nextFocusUp="@id/btMedia"
+            android:nextFocusDown="@id/btPlaces" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -106,8 +106,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:nextFocusDown="@id/btSave"
                 android:nextFocusUp="@id/lvMedia"
+                android:nextFocusDown="@id/btSave"
                 android:onClick="addPlace"
                 android:text="@string/trip_add_places" />
         </RelativeLayout>
@@ -117,8 +117,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:nextFocusDown="@id/etTitle"
             android:nextFocusUp="@id/btPlaces"
+            android:nextFocusDown="@id/etTitle"
             android:onClick="saveTrip"
             android:text="@string/trip_save" />
 
