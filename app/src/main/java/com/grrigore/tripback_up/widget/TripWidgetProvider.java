@@ -3,11 +3,13 @@ package com.grrigore.tripback_up.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
 import com.grrigore.tripback_up.R;
-import com.grrigore.tripback_up.utils.Constants;
+import com.grrigore.tripback_up.utils.SharedPrefs;
+
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 
 //todo new widget design
 
@@ -24,10 +26,9 @@ public class TripWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
-        String tripTitle = sharedPreferences.getString(Constants.TRIP_CLICKED_TITLE, null);
-        String tripDescription = sharedPreferences.getString(Constants.TRIP_CLICKED_DESCRIPTION, null);
+        String tripTitle = SharedPrefs.getInstance(context).getStringValue(TRIP_CLICKED_TITLE, null);
+        String tripDescription = SharedPrefs.getInstance(context).getStringValue(TRIP_CLICKED_DESCRIPTION, null);
         for (int id : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, id, tripTitle, tripDescription);
         }

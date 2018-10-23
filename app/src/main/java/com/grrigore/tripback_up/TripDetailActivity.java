@@ -2,7 +2,6 @@ package com.grrigore.tripback_up;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -44,7 +43,7 @@ import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
 import com.grrigore.tripback_up.network.FirebaseStorageUtils;
-import com.grrigore.tripback_up.utils.Constants;
+import com.grrigore.tripback_up.utils.SharedPrefs;
 import com.grrigore.tripback_up.utils.ToastUtil;
 import com.grrigore.tripback_up.widget.TripWidgetProvider;
 
@@ -57,6 +56,8 @@ import butterknife.ButterKnife;
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY_MDA_TDA;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
 import static com.grrigore.tripback_up.utils.Constants.USERS;
 
@@ -269,15 +270,17 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 startActivity(intent);
                 return true;
             case R.id.addWidget:
-                SharedPreferences sharedPreferences = TripDetailActivity.this.getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+
                 Bundle bundle = new Bundle();
-
                 int widgetId = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-                TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, sharedPreferences.getString(Constants.TRIP_CLICKED_TITLE, null),
-                        sharedPreferences.getString(Constants.TRIP_CLICKED_DESCRIPTION, null));
-                ToastUtil.showToast("Widget set for " + trip.getTitle() + "!", this);
 
+
+                String tripTitle = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_TITLE, null);
+                String tripDescription = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_DESCRIPTION, null);
+                TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, tripTitle, tripDescription);
+
+                ToastUtil.showToast("Widget set for " + trip.getTitle() + "!", this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -2,7 +2,6 @@ package com.grrigore.tripback_up;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +33,7 @@ import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
 import com.grrigore.tripback_up.network.FirebaseStorageUtils;
-import com.grrigore.tripback_up.utils.Constants;
+import com.grrigore.tripback_up.utils.SharedPrefs;
 import com.grrigore.tripback_up.utils.ToastUtil;
 import com.grrigore.tripback_up.widget.TripWidgetProvider;
 
@@ -47,7 +46,6 @@ import butterknife.ButterKnife;
 
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
 import static com.grrigore.tripback_up.utils.Constants.SEVEN_DAYS_IN_MILISECONDS;
-import static com.grrigore.tripback_up.utils.Constants.SHARED_PREFERENCES;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
@@ -286,11 +284,8 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
     @Override
     public void onItemClick(View view, Trip trip) {
-        //todo separate class to manage the shared preferences values
-        SharedPreferences.Editor sharedPreferencesEditor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
-        sharedPreferencesEditor.putString(TRIP_CLICKED_TITLE, trip.getTitle());
-        sharedPreferencesEditor.putString(TRIP_CLICKED_DESCRIPTION, trip.getDescription());
-        sharedPreferencesEditor.apply();
+        SharedPrefs.getInstance(getApplicationContext()).setValue(TRIP_CLICKED_TITLE, trip.getTitle());
+        SharedPrefs.getInstance(getApplicationContext()).setValue(TRIP_CLICKED_DESCRIPTION, trip.getDescription());
 
         Intent tripDetailIntent = new Intent(TripListActivity.this, TripDetailActivity.class);
         tripDetailIntent.putExtra("tripClicked", trip);
@@ -324,13 +319,15 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         startActivity(getIntent());
                         return true;
                     case R.id.addWidget:
-                        SharedPreferences sharedPreferences = TripListActivity.this.getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
                         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                        Bundle bundle = new Bundle();
 
+                        Bundle bundle = new Bundle();
                         int widgetId = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-                        TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, sharedPreferences.getString(Constants.TRIP_CLICKED_TITLE, null),
-                                sharedPreferences.getString(Constants.TRIP_CLICKED_DESCRIPTION, null));
+
+                        String tripTitle = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_TITLE, null);
+                        String tripDescription = SharedPrefs.getInstance(getApplicationContext()).getStringValue(TRIP_CLICKED_DESCRIPTION, null);
+                        TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager, widgetId, tripTitle, tripDescription);
+
                         ToastUtil.showToast("Widget set for " + trip.getTitle() + "!", getApplicationContext());
                         return true;
                 }
