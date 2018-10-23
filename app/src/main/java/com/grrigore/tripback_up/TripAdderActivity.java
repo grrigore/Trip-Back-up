@@ -304,7 +304,7 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
             //create storage reference for user's image folder
             //points to the images folder
-            imageReference = userReference.child(IMAGES + IMG + i);
+            imageReference = userReference.child(IMAGES).child(IMG + i);
             i++;
             uploadTask = imageReference.putFile(imageURI);
             imageNameList.add(imageURI.getPath());
@@ -318,7 +318,8 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //todo change activity
                     ToastUtil.showToast(getString(R.string.images_added), getApplicationContext());
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                            android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
                     lvMedia.setAdapter(adapter);
                 }
             });
