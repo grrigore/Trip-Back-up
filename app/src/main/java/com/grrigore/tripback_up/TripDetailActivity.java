@@ -1,7 +1,6 @@
 package com.grrigore.tripback_up;
 
 
-import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,9 +40,7 @@ import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
 import com.grrigore.tripback_up.network.FirebaseStorageUtils;
-import com.grrigore.tripback_up.utils.SharedPrefs;
-import com.grrigore.tripback_up.utils.ToastUtil;
-import com.grrigore.tripback_up.widget.TripWidgetProvider;
+import com.grrigore.tripback_up.utils.WidgetUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +54,6 @@ import static com.grrigore.tripback_up.utils.Constants.IMG;
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
-import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
-import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_ID;
 import static com.grrigore.tripback_up.utils.Constants.USER;
 
@@ -286,23 +281,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 startActivity(intent);
                 return true;
             case R.id.addWidget:
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-
-                Bundle bundle = new Bundle();
-                int widgetId = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-
-
-                String tripTitle = SharedPrefs.getInstance(getApplicationContext())
-                        .getStringValue(TRIP_CLICKED_TITLE, null);
-
-                String tripDescription = SharedPrefs.getInstance(getApplicationContext())
-                        .getStringValue(TRIP_CLICKED_DESCRIPTION, null);
-
-                TripWidgetProvider.updateAppWidget(getApplicationContext(), appWidgetManager,
-                        widgetId, tripTitle, tripDescription);
-
-                ToastUtil.showToast(getString(R.string.wiget_set_for) + trip.getTitle()
-                        + getString(R.string.exclamation_mark), this);
+                WidgetUtils.addWidget(getApplicationContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

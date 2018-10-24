@@ -29,6 +29,7 @@ import static com.grrigore.tripback_up.utils.Constants.USERS;
 public class FirebaseDatabaseUtils {
 
     public FirebaseDatabaseUtils() {
+        //empty constructor
     }
 
     //Firebase database

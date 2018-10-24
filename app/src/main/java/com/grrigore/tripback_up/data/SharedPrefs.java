@@ -1,4 +1,4 @@
-package com.grrigore.tripback_up.utils;
+package com.grrigore.tripback_up.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;

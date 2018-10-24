@@ -6,7 +6,7 @@ import android.content.Context;
 import android.widget.RemoteViews;
 
 import com.grrigore.tripback_up.R;
-import com.grrigore.tripback_up.utils.SharedPrefs;
+import com.grrigore.tripback_up.data.SharedPrefs;
 
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;

@@ -25,7 +25,7 @@ import static com.grrigore.tripback_up.utils.Constants.USERS;
 public class FirebaseStorageUtils {
 
     public FirebaseStorageUtils(){
-
+        //empty constructor
     }
     //Firebase storage
     public void editImagesFromStorage(String tripId, String currentUser) {
