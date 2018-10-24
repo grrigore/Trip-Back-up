@@ -9,9 +9,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.grrigore.tripback_up.R;
 import com.grrigore.tripback_up.TripAdderActivity;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
+import com.grrigore.tripback_up.utils.ToastUtil;
 
 import static com.grrigore.tripback_up.utils.Constants.DESC;
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
@@ -54,7 +56,7 @@ public class FirebaseDatabaseUtils {
         tripId++;
         databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
 
-        //ToastUtil.showToast(getString(R.string.trip_saved), context);
+        ToastUtil.showToast(context.getString(R.string.trip_saved), context);
 
         Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
     }
@@ -66,7 +68,7 @@ public class FirebaseDatabaseUtils {
         tripReference.child(TITLE).setValue(trip.getTitle());
         tripReference.child(DESC).setValue(trip.getDescription());
 
-        // ToastUtil.showToast(getString(R.string.trip_saved), context);
+        ToastUtil.showToast(context.getString(R.string.trip_saved), context);
     }
 
     public void deleteTripFromDatabase(String tripId, String currentUser, DatabaseReference databaseReference) {
