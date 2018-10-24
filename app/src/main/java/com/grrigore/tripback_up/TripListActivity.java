@@ -77,6 +77,8 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     private List<StorageReference> imageRefsRecent;
     private List<StorageReference> imageRefsPast;
 
+    private TripAdapter tripAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,7 +162,8 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     }
 
     private void populateTripList(List<Trip> tripList, List<StorageReference> imageRefs) {
-        TripAdapter tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
+
+        tripAdapter = new TripAdapter(tripList, imageRefs, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),
                 2);
         //set on item click listener
@@ -225,8 +228,7 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
         }
     }
 
-    private void provideTripsForUi(List<Trip> trips, List<StorageReference> tripImages,
-                                   int menuItemId) {
+    private void provideTripsForUi(List<Trip> trips, List<StorageReference> tripImages, int menuItemId) {
         if (trips.size() != 0) {
             setContentView(R.layout.activity_trip_list);
             ButterKnife.bind(TripListActivity.this);
