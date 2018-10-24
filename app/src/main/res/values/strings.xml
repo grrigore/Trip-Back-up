@@ -54,7 +54,7 @@
     <string name="trip_not_saved">Trip couldn\'t be saved! Please check fields!</string>
     <string name="trip_saved">Trip saved!</string>
     <string name="images_added">Images added!</string>
-    <string name="wiget_set_for">Widget set for</string>
+    <string name="wiget_set_for">Widget set for </string>
     <string name="exclamation_mark">!</string>
     <string name="trip_deleted">Trip deleted!</string>
 </resources>

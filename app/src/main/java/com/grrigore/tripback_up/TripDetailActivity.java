@@ -76,10 +76,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
-    private FirebaseDatabaseUtils firebaseDatabaseUtils;
-    private FirebaseStorageUtils firebaseStorageUtils;
-
-
     private Trip trip;
     private String userUID;
     private String tripId;
@@ -96,9 +92,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         databaseReference = firebaseDatabase.getReference();
-
-        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
-        firebaseStorageUtils = new FirebaseStorageUtils();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -275,8 +268,8 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         switch (id) {
             case R.id.deleteTrip:
                 String currentUser = FirebaseAuth.getInstance().getUid();
-                firebaseStorageUtils.deleteImagesFromStorage(trip.getId(), currentUser, databaseReference, firebaseStorage);
-                firebaseDatabaseUtils.deleteTripFromDatabase(trip.getId(), currentUser, databaseReference);
+                (new FirebaseStorageUtils()).deleteImagesFromStorage(trip.getId(), currentUser, databaseReference, firebaseStorage);
+                (new FirebaseDatabaseUtils()).deleteTripFromDatabase(trip.getId(), currentUser, databaseReference);
                 Intent intent = new Intent(this, TripListActivity.class);
                 startActivity(intent);
                 return true;

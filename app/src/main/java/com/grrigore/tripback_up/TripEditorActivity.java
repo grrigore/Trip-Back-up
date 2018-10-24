@@ -33,8 +33,6 @@ public class TripEditorActivity extends AppCompatActivity {
     private List<Place> places;
     private String currentUser;
 
-    private FirebaseDatabaseUtils firebaseDatabaseUtils;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +41,6 @@ public class TripEditorActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
-
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             trip = bundle.getParcelable(TRIP_CLICKED);
@@ -65,7 +61,7 @@ public class TripEditorActivity extends AppCompatActivity {
     public void saveTrip(View view) {
         trip.setTitle(String.valueOf(etTitle.getText()));
         trip.setDescription(String.valueOf(etDescription.getText()));
-        firebaseDatabaseUtils.editTripFromDatabase(trip, currentUser, firebaseDatabase.getReference(), getApplicationContext());
+        (new FirebaseDatabaseUtils()).editTripFromDatabase(trip, currentUser, firebaseDatabase.getReference(), getApplicationContext());
         Intent tripListIntent = new Intent(TripEditorActivity.this, TripListActivity.class);
         startActivity(tripListIntent);
     }

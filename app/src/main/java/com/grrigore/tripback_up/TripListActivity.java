@@ -77,10 +77,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
     private List<StorageReference> imageRefsRecent;
     private List<StorageReference> imageRefsPast;
 
-    private FirebaseDatabaseUtils firebaseDatabaseUtils;
-    private FirebaseStorageUtils firebaseStorageUtils;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +89,6 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
 
         //create instance of firebase database
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
-        firebaseStorageUtils = new FirebaseStorageUtils();
 
         recentTrips = new ArrayList<>();
         pastTrips = new ArrayList<>();
@@ -326,8 +319,8 @@ public class TripListActivity extends AppCompatActivity implements TripAdapter.I
                         startActivity(tripEditorIntent);
                         return true;
                     case R.id.deleteTrip:
-                        firebaseStorageUtils.deleteImagesFromStorage(trip.getId(), currentUser, databaseReference, firebaseStorage);
-                        firebaseDatabaseUtils.deleteTripFromDatabase(trip.getId(), currentUser, databaseReference);
+                        (new FirebaseStorageUtils()).deleteImagesFromStorage(trip.getId(), currentUser, databaseReference, firebaseStorage);
+                        (new FirebaseDatabaseUtils()).deleteTripFromDatabase(trip.getId(), currentUser, databaseReference);
                         ToastUtil.showToast(getString(R.string.trip_deleted), getApplicationContext());
                         //todo refresh UI after trip is deleted
                         finish();

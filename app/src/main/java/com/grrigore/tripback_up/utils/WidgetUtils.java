@@ -13,7 +13,6 @@ import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 
 public class WidgetUtils {
     public static void addWidget(Context context) {
-
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
         Bundle bundle = new Bundle();

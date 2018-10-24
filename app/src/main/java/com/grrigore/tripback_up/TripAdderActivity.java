@@ -51,16 +51,19 @@ public class TripAdderActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE_REQUEST = 1;
     public static final int PICK_PLACE_REQUEST = 2;
+
     @BindView(R.id.etTitle)
     EditText etTitle;
     @BindView(R.id.etDescription)
     EditText etDescription;
     @BindView(R.id.lvMedia)
     ListView lvMedia;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+
     private ArrayList<Uri> imageUris;
     private Trip trip;
     private Date date;
@@ -68,10 +71,8 @@ public class TripAdderActivity extends AppCompatActivity {
     private String imageEncoded;
     private List<String> imagesEncodedList;
     private List<Place> placeList;
-    private boolean placesAdded = false;
 
-    private FirebaseDatabaseUtils firebaseDatabaseUtils;
-    private FirebaseStorageUtils firebaseStorageUtils;
+    private boolean placesAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +99,6 @@ public class TripAdderActivity extends AppCompatActivity {
 
         //get storage reference
         storageReference = firebaseStorage.getReference();
-
-        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
-        firebaseStorageUtils = new FirebaseStorageUtils();
 
 
         //read number of trips from the database
@@ -244,8 +242,8 @@ public class TripAdderActivity extends AppCompatActivity {
             //create storage reference from our app
             //points to the root reference
             storageReference = firebaseStorage.getReference();
-            firebaseStorageUtils.addImagesToStorage(imageUris, currentUser, storageReference, tripId);
-            firebaseDatabaseUtils.addTripToDatabase(trip, currentUser, databaseReference, tripId, firebaseAuth, getApplicationContext());
+            (new FirebaseStorageUtils()).addImagesToStorage(imageUris, currentUser, storageReference, tripId);
+            (new FirebaseDatabaseUtils()).addTripToDatabase(trip, currentUser, databaseReference, tripId, firebaseAuth, getApplicationContext());
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
             intentRecentTrips.putExtra(ID, tripId);
             startActivity(intentRecentTrips);
