@@ -1,5 +1,6 @@
 package com.grrigore.tripback_up;
 
+
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,11 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.grrigore.tripback_up.adapter.GalleryAdapter;
@@ -53,6 +51,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grrigore.tripback_up.utils.Constants.CURRENT_USER;
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
 import static com.grrigore.tripback_up.utils.Constants.IMG;
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY;
@@ -61,17 +60,13 @@ import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_DESCRIPTION;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED_TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_ID;
-import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
 import static com.grrigore.tripback_up.utils.Constants.USER;
-import static com.grrigore.tripback_up.utils.Constants.USERS;
-import static com.grrigore.tripback_up.utils.Constants.CURRENT_USER;
 
 
 //todo on screen rotation
 
 //todo rethink trip gallery
-public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback,
-        FirebaseDatabaseUtils, FirebaseStorageUtils {
+public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @BindView(R.id.tvTripTitle)
     TextView tvTripTitle;
@@ -84,6 +79,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     private FirebaseStorage firebaseStorage;
     private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+
+    private FirebaseDatabaseUtils firebaseDatabaseUtils;
+    private FirebaseStorageUtils firebaseStorageUtils;
+
 
     private Trip trip;
     private String userUID;
@@ -99,6 +99,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         //create instance of firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        databaseReference = firebaseDatabase.getReference();
+
+        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
+        firebaseStorageUtils = new FirebaseStorageUtils();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -275,8 +280,8 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         switch (id) {
             case R.id.deleteTrip:
                 String currentUser = FirebaseAuth.getInstance().getUid();
-                deleteImagesFromStorage(tripId, currentUser);
-                deleteTripFromDatabase(tripId, currentUser);
+                firebaseStorageUtils.deleteImagesFromStorage(trip.getId(), currentUser, databaseReference, firebaseStorage);
+                firebaseDatabaseUtils.deleteTripFromDatabase(trip.getId(), currentUser, databaseReference);
                 Intent intent = new Intent(this, TripListActivity.class);
                 startActivity(intent);
                 return true;
@@ -302,79 +307,5 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void deleteTripFromDatabase(String tripId, String currentUser) {
-        DatabaseReference tripReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId);
-        tripReference.removeValue();
-        final DatabaseReference tripNumberReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIP_NUMBER);
-        tripNumberReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long numberOfTrips = (long) dataSnapshot.getValue();
-                numberOfTrips--;
-                tripNumberReference.setValue(numberOfTrips);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("Error: ", databaseError.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void deleteImagesFromStorage(String tripId, String currentUser) {
-        DatabaseReference imagesReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId).child(IMAGES);
-        imagesReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot image : dataSnapshot.getChildren()) {
-                    final String imageRefecence = image.getValue().toString();
-
-                    StorageReference imageStorageReference = firebaseStorage.getReferenceFromUrl(imageRefecence);
-                    Log.d(getApplicationContext().getClass().getSimpleName(), "Image storage reference: " + imageStorageReference);
-
-                    imageStorageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(getApplicationContext().getClass().getSimpleName(), "Deleted file: " + imageRefecence);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(getApplicationContext().getClass().getSimpleName(), "Cannot delete file: " + imageRefecence);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    @Override
-    public void downloadImagesFromStorage(String tripId, String currentUser) {
-
-    }
-
-    @Override
-    public void addTripToDatabase(Trip trip, String currentUser) {
-    }
-
-    @Override
-    public void editTripFromDatabase(String tripId, String currentUser) {
-    }
-
-    @Override
-    public void addImagesToStorage(ArrayList<Uri> imageUris, String currentUser) {
-    }
-
-    @Override
-    public void editImagesFromStorage(String tripId, String currentUser) {
     }
 }

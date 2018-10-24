@@ -6,26 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
-import com.grrigore.tripback_up.utils.ToastUtil;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.grrigore.tripback_up.utils.Constants.DESC;
-import static com.grrigore.tripback_up.utils.Constants.TITLE;
-import static com.grrigore.tripback_up.utils.Constants.TRIPS;
-import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
-import static com.grrigore.tripback_up.utils.Constants.USERS;
 import static com.grrigore.tripback_up.utils.Constants.CURRENT_USER;
+import static com.grrigore.tripback_up.utils.Constants.TRIP_CLICKED;
 
-public class TripEditorActivity extends AppCompatActivity implements FirebaseDatabaseUtils {
+public class TripEditorActivity extends AppCompatActivity {
 
 
     @BindView(R.id.etTitle)
@@ -39,6 +33,8 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
     private List<Place> places;
     private String currentUser;
 
+    private FirebaseDatabaseUtils firebaseDatabaseUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +43,7 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
         ButterKnife.bind(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -68,7 +65,7 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
     public void saveTrip(View view) {
         trip.setTitle(String.valueOf(etTitle.getText()));
         trip.setDescription(String.valueOf(etDescription.getText()));
-        editTripFromDatabase(trip.getId(), currentUser);
+        firebaseDatabaseUtils.editTripFromDatabase(trip, currentUser, firebaseDatabase.getReference(), getApplicationContext());
         Intent tripListIntent = new Intent(TripEditorActivity.this, TripListActivity.class);
         startActivity(tripListIntent);
     }
@@ -81,23 +78,4 @@ public class TripEditorActivity extends AppCompatActivity implements FirebaseDat
     public void editMedia(View view) {
     }
 
-    @Override
-    public void editTripFromDatabase(String tripId, String currentUser) {
-        DatabaseReference tripReference = firebaseDatabase.getReference().child(USERS).child(currentUser).child(TRIPS).child(tripId);
-
-        tripReference.child(TITLE).setValue(trip.getTitle());
-        tripReference.child(DESC).setValue(trip.getDescription());
-
-        ToastUtil.showToast(getString(R.string.trip_saved), getApplicationContext());
-    }
-
-    @Override
-    public void addTripToDatabase(Trip trip, String currentUser) {
-
-    }
-
-    @Override
-    public void deleteTripFromDatabase(String tripId, String currentUser) {
-
-    }
 }

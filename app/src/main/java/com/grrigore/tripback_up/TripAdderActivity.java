@@ -6,16 +6,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.grrigore.tripback_up.model.Place;
 import com.grrigore.tripback_up.model.Trip;
 import com.grrigore.tripback_up.network.FirebaseDatabaseUtils;
@@ -39,14 +34,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.grrigore.tripback_up.utils.Constants.DESC;
 import static com.grrigore.tripback_up.utils.Constants.ID;
 import static com.grrigore.tripback_up.utils.Constants.IMAGES;
 import static com.grrigore.tripback_up.utils.Constants.IMG;
-import static com.grrigore.tripback_up.utils.Constants.PLACE;
 import static com.grrigore.tripback_up.utils.Constants.PLACE_LIST_KEY;
-import static com.grrigore.tripback_up.utils.Constants.TIME;
-import static com.grrigore.tripback_up.utils.Constants.TITLE;
 import static com.grrigore.tripback_up.utils.Constants.TRIP;
 import static com.grrigore.tripback_up.utils.Constants.TRIPS;
 import static com.grrigore.tripback_up.utils.Constants.TRIP_NUMBER;
@@ -55,7 +46,7 @@ import static com.grrigore.tripback_up.utils.Constants.USERS;
 
 //todo on screen rotate
 
-public class TripAdderActivity extends AppCompatActivity implements FirebaseDatabaseUtils, FirebaseStorageUtils {
+public class TripAdderActivity extends AppCompatActivity {
 
 
     public static final int PICK_IMAGE_REQUEST = 1;
@@ -78,6 +69,9 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
     private List<String> imagesEncodedList;
     private List<Place> placeList;
     private boolean placesAdded = false;
+
+    private FirebaseDatabaseUtils firebaseDatabaseUtils;
+    private FirebaseStorageUtils firebaseStorageUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +98,9 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
 
         //get storage reference
         storageReference = firebaseStorage.getReference();
+
+        firebaseDatabaseUtils = new FirebaseDatabaseUtils();
+        firebaseStorageUtils = new FirebaseStorageUtils();
 
 
         //read number of trips from the database
@@ -244,106 +241,17 @@ public class TripAdderActivity extends AppCompatActivity implements FirebaseData
             trip.setImages(imageList);
 
             String currentUser = firebaseAuth.getUid();
-            addImagesToStorage(imageUris, currentUser);
-            addTripToDatabase(trip, currentUser);
-
+            //create storage reference from our app
+            //points to the root reference
+            storageReference = firebaseStorage.getReference();
+            firebaseStorageUtils.addImagesToStorage(imageUris, currentUser, storageReference, tripId);
+            firebaseDatabaseUtils.addTripToDatabase(trip, currentUser, databaseReference, tripId, firebaseAuth, getApplicationContext());
             Intent intentRecentTrips = new Intent(this, TripListActivity.class);
             intentRecentTrips.putExtra(ID, tripId);
             startActivity(intentRecentTrips);
         } else {
             ToastUtil.showToast(getString(R.string.trip_not_saved), getApplicationContext());
         }
-
-    }
-
-    @Override
-    public void addTripToDatabase(Trip trip, String currentUser) {
-        //toask cum pot scapa de astea? fac o variabila?
-        DatabaseReference tripReference = databaseReference.child(USERS).child(currentUser).child(TRIPS).child(TRIP + tripId);
-        int placeId = 0;
-        int imageId = 1;
-
-        tripReference.child(TITLE).setValue(trip.getTitle());
-        tripReference.child(DESC).setValue(trip.getDescription());
-        tripReference.child(TIME).setValue(trip.getTime());
-
-        for (Place place : trip.getPlaces()) {
-            tripReference.child(PLACE).child(String.valueOf(placeId)).setValue(place);
-            placeId++;
-        }
-
-        for (String imageRef : trip.getImages()) {
-            tripReference.child(IMAGES).child(IMG + imageId).setValue(imageRef);
-            imageId++;
-        }
-
-
-        tripId++;
-        databaseReference.child(USERS).child(firebaseAuth.getUid()).child(TRIP_NUMBER).setValue(tripId);
-
-        ToastUtil.showToast(getString(R.string.trip_saved), getApplicationContext());
-
-        Log.d(TripAdderActivity.class.getSimpleName(), "Current trip id = " + tripId);
-    }
-
-    @Override
-    public void addImagesToStorage(ArrayList<Uri> imageURIs, String currentUser) {
-        //create storage reference from our app
-        //points to the root reference
-        storageReference = firebaseStorage.getReference();
-        //create storage reference for user folder
-        //points to the trip folder
-        StorageReference userReference = storageReference.child(USER).child(currentUser).child(TRIPS).child(TRIP + tripId);
-        StorageReference imageReference;
-        UploadTask uploadTask;
-
-        //array list used to store images paths
-        final ArrayList<String> imageNameList = new ArrayList<>();
-        int i = 0;
-        for (Uri imageURI : imageURIs) {
-
-            //create storage reference for user's image folder
-            //points to the images folder
-            imageReference = userReference.child(IMAGES).child(IMG + i);
-            i++;
-            uploadTask = imageReference.putFile(imageURI);
-            imageNameList.add(imageURI.getPath());
-            // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    //todo change activity
-                    ToastUtil.showToast(getString(R.string.images_added), getApplicationContext());
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                            android.R.layout.simple_list_item_1, android.R.id.text1, imageNameList);
-                    lvMedia.setAdapter(adapter);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void editTripFromDatabase(String tripId, String currentUser) {
-    }
-
-    @Override
-    public void deleteTripFromDatabase(String tripId, String currentUser) {
-    }
-
-    @Override
-    public void editImagesFromStorage(String tripId, String currentUser) {
-    }
-
-    @Override
-    public void deleteImagesFromStorage(String tripId, String currentUser) {
-    }
-
-    @Override
-    public void downloadImagesFromStorage(String tripId, String currentUser) {
 
     }
 }
