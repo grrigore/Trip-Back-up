@@ -125,7 +125,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         galleryAdapter.setItemClickListener(new GalleryAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
-                firebaseStorage.getReference().child(USER + userUID).child(TRIPS).child(tripId)
+                firebaseStorage.getReference().child(USER).child(userUID).child(TRIPS).child(tripId)
                         .child(IMAGES).child(IMG + position).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
